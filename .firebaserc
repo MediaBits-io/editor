@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "northern-shield-294108"
+  },
+  "targets": {
+    "northern-shield-294108": {
+      "hosting": {
+        "editor": [
+          "mediabits-editor-001"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.konvajs-content {
+  margin: auto;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 0.5em;
+  overflow: hidden;
+}
+
+@layer components {
+  .panel-item {
+    @apply text-left relative w-full rounded-md border border-gray-300 bg-white px-3 py-2 transition duration-150;
+
+    @screen sm {
+      @apply text-sm leading-5;
+    }
+  }
+
+  .panel-item:focus-within {
+    @apply outline-none border-blue-300;
+  }
+}

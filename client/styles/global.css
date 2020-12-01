@@ -1,0 +1,5 @@
+@import './tailwind.css';
+@import './loader.css';
+@import './editor.css';
+
+@import 'react-aspect-ratio/aspect-ratio.css';

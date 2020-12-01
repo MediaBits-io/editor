@@ -1,0 +1,12 @@
+export enum EditorPanel {
+  Settings = 'settings-panel',
+  Text = 'text-panel',
+  Elements = 'elements-panel',
+  Audio = 'audio-panel',
+  Image = 'image-panel',
+  ImageProperties = 'image-properties-panel',
+  TextProperties = 'text-properties-panel',
+  ProgressBarProperties = 'progress-bar-properties-panel',
+  WaveformProperties = 'waveform-properties-panel',
+  RectangleProperties = 'rectangle-properties-panel',
+}

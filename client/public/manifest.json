@@ -1,0 +1,15 @@
+{
+  "short_name": "Mediabits",
+  "name": "Mediabits.io",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "32x32 24x24 16x16",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#252f3f",
+  "background_color": "#f9fafb"
+}

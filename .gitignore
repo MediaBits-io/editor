@@ -9,17 +9,19 @@
 /coverage
 
 # next.js
-/.next/
+.next
 /out/
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
 *.pem
 
 # debug
+firebase-debug.log*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

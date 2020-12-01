@@ -1,4 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align="center">
+  <img width="300" src="https://images2.imgbox.com/f7/a2/HACjzYnu_o.png">
+</p>
+
+# Mediabits.io
+
+Mediabits.io lets anyone create engaging videos for their audio, perfect for sharing on social media.
+
+This is a repository for the main editor, which is currently being rebuilt from scratch. An old version is live on https://mediabits.io
+
+Mediabits.io aims to:
+
+- Be open-source
+- Have no watermarks
+- Need no login or registration
+- Give access to all video editor features for free
+- Include no features unrelated to video editing
+
+Mediabits.io Pro will:
+
+- Render longer videos
+- Provide transcription
+- Save templates and videos in cloud
+- Have workspaces for projects, to store and reuse resources like audio, images, fonts, etc.
+- Provide pre-built designer templates
 
 ## Getting Started
 
@@ -9,22 +33,3 @@ npm run dev
 # or
 yarn dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
