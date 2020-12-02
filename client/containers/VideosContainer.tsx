@@ -53,8 +53,6 @@ function useVideos() {
         .map(({ url }) => url)
         .filter(isTruthy);
 
-      console.log(exportedVideos, videos);
-
       if (exportedVideos.length) {
         exportedVideos.forEach((url) => {
           addToast(

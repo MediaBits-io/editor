@@ -6,6 +6,10 @@
 
 Mediabits.io lets anyone create engaging videos for their audio, perfect for sharing on social media.
 
+<p align="center">
+  <img width="600" src="https://images2.imgbox.com/50/8c/oC01iZtt_o.png">
+</p>
+
 This is a repository for the main editor, which is currently being rebuilt from scratch. An old version is live on https://mediabits.io
 
 Mediabits.io aims to:

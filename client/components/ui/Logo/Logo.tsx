@@ -3,12 +3,18 @@ import classNames from '../../../utils/classNames';
 
 interface Props {
   dark?: boolean;
+  pro?: boolean;
   className?: string;
 }
 
-function Logo({ dark, className }: Props) {
+function Logo({ dark, pro, className }: Props) {
   return (
-    <div className={classNames('w-full flex items-center', className)}>
+    <div
+      className={classNames(
+        'relative w-full flex items-center group',
+        className
+      )}
+    >
       <svg className="h-9 mr-2" viewBox="0 0 32 32" fill="none">
         <circle cx="16" cy="16" r="16" fill={dark ? '#252F3F' : 'white'} />
         <path
@@ -31,6 +37,12 @@ function Logo({ dark, className }: Props) {
           fill={dark ? '#252F3F' : 'white'}
         />
       </svg>
+
+      {pro && (
+        <span className="absolute top-0 -right-6 text-xs font-semibold mb-2 text-yellow-400 group-hover:text-yellow-500">
+          PRO
+        </span>
+      )}
     </div>
   );
 }

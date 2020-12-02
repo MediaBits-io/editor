@@ -50,7 +50,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
         tabIndex={disabled ? -1 : tabIndex}
         onClick={loading || disabled ? undefined : onClick}
         className={classNames(
-          'inline-flex justify-center items-center text-base sm:text-sm leading-6 sm:leading-5 font-medium transition ease-in-out duration-150',
+          'inline-flex justify-center items-center text-base sm:text-sm leading-6 sm:leading-5 whitespace-nowrap font-medium transition ease-in-out duration-150',
           type !== 'link' &&
             type !== 'custom' &&
             'py-2 border focus:outline-none',
