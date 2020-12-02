@@ -1,24 +1,28 @@
 import { useReducer } from 'react';
 import { createContainer } from 'unstated-next';
 import { EditorPanel } from '../../interfaces/Editor';
+import { Template } from '../../interfaces/StageConfig';
 import { EditorState } from './interfaces';
 import reducer from './reducer';
 
+const initialTemplate: Template = {
+  dimensions: {
+    width: 1080,
+    height: 1080,
+  },
+  background: {
+    fill: 'rgba(255, 255, 255, 1)',
+  },
+  elements: [],
+};
+
 const initialState: EditorState = {
   template: {
+    present: initialTemplate,
     past: [],
-    present: {
-      dimensions: {
-        width: 1080,
-        height: 1080,
-      },
-      background: {
-        fill: 'rgba(255, 255, 255, 1)',
-      },
-      elements: [],
-    },
     future: [],
   },
+  lastSaved: initialTemplate,
   activePanel: EditorPanel.Settings,
   zoom: 1,
 };

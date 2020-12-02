@@ -16,8 +16,25 @@ const editorMargin = 8;
 function Editor() {
   const { redo, undo } = useEditorHistory();
   const { selectedElement } = useElements();
-  const { state, dispatch } = EditorContainer.useContainer();
+  const { state, template, dispatch } = EditorContainer.useContainer();
   const editorAreaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (state.lastSaved === template) {
+      return;
+    }
+
+    const unloadCallback = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    };
+
+    window.addEventListener('beforeunload', unloadCallback);
+    return () => {
+      window.removeEventListener('beforeunload', unloadCallback);
+    };
+  }, [state.lastSaved, template]);
 
   useEditorKeyCommand('ctrl+z', undo, process.browser ? document : undefined);
   useEditorKeyCommand('ctrl+y', redo, process.browser ? document : undefined);

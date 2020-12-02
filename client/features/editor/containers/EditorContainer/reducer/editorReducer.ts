@@ -8,7 +8,10 @@ export type EditorAction =
   | { type: 'select_element'; id: string }
   | { type: 'clear_selection' }
   | { type: 'open_editor_panel'; panel: EditorPanel }
-  | { type: 'delete_element'; id: string };
+  | { type: 'delete_element'; id: string }
+  | {
+      type: 'save_changes';
+    };
 
 const reducer = (state: EditorState, action: EditorAction): EditorState => {
   const getElement = (selectedElement?: string | CanvasElement) => {
@@ -66,6 +69,11 @@ const reducer = (state: EditorState, action: EditorAction): EditorState => {
       return {
         ...state,
         activePanel: action.panel,
+      };
+    case 'save_changes':
+      return {
+        ...state,
+        lastSaved: state.template.present,
       };
     default:
       return state;

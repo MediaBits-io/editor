@@ -25,7 +25,7 @@ const AudioClipper = dynamic(
 );
 
 function ExportModal({ visible, close }: Props) {
-  const { template } = EditorContainer.useContainer();
+  const { template, dispatch } = EditorContainer.useContainer();
   const { exportVideo } = VideosContainer.useContainer();
   const [loading, setLoading] = useState(false);
   const [audioFile, setAudioFile] = useState<File>();
@@ -53,7 +53,7 @@ function ExportModal({ visible, close }: Props) {
       setLoading(true);
       const audioBuffer = await clipAudio(bounds.startPart, bounds.endPart);
       await exportVideo(audioBuffer, template);
-      // TODO: clear unsaved changes flag
+      dispatch({ type: 'save_changes' });
       close();
       addToast(
         <NotificationContent title="Video exported successfully">
