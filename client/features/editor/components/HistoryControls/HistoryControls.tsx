@@ -1,6 +1,7 @@
 import React from 'react';
 import RedoIcon from '../../../../components/ui/Icons/RedoIcon';
 import UndoIcon from '../../../../components/ui/Icons/UndoIcon';
+import Popover from '../../../../components/ui/Popover/Popover';
 import useEditorHistory from '../../hooks/useEditorHistory';
 import ClearButton from '../ui/ClearButton';
 
@@ -9,12 +10,16 @@ function HistoryControls() {
 
   return (
     <div className="flex items-center space-x-2">
-      <ClearButton disabled={!hasPast} onClick={undo} title="Undo">
-        <UndoIcon className="w-4 h-4" />
-      </ClearButton>
-      <ClearButton disabled={!hasFuture} onClick={redo} title="Redo">
-        <RedoIcon className="w-4 h-4" />
-      </ClearButton>
+      <Popover content="Undo" placement="top" closed={!hasPast}>
+        <ClearButton disabled={!hasPast} onClick={undo}>
+          <UndoIcon className="w-4 h-4" />
+        </ClearButton>
+      </Popover>
+      <Popover content="Redo" placement="top" closed={!hasFuture}>
+        <ClearButton disabled={!hasFuture} onClick={redo}>
+          <RedoIcon className="w-4 h-4" />
+        </ClearButton>
+      </Popover>
     </div>
   );
 }

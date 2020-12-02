@@ -6,7 +6,6 @@ import {
   DownloadOutline,
   FolderOpenOutline,
   Heart,
-  LoginOutline,
   SaveAsOutline,
   SparklesOutline,
   VideoCameraOutline,
@@ -30,6 +29,7 @@ function EditorHeader() {
     <div className="flex bg-white border-b w-full p-2 items-center">
       <ExportModal visible={isExportVisible} close={closeExport} />
       <Popover
+        className="flex pr-5 mr-5"
         content={
           <span className="flex items-center space-x-1">
             <span>You have upgraded, thank you!</span>
@@ -37,9 +37,7 @@ function EditorHeader() {
           </span>
         }
       >
-        <div className="flex mr-10">
-          <Logo dark pro />
-        </div>
+        <Logo dark pro />
       </Popover>
       <div className="flex flex-grow items-center justify-between">
         <div className="flex items-center space-x-2">

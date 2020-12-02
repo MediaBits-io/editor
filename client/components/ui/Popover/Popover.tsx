@@ -1,5 +1,5 @@
 import { Transition } from '@headlessui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Options as PopperOptions } from '@popperjs/core';
 import { Portal } from 'react-portal';
 import usePopper from '../../../utils/hooks/usePopper';
@@ -7,12 +7,19 @@ import usePopper from '../../../utils/hooks/usePopper';
 interface Props extends Partial<PopperOptions> {
   children: React.ReactNode;
   content: React.ReactNode;
+  closed?: boolean;
   className?: string;
 }
 
-function Popover({ children, content, className, ...popperOptions }: Props) {
-  const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
+function Popover({
+  children,
+  content,
+  className,
+  closed,
+  ...popperOptions
+}: Props) {
   const [isOpen, setOpen] = useState(false);
+  const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
   const [targetElement, setTargetElement] = useState<HTMLDivElement | null>(
     null
   );
@@ -32,12 +39,18 @@ function Popover({ children, content, className, ...popperOptions }: Props) {
     }
   );
 
+  useEffect(() => {
+    if (closed && isOpen) {
+      setOpen(false);
+    }
+  }, [closed, isOpen]);
+
   return (
     <div
       ref={setTargetElement}
       className={className}
       onMouseOver={() => {
-        if (!isOpen) {
+        if (!isOpen && !closed) {
           setOpen(true);
         }
       }}
@@ -50,7 +63,7 @@ function Popover({ children, content, className, ...popperOptions }: Props) {
       {children}
       <Portal>
         <Transition
-          show={isOpen}
+          show={isOpen && !closed}
           enter="transition ease-out duration-100"
           enterFrom="transform opacity-0 scale-95"
           enterTo="transform opacity-100 scale-100"
@@ -59,12 +72,12 @@ function Popover({ children, content, className, ...popperOptions }: Props) {
           leaveTo="transform opacity-0 scale-95"
         >
           {(ref) => (
-            <div ref={setPopperElement} {...popperProps}>
-              <div className="mt-2" ref={ref}>
+            <div className="popover" ref={setPopperElement} {...popperProps}>
+              <div ref={ref}>
                 <div
                   ref={setArrowElement}
                   {...arrowProps}
-                  className="popover-arrow w-2 h-2 -mt-1"
+                  className="popover-arrow"
                 ></div>
                 <div className="outline-none rounded-md shadow-sm p-2 text-xs leading-4 bg-gray-700 text-white">
                   {content}

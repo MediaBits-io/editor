@@ -1,7 +1,9 @@
+import { last } from 'ramda';
 import { SHAPE_PROPERTIES_PANEL, SHAPE_TOOL_PANEL } from '../../../constants';
 import { EditorPanel } from '../../../interfaces/Editor';
 import { CanvasElement } from '../../../interfaces/StageConfig';
 import { EditorState } from '../interfaces';
+import { Action as UndoableAction } from './undoable';
 
 export type EditorAction =
   | { type: 'create_element'; element: CanvasElement }
@@ -11,7 +13,8 @@ export type EditorAction =
   | { type: 'delete_element'; id: string }
   | {
       type: 'save_changes';
-    };
+    }
+  | UndoableAction;
 
 const reducer = (state: EditorState, action: EditorAction): EditorState => {
   const getElement = (selectedElement?: string | CanvasElement) => {
@@ -75,6 +78,36 @@ const reducer = (state: EditorState, action: EditorAction): EditorState => {
         ...state,
         lastSaved: state.template.present,
       };
+    case 'undo': {
+      const element = state.template.present.elements.find(
+        ({ id }) => id === state.selectedId
+      );
+      const prevElement = last(state.template.future)?.elements.find(
+        ({ id }) => id === state.selectedId
+      );
+      return element
+        ? state
+        : {
+            ...state,
+            activePanel: getShapeToolPanel(prevElement),
+            selectedId: undefined,
+          };
+    }
+    case 'redo': {
+      const element = state.template.present.elements.find(
+        ({ id }) => id === state.selectedId
+      );
+      const prevElement = last(state.template.past)?.elements.find(
+        ({ id }) => id === state.selectedId
+      );
+      return element
+        ? state
+        : {
+            ...state,
+            activePanel: getShapeToolPanel(prevElement),
+            selectedId: undefined,
+          };
+    }
     default:
       return state;
   }

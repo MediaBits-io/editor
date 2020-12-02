@@ -7,6 +7,7 @@ import { EditorContainer } from '../../containers/EditorContainer/EditorContaine
 import useZoom from '../../hooks/useZoom';
 import ClearButton from '../ui/ClearButton';
 import classNames from '../../../../utils/classNames';
+import Popover from '../../../../components/ui/Popover/Popover';
 
 interface Props {
   editorAreaRef: RefObject<HTMLDivElement>;
@@ -27,16 +28,22 @@ function ZoomControls({ editorMargin, editorAreaRef }: Props) {
       targetElement={targetElement}
       target={({ open }) => (
         <div ref={setTargetElement}>
-          <DropdownMenuAnchor
-            as={ClearButton}
-            title="Zoom"
-            className={classNames(
-              'px-2.5',
-              open && 'bg-gray-100 ring-gray-300 ring-2'
-            )}
+          <Popover
+            content="Zoom"
+            className="mt-auto"
+            placement="top"
+            closed={open}
           >
-            {Math.floor(state.zoom * 100)}%
-          </DropdownMenuAnchor>
+            <DropdownMenuAnchor
+              as={ClearButton}
+              className={classNames(
+                'px-2.5',
+                open && 'bg-gray-100 ring-gray-300 ring-2'
+              )}
+            >
+              {Math.floor(state.zoom * 100)}%
+            </DropdownMenuAnchor>
+          </Popover>
         </div>
       )}
     >

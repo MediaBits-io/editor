@@ -7,9 +7,29 @@
 }
 
 @layer components {
+  .popover-arrow {
+    @apply w-2 h-2;
+  }
+
   .popover-arrow::before {
-    @apply transform rotate-45 top-0 left-0 w-2 h-2 absolute z-0 bg-gray-700;
+    @apply transform rotate-45 w-2 h-2 absolute z-0 bg-gray-700;
     content: '';
+  }
+
+  .popover[data-popper-placement^='bottom'] > div {
+    @apply mt-2 relative;
+
+    & .popover-arrow {
+      @apply -mt-1 top-0 left-0;
+    }
+  }
+
+  .popover[data-popper-placement^='top'] > div {
+    @apply mb-2 relative;
+
+    & .popover-arrow {
+      @apply -mb-1 bottom-0 left-0;
+    }
   }
 
   .panel-item {
