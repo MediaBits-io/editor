@@ -98,7 +98,7 @@ function useVideos() {
 
   const exportVideo = async (audioBuffer: Blob, template: Template) => {
     const formData = new FormData();
-    const headers = await getAuthHeaders();
+    // TODO: get auth headers if pro
 
     formData.set('audio', audioBuffer);
     formData.set(
@@ -110,9 +110,7 @@ function useVideos() {
 
     const {
       data: { id },
-    } = await api.post<{ id: string; duration: number }>('/export', formData, {
-      headers,
-    });
+    } = await api.post<{ id: string; duration: number }>('/export', formData);
 
     pollVideo(id);
   };
