@@ -63,7 +63,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
           type === 'primary' &&
             (disabled
               ? 'border-transparent bg-gray-200 text-gray-400'
-              : 'border-transparent bg-blue-600 text-white hover:bg-blue-500 focus:border-blue-700 active:bg-blue-700  focus:ring-blue-300 focus:ring-2'),
+              : 'border-transparent bg-blue-600 text-white hover:bg-blue-500 active:bg-blue-700 focus:ring-blue-300 focus:ring-2'),
           type === 'secondary' &&
             'border-gray-300 bg-white text-gray-700 focus:ring-blue-300 hover:text-gray-500 focus:border-blue-300 active:bg-gray-100 focus:ring-2',
           type === 'accented' &&

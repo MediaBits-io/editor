@@ -19,7 +19,10 @@ function DropdownMenu({
   target,
   ...popperOptions
 }: Props) {
-  const [popperProps, popperElement] = usePopper(targetElement, popperOptions);
+  const [{ popperProps }, popperElement] = usePopper(
+    targetElement,
+    popperOptions
+  );
 
   return (
     <Menu>

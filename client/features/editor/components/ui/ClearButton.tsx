@@ -10,7 +10,7 @@ const ClearButton = forwardRef<HTMLButtonElement, Omit<Props, 'type' | 'ref'>>(
         disabled={disabled}
         type="custom"
         className={classNames(
-          'p-1.5 rounded-md font-semibold bg-white transition duration-150',
+          'p-1.5 rounded-md font-semibold bg-white transition duration-150 border border-transparent',
           disabled
             ? 'text-gray-300'
             : 'text-gray-700 hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-200 active:text-gray-900 focus:ring-gray-300 focus:outline-none focus:ring-2',

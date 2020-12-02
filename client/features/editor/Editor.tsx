@@ -8,6 +8,8 @@ import EditorHeader from './components/EditorHeader/EditorHeader';
 import useEditorKeyCommand from './hooks/useEditorKeyCommand';
 import useEditorHistory from './hooks/useEditorHistory';
 import useElements from './hooks/useElements';
+import ZoomControls from './components/ZoomControls/ZoomControls';
+import HistoryControls from './components/HistoryControls/HistoryControls';
 
 const editorMargin = 8;
 
@@ -35,13 +37,24 @@ function Editor() {
 
   return (
     <>
-      <EditorHeader editorAreaRef={editorAreaRef} editorMargin={editorMargin} />
+      <EditorHeader />
       <div className="flex flex-grow overflow-hidden">
         <EditorMenu />
-        <EditorMenuPanel
-          editorAreaRef={editorAreaRef}
-          editorMargin={editorMargin}
-        />
+        <div className="flex flex-col">
+          <EditorMenuPanel
+            editorAreaRef={editorAreaRef}
+            editorMargin={editorMargin}
+          />
+          <div className="bg-white mb-2 rounded border p-2 flex justify-between">
+            <div>
+              <ZoomControls
+                editorAreaRef={editorAreaRef}
+                editorMargin={editorMargin}
+              />
+            </div>
+            <HistoryControls />
+          </div>
+        </div>
         <MainArea
           onKeyDown={handleKeyDown}
           className="overflow-x-auto focus:outline-none"

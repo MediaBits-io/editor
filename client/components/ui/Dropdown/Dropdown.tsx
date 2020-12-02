@@ -23,7 +23,7 @@ function Dropdown({
   className,
   ...popperOptions
 }: Props) {
-  const [popperProps, setPopperElement, popperElement] = usePopper(
+  const [{ popperProps }, setPopperElement, popperElement] = usePopper(
     targetElement,
     popperOptions
   );

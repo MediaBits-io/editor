@@ -69,7 +69,7 @@ function WaveformPatternSetting({ elementId, elementProps }: Props) {
           )}
         >
           {options.map(({ label, value }) => (
-            <DropdownSelectOption value={value}>
+            <DropdownSelectOption key={value} value={value}>
               <span className="w-52">{label}</span>
             </DropdownSelectOption>
           ))}

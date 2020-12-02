@@ -34,7 +34,7 @@ const ExternalLink = forwardRef<HTMLAnchorElement, Props>(
           className
         )}
       >
-        {children}
+        {children || to}
       </a>
     );
   }

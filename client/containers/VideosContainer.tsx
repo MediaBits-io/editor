@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { createContainer } from 'unstated-next';
-import { getAuthHeaders, api } from '../utils/api';
+import { api } from '../utils/api';
 import { useToasts } from 'react-toast-notifications';
 import { Template } from '../features/editor/interfaces/StageConfig';
 import { toTemplateJSON } from '../features/editor/utils/template';
@@ -43,9 +43,7 @@ function useVideos() {
 
   const startPollingInterval = useCallback(() => {
     pollingIntervalRef.current = setInterval(async () => {
-      const headers = await getAuthHeaders();
       const res = await api.get<VideosDTO>('/videos', {
-        headers,
         params: {
           ids: pollingIdsRef.current,
         },
@@ -55,11 +53,15 @@ function useVideos() {
         .map(({ url }) => url)
         .filter(isTruthy);
 
+      console.log(exportedVideos, videos);
+
       if (exportedVideos.length) {
         exportedVideos.forEach((url) => {
           addToast(
             <NotificationContent title="Finished processing video">
-              <ExternalLink to={url} />
+              <ExternalLink to={url} newTab>
+                View it here
+              </ExternalLink>
             </NotificationContent>,
             { appearance: 'info', autoDismiss: false }
           );

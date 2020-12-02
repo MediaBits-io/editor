@@ -10,7 +10,11 @@ interface PopperProps {
 export default function usePopper(
   targetElement: Element | null,
   options: Partial<Options>
-): [PopperProps, (el: HTMLElement | null) => void, HTMLElement | null] {
+): [
+  { popperProps: PopperProps; arrowProps: { style: React.CSSProperties } },
+  (el: HTMLElement | null) => void,
+  HTMLElement | null
+] {
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const { styles, attributes } = useReactPopper(targetElement, popperElement, {
     modifiers: [
@@ -25,7 +29,10 @@ export default function usePopper(
   });
 
   return [
-    { style: styles.popper, ...attributes.popper },
+    {
+      popperProps: { style: styles.popper, ...attributes.popper },
+      arrowProps: { style: styles.arrow },
+    },
     setPopperElement,
     popperElement,
   ];

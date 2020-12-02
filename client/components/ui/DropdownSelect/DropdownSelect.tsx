@@ -21,7 +21,10 @@ function DropdownSelect<Value>({
   onChange,
   ...popperOptions
 }: Props<Value>) {
-  const [popperProps, popperElement] = usePopper(targetElement, popperOptions);
+  const [{ popperProps }, popperElement] = usePopper(
+    targetElement,
+    popperOptions
+  );
 
   return (
     <Listbox value={value} onChange={onChange}>

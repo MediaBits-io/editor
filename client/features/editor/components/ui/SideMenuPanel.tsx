@@ -31,13 +31,17 @@ function SideMenuPanel({
   return (
     <div
       className={classNames(
-        'flex flex-col mt-2 mb-2 p-4 rounded-md w-72 bg-white text-gray-900 border',
+        'flex flex-col flex-grow mt-2 mb-2 p-4 rounded-md w-72 bg-white text-gray-900 border',
         className
       )}
     >
       <div className="mb-6 flex items-center">
         {previous && (
-          <ClearButton onClick={handleClickBack} className="mr-2" title="Back">
+          <ClearButton
+            onClick={handleClickBack}
+            className="mr-2 px-1 py-1"
+            title="Back"
+          >
             <ArrowLeftOutline className="w-4 h-4" />
           </ClearButton>
         )}

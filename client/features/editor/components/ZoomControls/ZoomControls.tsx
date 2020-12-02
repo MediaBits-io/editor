@@ -23,21 +23,31 @@ function ZoomControls({ editorMargin, editorAreaRef }: Props) {
 
   return (
     <DropdownMenu
-      placement="bottom"
+      placement="top"
       targetElement={targetElement}
       target={({ open }) => (
         <div ref={setTargetElement}>
           <DropdownMenuAnchor
             as={ClearButton}
             title="Zoom"
-            className={classNames('px-2.5', open && 'bg-gray-100 ring-2')}
+            className={classNames(
+              'px-2.5',
+              open && 'bg-gray-100 ring-gray-300 ring-2'
+            )}
           >
             {Math.floor(state.zoom * 100)}%
           </DropdownMenuAnchor>
         </div>
       )}
     >
-      <div className="max-h-64 overflow-y-auto divide-y divide-gray-100">
+      <div className="overflow-y-auto divide-y divide-gray-100">
+        <div>
+          {[3, 2, 1.25, 1, 0.75, 0.5, 0.25, 0.1].map((scale) => (
+            <DropdownMenuButton onClick={() => setScale(scale)} key={scale}>
+              {scale * 100}%
+            </DropdownMenuButton>
+          ))}
+        </div>
         <div>
           <DropdownMenuButton onClick={() => fitToScreen()}>
             Fit
@@ -45,13 +55,6 @@ function ZoomControls({ editorMargin, editorAreaRef }: Props) {
           <DropdownMenuButton onClick={() => fillScreen()}>
             Fill
           </DropdownMenuButton>
-        </div>
-        <div>
-          {[3, 2, 1.25, 1, 0.75, 0.5, 0.25, 0.1].reverse().map((scale) => (
-            <DropdownMenuButton onClick={() => setScale(scale)} key={scale}>
-              {scale * 100}%
-            </DropdownMenuButton>
-          ))}
         </div>
       </div>
     </DropdownMenu>

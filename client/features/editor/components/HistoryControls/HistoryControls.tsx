@@ -10,10 +10,10 @@ function HistoryControls() {
   return (
     <div className="flex items-center space-x-2">
       <ClearButton disabled={!hasPast} onClick={undo} title="Undo">
-        <UndoIcon className="w-4 h-4 m-0.5" />
+        <UndoIcon className="w-4 h-4" />
       </ClearButton>
       <ClearButton disabled={!hasFuture} onClick={redo} title="Redo">
-        <RedoIcon className="w-4 h-4 m-0.5" />
+        <RedoIcon className="w-4 h-4" />
       </ClearButton>
     </div>
   );

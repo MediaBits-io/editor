@@ -7,6 +7,11 @@
 }
 
 @layer components {
+  .popover-arrow::before {
+    @apply transform rotate-45 top-0 left-0 w-2 h-2 absolute z-0 bg-gray-700;
+    content: '';
+  }
+
   .panel-item {
     @apply text-left relative w-full rounded-md border border-gray-300 bg-white px-3 py-2 transition duration-150;
 
