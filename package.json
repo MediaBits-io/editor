@@ -37,7 +37,7 @@
     "firebase-functions": "^3.12.0",
     "heroicons-react": "^1.3.0",
     "konva": "^7.2.0",
-    "konva-elements": "MediaBits-io/konva-elements#master",
+    "konva-elements": "github:MediaBits-io/konva-elements#master",
     "next": "^10.0.3",
     "ramda": "^0.27.1",
     "react": "^17.0.1",
