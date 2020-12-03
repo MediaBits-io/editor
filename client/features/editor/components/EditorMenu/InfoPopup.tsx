@@ -43,32 +43,44 @@ function InfoPopup() {
               About Mediabits.io
             </h2>
 
-            <p className="text-sm text-gray-400 mb-2">
+            <p className="text-sm text-gray-400 mb-3">
               Mediabits.io is an editor to create small videos for your podcast
               or other audio content, that you can then share on social media.
             </p>
 
-            <ol className="text-sm text-gray-200 list-decimal list-inside mb-2">
+            <ol className="text-sm text-gray-200 list-decimal list-inside mb-3">
               <li>Load a template or create it from scratch</li>
               <li>Import an audio clip</li>
               <li>Generate and download the video</li>
             </ol>
 
             <div className="flex items-end">
-              <p className="flex items-center text-sm text-gray-400">
-                Made with <Heart className="h-4 w-4 text-red-500 mx-1" /> by
-                <ExternalLink
-                  custom
-                  newTab
-                  to="https://vincas.dev"
-                  className="ml-1 font-medium text-blue-400 hover:text-blue-500 focus:outline-none hover:underline focus:underline transition duration-150"
-                >
-                  Vincas Stonys
-                </ExternalLink>
-              </p>
+              <div className="flex flex-col text-sm text-gray-400">
+                <p className="flex items-center">
+                  Made with <Heart className="h-4 w-4 text-red-500 mx-1" /> by
+                  <ExternalLink
+                    type="light"
+                    newTab
+                    to="https://vincas.dev"
+                    className="ml-1"
+                  >
+                    Vincas Stonys
+                  </ExternalLink>
+                </p>
+                <p>
+                  Questions?
+                  <ExternalLink
+                    type="light"
+                    to="mailto:support@mediabits.io"
+                    className="ml-1"
+                  >
+                    support@mediabits.io
+                  </ExternalLink>
+                </p>
+              </div>
 
               <ExternalLink
-                custom
+                type="custom"
                 newTab
                 to="https://github.com/MediaBits-io/editor"
                 className="ml-auto text-gray-300 hover:text-white focus:text-white focus:outline-none transition duration-150"

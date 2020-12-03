@@ -11,11 +11,11 @@ interface Props
   > {
   to: string;
   newTab?: boolean;
-  custom?: boolean;
+  type?: 'normal' | 'light' | 'custom';
 }
 
 const ExternalLink = forwardRef<HTMLAnchorElement, Props>(
-  ({ children, className, to, newTab, custom, ...rest }, ref) => {
+  ({ children, className, to, newTab, type = 'normal', ...rest }, ref) => {
     const additional = newTab
       ? {
           rel: 'noopener noreferrer',
@@ -29,8 +29,10 @@ const ExternalLink = forwardRef<HTMLAnchorElement, Props>(
         ref={ref}
         href={to}
         className={classNames(
-          !custom &&
-            'font-medium text-blue-600 hover:text-blue-400 hover:underline focus:underline focus:outline-none transition duration-150',
+          type !== 'custom' &&
+            'font-medium hover:underline focus:underline focus:outline-none transition duration-150',
+          type === 'light' && 'text-blue-400 hover:text-blue-500',
+          type === 'normal' && 'text-blue-600 hover:text-blue-400',
           className
         )}
       >
