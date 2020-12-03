@@ -18,3 +18,11 @@ export const SHAPE_TOOL_PANEL: Partial<{ [key in ShapeType]: EditorPanel }> = {
   [ShapeType.Waveform]: EditorPanel.Elements,
   [ShapeType.Rectangle]: EditorPanel.Elements,
 };
+
+export enum DefaultFonts {
+  Headline = 'Archivo Black',
+  Regular = 'Helvetica',
+  Handwritten = 'Bad Script',
+}
+
+export const PRELOAD_FONTS = Object.values(DefaultFonts);

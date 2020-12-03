@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { ToastProvider } from 'react-toast-notifications';
 import Notification from '../components/ui/Notification/Notification';
 import NotificationContainer from '../components/ui/Notification/NotificationContainer';
-import { FontsContainer } from '../containers/FontsContainer';
 import UniqueIdContainer from '../containers/UniqueIdContainer';
 import { VideosContainer } from '../containers/VideosContainer';
 import Editor from '../features/editor/Editor';
@@ -33,9 +32,7 @@ export default function Home() {
           }}
         >
           <VideosContainer.Provider>
-            <FontsContainer.Provider>
-              <Editor />
-            </FontsContainer.Provider>
+            <Editor />
           </VideosContainer.Provider>
         </ToastProvider>
       </UniqueIdContainer.Provider>

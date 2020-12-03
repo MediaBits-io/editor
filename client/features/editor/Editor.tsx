@@ -10,6 +10,8 @@ import useEditorHistory from './hooks/useEditorHistory';
 import useElements from './hooks/useElements';
 import ZoomControls from './components/ZoomControls/ZoomControls';
 import HistoryControls from './components/HistoryControls/HistoryControls';
+import { loadFonts } from '../../utils/fonts';
+import { PRELOAD_FONTS } from './constants';
 
 const editorMargin = 8;
 
@@ -18,6 +20,10 @@ function Editor() {
   const { selectedElement } = useElements();
   const { state, template, dispatch } = EditorContainer.useContainer();
   const editorAreaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    loadFonts(PRELOAD_FONTS);
+  }, []);
 
   useEffect(() => {
     if (state.lastSaved === template) {
