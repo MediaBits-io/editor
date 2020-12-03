@@ -5,13 +5,11 @@ import Logo from '../../../../components/ui/Logo/Logo';
 import {
   DownloadOutline,
   FolderOpenOutline,
-  Heart,
   SaveAsOutline,
   SparklesOutline,
   VideoCameraOutline,
 } from 'heroicons-react';
 import ClearButton from '../ui/ClearButton';
-import Popover from '../../../../components/ui/Popover/Popover';
 
 function EditorHeader() {
   const [isExportVisible, setExportVisible] = useState(false);
@@ -28,22 +26,17 @@ function EditorHeader() {
   return (
     <div className="flex bg-white border-b w-full p-2 items-center">
       <ExportModal visible={isExportVisible} close={closeExport} />
-      <Popover
-        className="flex pr-5 mr-5"
-        content={
-          <span className="flex items-center space-x-1">
-            <span>You have upgraded, thank you!</span>
-            <Heart className="w-4 h-4 text-red-500" />
-          </span>
-        }
-      >
+
+      <div className="flex pr-5 mr-5">
         <Logo dark pro />
-      </Popover>
+      </div>
+
       <div className="flex flex-grow items-center justify-between">
         <div className="flex items-center space-x-2">
           <ClearButton icon={FolderOpenOutline} className="px-2.5">
             Open template
           </ClearButton>
+
           <ClearButton icon={SaveAsOutline} className="px-2.5">
             Save template
           </ClearButton>
@@ -66,7 +59,7 @@ function EditorHeader() {
           icon={DownloadOutline}
           type="primary"
         >
-          Export video
+          Generate video
         </Button>
       </div>
     </div>

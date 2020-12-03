@@ -57,7 +57,7 @@ function ShapeActions({ elementId }: Props) {
           disabled={moveUpDisabled}
         />
       </Popover>
-      <Popover content="Remove" placement="top" className="flex">
+      <Popover content="Remove (delete)" placement="top" className="flex">
         <PanelActionButton icon={TrashOutline} onClick={handleDeleteClick} />
       </Popover>
     </>

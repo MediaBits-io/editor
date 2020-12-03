@@ -102,7 +102,7 @@ function ExportModal({ visible, close }: Props) {
 
   return (
     <Modal visible={visible}>
-      <ModalContent title="Export Video">
+      <ModalContent title="Generate video">
         {fileTooBig ? (
           <>
             <img

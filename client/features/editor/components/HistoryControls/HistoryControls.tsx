@@ -10,12 +10,12 @@ function HistoryControls() {
 
   return (
     <div className="flex items-center space-x-2">
-      <Popover content="Undo" placement="top" closed={!hasPast}>
+      <Popover content="Undo (ctrl+z)" placement="top" closed={!hasPast}>
         <ClearButton disabled={!hasPast} onClick={undo}>
           <UndoIcon className="w-4 h-4" />
         </ClearButton>
       </Popover>
-      <Popover content="Redo" placement="top" closed={!hasFuture}>
+      <Popover content="Redo (ctrl+y)" placement="top" closed={!hasFuture}>
         <ClearButton disabled={!hasFuture} onClick={redo}>
           <RedoIcon className="w-4 h-4" />
         </ClearButton>

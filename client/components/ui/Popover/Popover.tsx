@@ -26,7 +26,9 @@ function Popover({
   const [{ popperProps, arrowProps }, setPopperElement] = usePopper(
     targetElement,
     {
+      ...popperOptions,
       modifiers: [
+        ...(popperOptions?.modifiers ?? []),
         {
           name: 'arrow',
           options: {
@@ -35,7 +37,6 @@ function Popover({
           },
         },
       ],
-      ...popperOptions,
     }
   );
 

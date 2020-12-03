@@ -30,7 +30,7 @@ const ExternalLink = forwardRef<HTMLAnchorElement, Props>(
         href={to}
         className={classNames(
           !custom &&
-            'font-medium text-blue-600 hover:text-blue-400 focus:outline-none focus:underline transition ease-in-out duration-150',
+            'font-medium text-blue-600 hover:text-blue-400 hover:underline focus:underline focus:outline-none transition duration-150',
           className
         )}
       >
