@@ -79,32 +79,32 @@ const reducer = (state: EditorState, action: EditorAction): EditorState => {
         lastSaved: state.template.present,
       };
     case 'undo': {
-      const element = state.template.present.elements.find(
+      const elementBeforeUndo = state.template.present.elements.find(
         ({ id }) => id === state.selectedId
       );
-      const prevElement = last(state.template.future)?.elements.find(
+      const elementAfterUndo = last(state.template.past)?.elements.find(
         ({ id }) => id === state.selectedId
       );
-      return element
+      return elementAfterUndo
         ? state
         : {
             ...state,
-            activePanel: getShapeToolPanel(prevElement),
+            activePanel: getShapeToolPanel(elementBeforeUndo),
             selectedId: undefined,
           };
     }
     case 'redo': {
-      const element = state.template.present.elements.find(
+      const elementBeforeRedo = state.template.present.elements.find(
         ({ id }) => id === state.selectedId
       );
-      const prevElement = last(state.template.past)?.elements.find(
+      const elementAfterRedo = last(state.template.future)?.elements.find(
         ({ id }) => id === state.selectedId
       );
-      return element
+      return elementAfterRedo
         ? state
         : {
             ...state,
-            activePanel: getShapeToolPanel(prevElement),
+            activePanel: getShapeToolPanel(elementBeforeRedo),
             selectedId: undefined,
           };
     }

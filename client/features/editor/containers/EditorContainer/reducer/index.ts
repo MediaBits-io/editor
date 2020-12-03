@@ -12,23 +12,22 @@ export type Action =
   | EditorAction;
 
 const reducer = (prevState: EditorState, action: Action): EditorState => {
+  const state = mergeReducers<EditorState, Action>(zoomReducer, editorReducer)(
+    prevState,
+    action
+  );
+
   const template = undoable(templateReducer)(
-    prevState.template,
+    state.template,
     action as TemplateAction
   );
 
-  const state =
-    template !== prevState.template
-      ? {
-          ...prevState,
-          template,
-        }
-      : prevState;
-
-  return mergeReducers<EditorState, Action>(zoomReducer, editorReducer)(
-    state,
-    action
-  );
+  return template !== state.template
+    ? {
+        ...state,
+        template,
+      }
+    : state;
 };
 
 export default reducer;
