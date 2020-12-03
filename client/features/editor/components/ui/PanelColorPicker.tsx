@@ -2,6 +2,7 @@ import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { ColorResult, RGBColor, SketchPicker } from 'react-color';
 import Dropdown from '../../../../components/ui/Dropdown/Dropdown';
 import useDropdown from '../../../../components/ui/DropdownMenu/useDropdown';
+import Popover from '../../../../components/ui/Popover/Popover';
 import Slider from '../../../../components/ui/Slider';
 import classNames from '../../../../utils/classNames';
 import { fromHex, isValidHex, toHex } from '../../../../utils/color';
@@ -92,7 +93,10 @@ function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
           onChange={handleChangeInputValue}
         />
         <div className="w-20 flex">
-          <div
+          <Popover
+            content="Pick a color"
+            placement="top"
+            closed={isOpen}
             className={classNames(
               'ml-auto rounded-md p-0.5 border focus:ring-blue-300 focus-within:border-blue-300 focus-within:ring-2 hover:border-blue-300 transition duration-150',
               isOpen && 'border-transparent ring-2'
@@ -128,7 +132,7 @@ function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
                 onChange={handleChangeColor}
               />
             </Dropdown>
-          </div>
+          </Popover>
         </div>
       </div>
       {!disableAlpha && (

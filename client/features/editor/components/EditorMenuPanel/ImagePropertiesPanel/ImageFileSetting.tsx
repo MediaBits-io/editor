@@ -3,6 +3,7 @@ import { EditorContainer } from '../../../containers/EditorContainer/EditorConta
 import Konva from 'konva';
 import AspectRatio from 'react-aspect-ratio';
 import useImageInput from '../../../hooks/useImageInput';
+import Popover from '../../../../../components/ui/Popover/Popover';
 
 interface Props {
   elementId: string;
@@ -39,7 +40,7 @@ function ImageFileSetting({ elementId, elementProps }: Props) {
   };
 
   return (
-    <div className="mb-6">
+    <Popover content="Change image" className="mb-6">
       <input
         className="hidden"
         ref={inputRef}
@@ -50,7 +51,6 @@ function ImageFileSetting({ elementId, elementProps }: Props) {
       <button
         type="button"
         className="flex items-center panel-item p-0 overflow-hidden"
-        title="Change image"
         onClick={handleClickChangeImage}
       >
         {image && 'src' in image && (
@@ -68,7 +68,7 @@ function ImageFileSetting({ elementId, elementProps }: Props) {
           </AspectRatio>
         )}
       </button>
-    </div>
+    </Popover>
   );
 }
 
