@@ -3,6 +3,7 @@ import React from 'react';
 import { EditorPanel } from '../../../interfaces/Editor';
 import SideMenuPanel from '../../ui/SideMenuPanel';
 import ShapeActions from '../ShapeActions';
+import FontFamilySetting from './FontFamilySetting/FontFamilySetting';
 import FontStyleSetting from './FontStyleSetting';
 import TextContentsSetting from './TextContentsSetting';
 import TextFillSetting from './TextFillSetting';
@@ -26,6 +27,7 @@ function TextPropertiesPanel({ elementId, elementProps }: Props) {
         <FontStyleSetting elementId={elementId} elementProps={elementProps} />
         <TextSizeSetting elementId={elementId} elementProps={elementProps} />
       </div>
+      <FontFamilySetting elementId={elementId} elementProps={elementProps} />
     </SideMenuPanel>
   );
 }

@@ -1,3 +1,4 @@
+import { dropRepeats } from 'ramda';
 import { EditorPanel } from './interfaces/Editor';
 import { ShapeType } from './interfaces/Shape';
 
@@ -25,4 +26,41 @@ export enum DefaultFonts {
   Handwritten = 'Bad Script',
 }
 
-export const PRELOAD_FONTS = Object.values(DefaultFonts);
+export const FONTS = [
+  'Abril Fatface',
+  'Alfa Slab One',
+  'Anton',
+  'Archivo Black',
+  'Arial Black',
+  'Arimo',
+  'Bad Script',
+  'Bangers',
+  'Cinzel',
+  'Courier',
+  'Georgia',
+  'Helvetica',
+  'Iceberg',
+  'Kumar One Outline',
+  'Lobster',
+  'Oleo Script',
+  'Oswald',
+  'Pacifico',
+  'Permanent Marker',
+  'Playfair Display',
+  'Rakkas',
+  'Roboto',
+  'Rubik',
+  'Shrikhand',
+  'Squada One',
+  'Times',
+  'Titan One',
+  'Work Sans',
+  'Young Serif',
+  'ZCOOL KuaiLe',
+  'Zilla Slab Highlight',
+].sort();
+
+export const PRELOAD_FONTS = dropRepeats([
+  ...Object.values(DefaultFonts),
+  ...FONTS.slice(0, 8),
+]);

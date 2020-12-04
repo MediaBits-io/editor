@@ -12,7 +12,7 @@ function InfoPopup() {
   return (
     <div className="flex flex-grow">
       <div className="mt-auto">
-        <Popover content="Info" placement="top">
+        <Popover content="About" placement="top">
           <Button
             round
             type="dark"
