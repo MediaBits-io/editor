@@ -31,7 +31,12 @@ function FontFamilySetting({ elementId, elementProps }: Props) {
           targetElement={targetElement}
           target={({ open }) => (
             <FontFamilySelectAnchor open={open}>
-              {elementProps.fontFamily}
+              <span
+                style={{ fontFamily: elementProps.fontFamily }}
+                className="leading-5"
+              >
+                {elementProps.fontFamily}
+              </span>
             </FontFamilySelectAnchor>
           )}
         >

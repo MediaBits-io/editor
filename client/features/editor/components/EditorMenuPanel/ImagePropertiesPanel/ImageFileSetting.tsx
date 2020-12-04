@@ -40,7 +40,7 @@ function ImageFileSetting({ elementId, elementProps }: Props) {
   };
 
   return (
-    <Popover content="Change image" className="mb-6">
+    <Popover content="Change image" className="mb-4">
       <input
         className="hidden"
         ref={inputRef}

@@ -26,7 +26,7 @@ function TextFillSetting({ elementId, elementProps }: Props) {
   );
 
   return (
-    <SideMenuSetting label="Fill" htmlFor="input-fill-color" className="mb-6">
+    <SideMenuSetting label="Fill" htmlFor="input-fill-color">
       <PanelColorPicker
         rgba={elementProps.fill ? fromRgba(elementProps.fill) : undefined}
         id="input-fill-color"

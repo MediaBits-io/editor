@@ -13,18 +13,21 @@ const TEXT_PROPERTIES: { [key in DefaultFonts]: Konva.TextConfig } = {
     fontStyle: 'bold',
     fontFamily: DefaultFonts.Headline,
     fill: 'rgba(0, 0, 0, 1)',
+    align: 'center',
   },
   [DefaultFonts.Regular]: {
     text: 'Regular text',
     fontSize: 24,
     fontFamily: DefaultFonts.Regular,
     fill: 'rgba(0, 0, 0, 1)',
+    align: 'center',
   },
   [DefaultFonts.Handwritten]: {
     text: 'Handwritten text',
     fontSize: 36,
     fontFamily: DefaultFonts.Handwritten,
     fill: 'rgba(0, 0, 0, 1)',
+    align: 'center',
   },
 };
 

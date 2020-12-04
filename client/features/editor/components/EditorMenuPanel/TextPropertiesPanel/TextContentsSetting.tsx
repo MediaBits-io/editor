@@ -1,6 +1,7 @@
 import Konva from 'konva';
 import React from 'react';
 import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import SideMenuSetting from '../../ui/SideMenuSetting';
 
 interface Props {
   elementId: string;
@@ -21,14 +22,14 @@ function TextContentsSetting({ elementId, elementProps }: Props) {
   };
 
   return (
-    <div className="mb-6">
+    <SideMenuSetting label="Content">
       <textarea
         rows={3}
         className="panel-item focus:outline-none focus:ring-0"
         value={elementProps.text}
         onChange={handleChangeText}
       />
-    </div>
+    </SideMenuSetting>
   );
 }
 

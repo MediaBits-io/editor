@@ -5,6 +5,7 @@ import SideMenuPanel from '../../ui/SideMenuPanel';
 import ShapeActions from '../ShapeActions';
 import FontFamilySetting from './FontFamilySetting/FontFamilySetting';
 import FontStyleSetting from './FontStyleSetting';
+import TextAlignmentSetting from './TextAlignementSetting';
 import TextContentsSetting from './TextContentsSetting';
 import TextFillSetting from './TextFillSetting';
 import TextSizeSetting from './TextSizeSetting';
@@ -23,11 +24,12 @@ function TextPropertiesPanel({ elementId, elementProps }: Props) {
     >
       <TextContentsSetting elementId={elementId} elementProps={elementProps} />
       <TextFillSetting elementId={elementId} elementProps={elementProps} />
+      <FontFamilySetting elementId={elementId} elementProps={elementProps} />
       <div className="flex space-x-2">
         <FontStyleSetting elementId={elementId} elementProps={elementProps} />
         <TextSizeSetting elementId={elementId} elementProps={elementProps} />
       </div>
-      <FontFamilySetting elementId={elementId} elementProps={elementProps} />
+      <TextAlignmentSetting elementId={elementId} elementProps={elementProps} />
     </SideMenuPanel>
   );
 }

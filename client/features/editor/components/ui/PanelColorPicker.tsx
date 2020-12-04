@@ -92,7 +92,7 @@ function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
           value={inputValue}
           onChange={handleChangeInputValue}
         />
-        <div className="w-20 flex">
+        <div className="w-20 ml-1 flex">
           <Popover
             content="Pick a color"
             placement="top"
@@ -144,7 +144,7 @@ function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
             step={1}
             onChange={handleChangeOpacity}
           />
-          <span className="text-xs w-20 text-right leading-3">
+          <span className="text-xs w-20 ml-1 text-right leading-3">
             {percentageOpacity}%
           </span>
         </div>

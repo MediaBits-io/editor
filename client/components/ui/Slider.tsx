@@ -21,14 +21,14 @@ function Slider({ min = 0, max, onChange, value, step }: Props) {
       renderTrack={({ props, children }) => (
         <div
           {...props}
-          className="h-1 w-full rounded-full"
+          className="h-1.5 w-full rounded-full"
           style={{
             ...props.style,
             background: getTrackBackground({
               min,
               max,
               values: [value],
-              colors: [colors.blue[600], colors.gray[100]],
+              colors: [colors.blue[300], colors.gray[100]],
             }),
           }}
         >

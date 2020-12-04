@@ -17,13 +17,13 @@ const SideMenuSetting = ({
 }: Props) => {
   const contents = (
     <>
-      <span className="block text-sm font-semibold mb-2 leading-4 text-black-900">
+      <span className="block text-sm font-medium mb-1 text-gray-700">
         {label}
       </span>
       {children}
     </>
   );
-  const classes = classNames('mb-4', className);
+  const classes = classNames('mb-4 flex flex-col', className);
   return noLabel ? (
     <div className={classes} {...rest}>
       {contents}
