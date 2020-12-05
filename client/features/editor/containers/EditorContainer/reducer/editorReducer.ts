@@ -6,6 +6,7 @@ import { EditorState } from '../interfaces';
 import { Action as UndoableAction } from './undoable';
 
 export type EditorAction =
+  | { type: 'add_audio'; clipBuffer: Blob; audioFile: File }
   | { type: 'create_element'; element: CanvasElement }
   | { type: 'select_element'; id: string }
   | { type: 'clear_selection' }
@@ -72,6 +73,14 @@ const reducer = (state: EditorState, action: EditorAction): EditorState => {
       return {
         ...state,
         activePanel: action.panel,
+      };
+    case 'add_audio':
+      return {
+        ...state,
+        audio: {
+          clip: action.clipBuffer,
+          file: action.audioFile,
+        },
       };
     case 'save_changes':
       return {

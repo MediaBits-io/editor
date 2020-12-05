@@ -1,32 +1,19 @@
-import React, { useState } from 'react';
-import ExportModal from '../ExportModal/ExportModal';
+import React from 'react';
 import Button from '../../../../components/ui/Button';
 import Logo from '../../../../components/ui/Logo/Logo';
 import {
-  DownloadOutline,
   FolderOpenOutline,
   SaveAsOutline,
   SparklesOutline,
   VideoCameraOutline,
 } from 'heroicons-react';
 import ClearButton from '../ui/ClearButton';
+import ExportButton from './ExportButton';
 
 function EditorHeader() {
-  const [isExportVisible, setExportVisible] = useState(false);
-
-  const handleClickExport = () => {
-    setExportVisible(true);
-  };
-
-  const closeExport = () => {
-    setExportVisible(false);
-  };
-
   // TODO: hide pro when not pro
   return (
     <div className="flex bg-white border-b w-full p-2 items-center">
-      <ExportModal visible={isExportVisible} close={closeExport} />
-
       <div className="flex pr-5 mr-5">
         <Logo dark pro />
       </div>
@@ -54,13 +41,7 @@ function EditorHeader() {
           </Button>
         </div>
 
-        <Button
-          onClick={handleClickExport}
-          icon={DownloadOutline}
-          type="primary"
-        >
-          Generate video
-        </Button>
+        <ExportButton />
       </div>
     </div>
   );

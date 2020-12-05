@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { useToasts } from 'react-toast-notifications';
 import dynamic from 'next/dynamic';
 import Modal from '../../../../components/ui/Modal/Modal';
 import ModalFullActions from '../../../../components/ui/Modal/ModalFullActions';
 import ModalAction from '../../../../components/ui/Modal/ModalAction';
 import ModalContent from '../../../../components/ui/Modal/ModalContent';
 import useAudioClipper from '../../../../components/AudioClipper/useAudioClipper';
-import { VideosContainer } from '../../../../containers/VideosContainer';
 import ExternalLink from '../../../../components/ui/ExternalLink';
 import Alert from '../../../../components/ui/Alert';
-import NotificationContent from '../../../../components/ui/Notification/NotificationContent';
 import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
 
+// TODO: base max video length on plan
 const MAX_VIDEO_LENGTH = 60;
+
+interface ClipBounds {
+  startPart: number;
+  endPart: number;
+  duration: number;
+}
 
 interface Props {
   visible: boolean;
   close: () => void;
+  onContinue: (clipBuffer: Blob) => Promise<void>;
+  audioFile?: File;
 }
 
 const AudioClipper = dynamic(
@@ -24,48 +30,31 @@ const AudioClipper = dynamic(
   { ssr: false }
 );
 
-function ExportModal({ visible, close }: Props) {
-  const { template, dispatch } = EditorContainer.useContainer();
-  const { exportVideo } = VideosContainer.useContainer();
+function AudioModal({ visible, close, audioFile, onContinue }: Props) {
+  const { dispatch } = EditorContainer.useContainer();
   const [loading, setLoading] = useState(false);
-  const [audioFile, setAudioFile] = useState<File>();
-  const [bounds, setBounds] = useState<{
-    startPart: number;
-    endPart: number;
-    duration: number;
-  }>();
-  const { clipAudio } = useAudioClipper(audioFile);
-  const { addToast } = useToasts();
+  const [file, setFile] = useState<File>();
+  const [bounds, setBounds] = useState<ClipBounds>();
+  const { clipAudio } = useAudioClipper(file);
 
   useEffect(() => {
     if (visible) {
-      setAudioFile(undefined);
+      setFile(audioFile);
     }
-    // TODO: clear audio file on close with timer
-  }, [visible]);
+  }, [visible, audioFile]);
 
   const handleSubmit = async () => {
-    if (!bounds) {
+    if (!bounds || !file) {
       return;
     }
 
     try {
       setLoading(true);
       const audioBuffer = await clipAudio(bounds.startPart, bounds.endPart);
-      await exportVideo(audioBuffer, template);
-      dispatch({ type: 'save_changes' });
+      dispatch({ type: 'add_audio', audioFile: file, clipBuffer: audioBuffer });
+      await onContinue(audioBuffer);
       close();
-      addToast(
-        <NotificationContent title="Video exported successfully">
-          It may take a few minutes for the video to get processed
-        </NotificationContent>,
-        { appearance: 'success' }
-      );
     } catch (e) {
-      const errorText = e?.response?.data?.error;
-      if (errorText) {
-        addToast(errorText, { appearance: 'error' });
-      }
       console.error(e);
     } finally {
       setLoading(false);
@@ -73,7 +62,7 @@ function ExportModal({ visible, close }: Props) {
   };
 
   const handleTryAgain = () => {
-    setAudioFile(undefined);
+    setFile(undefined);
   };
 
   const fileTooBig = audioFile && audioFile.size > 50 * 1024 * 1024;
@@ -102,7 +91,7 @@ function ExportModal({ visible, close }: Props) {
 
   return (
     <Modal visible={visible}>
-      <ModalContent title="Generate video">
+      <ModalContent title="Select audio">
         {fileTooBig ? (
           <>
             <img
@@ -127,9 +116,9 @@ function ExportModal({ visible, close }: Props) {
           </>
         ) : (
           <AudioClipper
-            audioFile={audioFile}
+            audioFile={file}
             onChange={setBounds}
-            setAudioFile={setAudioFile}
+            setAudioFile={setFile}
           />
         )}
         {renderError()}
@@ -160,4 +149,4 @@ function ExportModal({ visible, close }: Props) {
   );
 }
 
-export default ExportModal;
+export default AudioModal;

@@ -7,5 +7,9 @@ export type EditorState = {
   lastSaved: TemplateState;
   selectedId?: string;
   activePanel: EditorPanel;
+  audio?: {
+    file: File;
+    clip: Blob;
+  };
   zoom: number;
 };
