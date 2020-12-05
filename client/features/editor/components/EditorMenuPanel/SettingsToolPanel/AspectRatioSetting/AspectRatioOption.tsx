@@ -16,7 +16,7 @@ function AspectRatioOption({ orientation, value, dimensions }: Props) {
   return (
     <DropdownSelectOption value={value}>
       {({ active, selected }) => (
-        <div className="flex items-center">
+        <div className="flex min-w-full items-center">
           <div className="flex items-center justify-center w-9 h-9 mr-4">
             <AspectRatio
               className={classNames(

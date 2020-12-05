@@ -21,7 +21,7 @@ interface ClipBounds {
 interface Props {
   visible: boolean;
   close: () => void;
-  onContinue: (clipBuffer: Blob) => Promise<void>;
+  onContinue?: (clipBuffer: Blob) => Promise<void>;
   audioFile?: File;
 }
 
@@ -52,7 +52,7 @@ function AudioModal({ visible, close, audioFile, onContinue }: Props) {
       setLoading(true);
       const audioBuffer = await clipAudio(bounds.startPart, bounds.endPart);
       dispatch({ type: 'add_audio', audioFile: file, clipBuffer: audioBuffer });
-      await onContinue(audioBuffer);
+      await onContinue?.(audioBuffer);
       close();
     } catch (e) {
       console.error(e);
@@ -91,7 +91,7 @@ function AudioModal({ visible, close, audioFile, onContinue }: Props) {
 
   return (
     <Modal visible={visible}>
-      <ModalContent title="Select audio">
+      <ModalContent title="Add audio">
         {fileTooBig ? (
           <>
             <img
@@ -140,7 +140,7 @@ function AudioModal({ visible, close, audioFile, onContinue }: Props) {
               disabled={!bounds}
               onClick={handleSubmit}
             >
-              Proceed
+              Confirm
             </ModalAction>
           )
         }

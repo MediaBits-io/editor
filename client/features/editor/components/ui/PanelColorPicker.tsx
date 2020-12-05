@@ -86,7 +86,7 @@ function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
         </label>
         <input
           id={id}
-          className="flex w-full text-right focus:outline-none"
+          className="flex w-full min-w-0 text-right focus:outline-none"
           placeholder="#000000"
           onBlur={handleBlurInput}
           value={inputValue}
