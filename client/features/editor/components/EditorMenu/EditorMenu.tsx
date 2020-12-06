@@ -11,8 +11,8 @@ function EditorMenu() {
   return (
     <SideMenu>
       <SettingsToolButton />
-      <TextToolButton />
       <AudioToolButton />
+      <TextToolButton />
       <ImageToolButton />
       <ElementsToolButton />
       <InfoPopup />

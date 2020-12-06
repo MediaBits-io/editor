@@ -77,7 +77,7 @@ function TextSizeSetting({ elementId, elementProps }: Props) {
           value={`${inputValue}px`}
           placeholder="12px"
           className={classNames(
-            'text-right focus:outline-none w-full py-2 px-2',
+            'text-right focus:outline-none w-full min-w-0 py-2 px-2',
             isOpen && 'border-blue-300'
           )}
         />
@@ -92,13 +92,12 @@ function TextSizeSetting({ elementId, elementProps }: Props) {
         </Button>
 
         <Dropdown
-          className="max-h-64 overflow-y-auto"
           placement="bottom-end"
           targetElement={targetElement}
           isOpen={isOpen}
           close={close}
         >
-          <div>
+          <div className="flex flex-col max-h-64 overflow-y-auto">
             {[18, 24, 36, 48, 64, 72, 96, 144, 288].map((value) => (
               <DropdownButton
                 key={value}
@@ -107,7 +106,7 @@ function TextSizeSetting({ elementId, elementProps }: Props) {
                   value === elementProps.fontSize ? 'selected' : 'stateless'
                 }
               >
-                {value}px
+                <span className="w-16 text-right">{value}px</span>
               </DropdownButton>
             ))}
           </div>

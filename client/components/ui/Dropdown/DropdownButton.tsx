@@ -14,7 +14,7 @@ function DropdownButton({ className, state, ...rest }: Props) {
     <button
       type="button"
       className={classNames(
-        'flex justify-between w-full px-4 py-2 text-sm leading-5 focus:outline-none translate duration-150',
+        'flex px-4 py-2 text-sm leading-5 w-full focus:outline-none translate duration-150',
         !state && 'text-gray-700',
         state === 'stateless' &&
           'text-gray-600 hover:bg-gray-100 hover:text-gray-800',

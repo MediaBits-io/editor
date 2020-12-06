@@ -14,10 +14,15 @@ function ExportButton() {
   const [loading, setLoading] = useState(false);
   const [isAudioSelectVisible, setAudioSelectVisible] = useState(false);
 
-  const saveAndExportVideo = async (audioClip: Blob) => {
+  const saveAndExportVideo = async (clipBuffer: Blob) => {
     try {
       setLoading(true);
-      await exportVideo(audioClip, template);
+      await exportVideo(clipBuffer, template);
+      dispatch({
+        type: 'add_audio',
+        clipBuffer,
+        blobUrl: URL.createObjectURL(clipBuffer),
+      });
       dispatch({ type: 'save_changes' });
       addToast(
         <NotificationContent title="Video exported successfully">
@@ -40,7 +45,7 @@ function ExportButton() {
     if (!state.audio) {
       setAudioSelectVisible(true);
     } else {
-      saveAndExportVideo(state.audio.clip);
+      saveAndExportVideo(state.audio.data);
     }
   };
 
@@ -51,7 +56,7 @@ function ExportButton() {
   return (
     <>
       <AudioModal
-        audioFile={state.audio?.file}
+        initialAudio={state.audio}
         onContinue={saveAndExportVideo}
         visible={isAudioSelectVisible}
         close={closeExport}

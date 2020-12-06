@@ -1,9 +1,9 @@
 import { slice } from 'audio-buffer-utils';
-import { readBlobAsArrayBuffer } from '../../utils/blob';
+import { readBlobAsArrayBuffer } from '../../../../utils/blob';
 import instantiate from '@etercast/mp3';
 
 // TODO: Move audio clipping to web worker to prevent blocking
-// TODO: detect audio sample rate instead of hard coding 44100
+// TODO: detect audio sample rate instead of hard coding 44100 (browsers missing APIs)
 
 /**
  * @param audioFile Blob or File to audio

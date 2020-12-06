@@ -100,17 +100,19 @@ function Alert({
               </div>
             )}
           </div>
-          <div
-            className={classNames(
-              'mt-2 text-sm leading-5',
-              type === 'info' && 'text-blue-700',
-              type === 'error' && 'text-red-700',
-              type === 'warning' && 'text-yellow-700',
-              type === 'success' && 'text-green-700'
-            )}
-          >
-            <p>{children}</p>
-          </div>
+          {children && (
+            <div
+              className={classNames(
+                'mt-2 text-sm leading-5',
+                type === 'info' && 'text-blue-700',
+                type === 'error' && 'text-red-700',
+                type === 'warning' && 'text-yellow-700',
+                type === 'success' && 'text-green-700'
+              )}
+            >
+              {children}
+            </div>
+          )}
         </div>
       </div>
     </div>

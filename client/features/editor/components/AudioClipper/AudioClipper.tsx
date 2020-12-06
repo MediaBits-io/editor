@@ -5,11 +5,11 @@ import IMask from 'imask';
 import CursorPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.cursor';
 import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions';
 import TimelinePlugin from 'wavesurfer.js/dist/plugin/wavesurfer.timeline';
-import Button from '../ui/Button';
+import Button from '../../../../components/ui/Button';
 import TimestampInput from './TimestampInput';
-import useThrottle from '../../utils/hooks/useThrottle';
-import Loader from '../ui/Loader/Loader';
-import { formatDateToValue, formatDuration } from '../../utils/time';
+import useThrottle from '../../../../utils/hooks/useThrottle';
+import Loader from '../../../../components/ui/Loader/Loader';
+import { formatDateToValue, formatDuration } from '../../../../utils/time';
 
 export interface BoxSize {
   width: string | number;
@@ -17,8 +17,8 @@ export interface BoxSize {
 }
 
 interface Props {
-  audioFile?: File;
-  setAudioFile: (file: File) => void;
+  audioFile?: Blob;
+  setAudioFile: (file: Blob) => void;
   onChange: (bounds: {
     startPart: number;
     endPart: number;
@@ -114,7 +114,6 @@ function AudioClipper({
       }
 
       const duration = wavesurferRef.current.getDuration();
-
       const start = Math.max(region.start, 0);
       const end = Math.max(region.end, start + minDuration);
 
@@ -142,9 +141,12 @@ function AudioClipper({
       }
 
       const duration = wavesurfer.getDuration();
+      const start = 0;
+      const end = Math.min(duration, start + 15);
+
       const region = wavesurfer.addRegion({
-        start: 0,
-        end: 15,
+        start,
+        end,
         minLength: minDuration,
         color: 'rgba(63, 131, 248, 0.25)',
         handleStyle: {
@@ -159,6 +161,7 @@ function AudioClipper({
         },
       });
 
+      updateRegionRange({ start, end });
       onChange({
         startPart: region.start / duration,
         endPart: region.end / duration,
@@ -364,7 +367,9 @@ function AudioClipper({
           >
             <span className="h-32 flex flex-col justify-center text-center">
               <span className="mb-1">Click to select audio</span>
-              <span className="text-sm text-gray-500">Max 50MB</span>
+              <span className="text-sm text-gray-500">
+                You can trim files up to 50MB
+              </span>
             </span>
           </button>
         )}

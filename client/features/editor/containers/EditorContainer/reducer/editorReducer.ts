@@ -6,15 +6,18 @@ import { EditorState } from '../interfaces';
 import { Action as UndoableAction } from './undoable';
 
 export type EditorAction =
-  | { type: 'add_audio'; clipBuffer: Blob; audioFile: File }
+  | {
+      type: 'add_audio';
+      clipBuffer: Blob;
+      blobUrl: string;
+    }
+  | { type: 'remove_audio' }
   | { type: 'create_element'; element: CanvasElement }
   | { type: 'select_element'; id: string }
   | { type: 'clear_selection' }
   | { type: 'open_editor_panel'; panel: EditorPanel }
   | { type: 'delete_element'; id: string }
-  | {
-      type: 'save_changes';
-    }
+  | { type: 'save_changes' }
   | UndoableAction;
 
 const reducer = (state: EditorState, action: EditorAction): EditorState => {
@@ -75,12 +78,21 @@ const reducer = (state: EditorState, action: EditorAction): EditorState => {
         activePanel: action.panel,
       };
     case 'add_audio':
+      if (state.audio && state.audio.url !== action.blobUrl) {
+        URL.revokeObjectURL(state.audio.url);
+      }
+
       return {
         ...state,
         audio: {
-          clip: action.clipBuffer,
-          file: action.audioFile,
+          data: action.clipBuffer,
+          url: action.blobUrl,
         },
+      };
+    case 'remove_audio':
+      return {
+        ...state,
+        audio: undefined,
       };
     case 'save_changes':
       return {

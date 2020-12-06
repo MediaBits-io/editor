@@ -5,7 +5,7 @@ import ImageToolPanel from './ImageToolPanel';
 import TextToolPanel from './TextToolPanel';
 import SettingsToolPanel from './SettingsToolPanel/SettingsToolPanel';
 import ElementToolPanel from './ElementToolPanel';
-import AudioToolPanel from './AudioToolPanel';
+import AudioToolPanel from './AudioToolPanel/AudioToolPanel';
 import ImagePropertiesPanel from './ImagePropertiesPanel/ImagePropertiesPanel';
 import { EditorPanel } from '../../interfaces/Editor';
 import useElements from '../../hooks/useElements';

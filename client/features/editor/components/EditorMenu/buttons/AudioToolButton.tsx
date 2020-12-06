@@ -6,7 +6,7 @@ import { EditorPanel } from '../../../interfaces/Editor';
 import { useEditorMenuButton } from '../useEditorMenuButton';
 
 function AudioToolButton() {
-  const { dispatch } = EditorContainer.useContainer();
+  const { state, dispatch } = EditorContainer.useContainer();
   const { selected } = useEditorMenuButton([EditorPanel.Audio]);
 
   const handleClick = () => {
@@ -18,6 +18,7 @@ function AudioToolButton() {
       onClick={handleClick}
       selected={selected}
       icon={MusicNoteOutline}
+      toggled={!!state.audio}
     >
       Audio
     </SideMenuButton>
