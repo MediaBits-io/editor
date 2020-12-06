@@ -70,6 +70,7 @@ function useVideos() {
         );
         if (!pollingIdsRef.current.length) {
           clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = undefined;
         }
       }
     }, 3000);

@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Modal from '../../../../components/ui/Modal/Modal';
 import ModalFullActions from '../../../../components/ui/Modal/ModalFullActions';
 import ModalAction from '../../../../components/ui/Modal/ModalAction';
 import ModalContent from '../../../../components/ui/Modal/ModalContent';
-import useAudioClipper from '../../../../components/AudioClipper/useAudioClipper';
-import ExternalLink from '../../../../components/ui/ExternalLink';
+import useAudioClipper from '../AudioClipper/useAudioClipper';
 import Alert from '../../../../components/ui/Alert';
-import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
+import { UserContainer } from '../../../../containers/UserContainer';
+import { Plan } from '../../../../containers/interfaces';
+import FileTooBig from './FileTooBig';
 
-// TODO: base max video length on plan
-const MAX_VIDEO_LENGTH = 60;
+const MAX_FILE_SIZE = 50 * 1024 * 1024;
+
+export interface AudioState {
+  url: string;
+  data: Blob;
+}
 
 interface ClipBounds {
   startPart: number;
@@ -22,36 +27,47 @@ interface Props {
   visible: boolean;
   close: () => void;
   onContinue?: (clipBuffer: Blob) => Promise<void>;
-  audioFile?: File;
+  initialAudio?: AudioState;
 }
 
-const AudioClipper = dynamic(
-  () => import('../../../../components/AudioClipper/AudioClipper'),
-  { ssr: false }
-);
+const AudioClipper = dynamic(() => import('../AudioClipper/AudioClipper'), {
+  ssr: false,
+});
 
-function AudioModal({ visible, close, audioFile, onContinue }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
+  const { userPlanInfo, userPlan } = UserContainer.useContainer();
   const [loading, setLoading] = useState(false);
-  const [file, setFile] = useState<File>();
   const [bounds, setBounds] = useState<ClipBounds>();
-  const { clipAudio } = useAudioClipper(file);
+  const [audio, setAudio] = useState(initialAudio);
+  const [totalDuration, setTotalDuration] = useState<number>();
+  const { clipAudio } = useAudioClipper(audio?.data);
 
   useEffect(() => {
     if (visible) {
-      setFile(audioFile);
+      setAudio(initialAudio);
     }
-  }, [visible, audioFile]);
+  }, [initialAudio, visible]);
+
+  useEffect(() => {
+    if (audio) {
+      const audioEl = new Audio();
+      audioEl.addEventListener('loadedmetadata', (e) => {
+        setTotalDuration((e.target as HTMLAudioElement).duration);
+      });
+      audioEl.src = audio.url;
+    }
+  }, [audio]);
 
   const handleSubmit = async () => {
-    if (!bounds || !file) {
+    if (!audio) {
       return;
     }
 
     try {
       setLoading(true);
-      const audioBuffer = await clipAudio(bounds.startPart, bounds.endPart);
-      dispatch({ type: 'add_audio', audioFile: file, clipBuffer: audioBuffer });
+      const audioBuffer = bounds
+        ? await clipAudio(bounds.startPart, bounds.endPart)
+        : audio.data;
       await onContinue?.(audioBuffer);
       close();
     } catch (e) {
@@ -62,26 +78,48 @@ function AudioModal({ visible, close, audioFile, onContinue }: Props) {
   };
 
   const handleTryAgain = () => {
-    setFile(undefined);
+    setAudio(undefined);
   };
 
-  const fileTooBig = audioFile && audioFile.size > 50 * 1024 * 1024;
+  const changeAudioFile = (data: Blob) => {
+    if (audio && initialAudio?.url !== audio.url) {
+      URL.revokeObjectURL(audio.url);
+    }
+
+    setAudio({
+      data,
+      url: URL.createObjectURL(data),
+    });
+  };
+
   const clipDuration =
     bounds && (bounds.endPart - bounds.startPart) * bounds.duration;
-  const videoTooLong = !!clipDuration && MAX_VIDEO_LENGTH < clipDuration;
+  const clipTooLong =
+    !!clipDuration && userPlanInfo.durationLimit < clipDuration;
+  const trimRequired =
+    !!totalDuration && totalDuration > userPlanInfo.durationLimit;
+  const fileTooBig = audio && audio.data.size > MAX_FILE_SIZE;
+  const isFree = userPlan.plan === Plan.Free;
+
+  const title = audio ? 'Trim audio' : 'Add audio';
 
   const renderError = () => {
     if (!clipDuration) {
       return null;
     }
 
-    // TODO: don't show for PRO plan
-    if (videoTooLong) {
+    if (clipTooLong) {
       return (
-        <Alert type="error" title="Video is too long" className="mt-4">
-          Can't export {Math.floor(clipDuration)} seconds of video. Maximum
-          video length is {MAX_VIDEO_LENGTH} seconds. <br />
-          Upgrade your plan to export this video today!
+        <Alert
+          type="error"
+          title="Selected audio clip is too long"
+          className="mt-4"
+        >
+          <div>
+            Maximum duration is {userPlanInfo.durationLimit} seconds. Your clip
+            length is {Math.floor(clipDuration)} seconds.
+          </div>
+          {isFree && <div>Upgrade for longer clips</div>}
         </Alert>
       );
     }
@@ -91,60 +129,41 @@ function AudioModal({ visible, close, audioFile, onContinue }: Props) {
 
   return (
     <Modal visible={visible}>
-      <ModalContent title="Add audio">
-        {fileTooBig ? (
-          <>
-            <img
-              src="/images/firefighter.svg"
-              alt="Error"
-              className="w-32 mx-auto mb-4"
+      {fileTooBig ? (
+        <FileTooBig
+          onCancel={close}
+          onBack={handleTryAgain}
+          onContinue={handleSubmit}
+          trimRequired={trimRequired}
+        />
+      ) : (
+        <>
+          <ModalContent title={fileTooBig ? undefined : title}>
+            <AudioClipper
+              onChange={setBounds}
+              audioFile={audio?.data}
+              setAudioFile={changeAudioFile}
             />
-            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-2">
-              File is too big :(
-            </h3>
-            <p>We can't load files larger than 50MB.</p>
-            <p className="mb-2">
-              Try trimming the audio to under 50MB before uploading it.
-            </p>
-            <p>
-              You can use{' '}
-              <ExternalLink newTab to="https://www.audacityteam.org">
-                Audacity
-              </ExternalLink>{' '}
-              to do that for free.
-            </p>
-          </>
-        ) : (
-          <AudioClipper
-            audioFile={file}
-            onChange={setBounds}
-            setAudioFile={setFile}
+            {renderError()}
+          </ModalContent>
+          <ModalFullActions
+            dismiss={
+              <ModalAction disabled={loading} onClick={close} type="secondary">
+                Cancel
+              </ModalAction>
+            }
+            submit={
+              <ModalAction
+                loading={loading}
+                disabled={!totalDuration || !bounds || clipTooLong}
+                onClick={handleSubmit}
+              >
+                Confirm
+              </ModalAction>
+            }
           />
-        )}
-        {renderError()}
-      </ModalContent>
-      <ModalFullActions
-        dismiss={
-          <ModalAction disabled={loading} onClick={close} type="secondary">
-            Cancel
-          </ModalAction>
-        }
-        submit={
-          fileTooBig ? (
-            <ModalAction type="accented" onClick={handleTryAgain}>
-              Try again
-            </ModalAction>
-          ) : (
-            <ModalAction
-              loading={loading}
-              disabled={!bounds}
-              onClick={handleSubmit}
-            >
-              Confirm
-            </ModalAction>
-          )
-        }
-      />
+        </>
+      )}
     </Modal>
   );
 }

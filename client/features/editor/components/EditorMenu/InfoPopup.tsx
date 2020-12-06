@@ -70,6 +70,7 @@ function InfoPopup() {
                 <p>
                   Questions?
                   <ExternalLink
+                    newTab
                     type="light"
                     to="mailto:support@mediabits.io"
                     className="ml-1"
@@ -80,8 +81,8 @@ function InfoPopup() {
               </div>
 
               <ExternalLink
-                type="custom"
                 newTab
+                type="custom"
                 to="https://github.com/MediaBits-io/editor"
                 className="ml-auto text-gray-300 hover:text-white focus:text-white focus:outline-none transition duration-150"
               >

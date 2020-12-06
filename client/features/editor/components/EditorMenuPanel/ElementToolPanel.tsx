@@ -32,7 +32,7 @@ function ElementToolPanel() {
       x: 0,
       y: 0,
       width: template.dimensions.width,
-      height: 10,
+      height: template.dimensions.height * 0.01,
       progress: 4,
       max: 10,
       backgroundColor: 'rgba(120, 120, 120, 0.2)',

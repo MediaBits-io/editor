@@ -1,4 +1,4 @@
-import { PencilOutline, TrashOutline } from 'heroicons-react';
+import { PencilOutline, ScissorsOutline, TrashOutline } from 'heroicons-react';
 import React from 'react';
 import Popover from '../../../../../components/ui/Popover/Popover';
 import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
@@ -6,9 +6,10 @@ import PanelActionButton from '../../ui/PanelActionButton';
 
 interface Props {
   onEditClick: () => void;
+  onTrimClick: () => void;
 }
 
-function AudioActions({ onEditClick }: Props) {
+function AudioActions({ onEditClick, onTrimClick }: Props) {
   const { dispatch } = EditorContainer.useContainer();
 
   const handleDeleteClick = () => {
@@ -17,7 +18,10 @@ function AudioActions({ onEditClick }: Props) {
 
   return (
     <>
-      <Popover content="Edit" placement="top" className="flex">
+      <Popover content="Trim audio" placement="top" className="flex">
+        <PanelActionButton icon={ScissorsOutline} onClick={onTrimClick} />
+      </Popover>
+      <Popover content="Change file" placement="top" className="flex">
         <PanelActionButton icon={PencilOutline} onClick={onEditClick} />
       </Popover>
       <Popover content="Remove" placement="top" className="flex">

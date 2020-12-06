@@ -43,21 +43,21 @@ function SideMenuButton({
       {toggled === true && (
         <CheckCircle
           className={classNames(
-            'absolute right-1 top-1 w-4 h-4 transition duration-150',
+            'absolute right-0.5 top-0.5 w-5 h-5 transition duration-150',
             selected ? 'text-blue-300' : 'text-blue-200'
           )}
         />
       )}
       {toggled === false && (
         <Popover
-          className="absolute right-1 top-1"
-          content="Required to generate video"
+          className="absolute right-0.5 top-0.5"
+          content="Required for generating video"
           placement="top"
         >
           <ExclamationCircle
             className={classNames(
-              'w-4 h-4 transition duration-150',
-              selected ? 'text-red-400' : 'text-red-400'
+              'w-5 h-5 transition duration-150',
+              selected ? 'text-red-300' : 'text-red-300'
             )}
           />
         </Popover>
