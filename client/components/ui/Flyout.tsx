@@ -5,7 +5,9 @@ function Flyout({
   transitionClass = ['translate-y-1', 'translate-y-0'],
   ...rest
 }: Props) {
-  return <Dropdown transitionClass={transitionClass} {...rest} />;
+  return (
+    <Dropdown transitionClass={transitionClass} autoClose={false} {...rest} />
+  );
 }
 
 export default Flyout;
