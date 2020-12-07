@@ -21,12 +21,16 @@ function AudioToolPanel() {
   useEffect(() => {
     if (!isTrimModalVisible) {
       setAudio((audio) => {
-        // Sync audio from state if changed and local remove blob urls
-        if (audio && audio.url !== state.audio?.url) {
-          URL.revokeObjectURL(audio.url);
-          return state.audio;
+        if (audio?.url === state.audio?.url) {
+          return audio;
         }
-        return audio;
+
+        // Sync audio from state if changed and remove local blob urls
+        if (audio) {
+          URL.revokeObjectURL(audio.url);
+        }
+
+        return state.audio;
       });
     }
   }, [isTrimModalVisible, state.audio]);

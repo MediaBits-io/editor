@@ -3,7 +3,7 @@ import React from 'react';
 import DropdownSelect from '../../../../../components/ui/DropdownSelect/DropdownSelect';
 import DropdownSelectAnchor from '../../../../../components/ui/DropdownSelect/DropdownSelectAnchor';
 import DropdownSelectOption from '../../../../../components/ui/DropdownSelect/DropdownSelectOption';
-import useDropdownSelect from '../../../../../components/ui/DropdownSelect/useDropdownSelect';
+import useDropdown from '../../../../../components/ui/Dropdown/useDropdown';
 import classNames from '../../../../../utils/classNames';
 import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
 import SideMenuSetting from '../../ui/SideMenuSetting';
@@ -42,7 +42,7 @@ interface Props {
 
 function WaveformPatternSetting({ elementId, elementProps }: Props) {
   const { dispatch } = EditorContainer.useContainer();
-  const { setTargetElement, targetElement } = useDropdownSelect();
+  const { setTargetElement, targetElement } = useDropdown();
 
   const selectedPattern = options.find(
     ({ value }) => value === elementProps.pattern

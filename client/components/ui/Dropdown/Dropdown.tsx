@@ -5,13 +5,14 @@ import { Portal } from 'react-portal';
 import usePopper from '../../../utils/hooks/usePopper';
 import classNames from '../../../utils/classNames';
 
-interface Props extends Partial<PopperOptions> {
+export interface Props extends Partial<PopperOptions> {
   targetElement: Element | null;
   children: React.ReactNode;
   isOpen: boolean;
   close: () => void;
   autoClose?: boolean;
   className?: string;
+  transitionClass?: [string, string];
 }
 
 function Dropdown({
@@ -20,6 +21,7 @@ function Dropdown({
   isOpen,
   close,
   autoClose = true,
+  transitionClass = ['scale-95', 'scale-100'],
   className,
   ...popperOptions
 }: Props) {
@@ -58,18 +60,18 @@ function Dropdown({
       <Transition
         show={isOpen}
         enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
+        enterFrom={classNames('transform opacity-0', transitionClass[0])}
+        enterTo={classNames('transform opacity-100', transitionClass[1])}
         leave="transition ease-in duration-100"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
+        leaveFrom={classNames('transform opacity-100', transitionClass[1])}
+        leaveTo={classNames('transform opacity-0', transitionClass[0])}
       >
         {(ref) => (
           <div ref={setPopperElement} {...popperProps}>
             <div
               ref={ref}
               className={classNames(
-                'outline-none overflow-hidden bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg',
+                'outline-none overflow-hidden bg-white border border-gray-200 rounded-md shadow-lg',
                 className
               )}
             >

@@ -2,7 +2,7 @@ import Konva from 'konva';
 import React from 'react';
 import DropdownSelect from '../../../../../../components/ui/DropdownSelect/DropdownSelect';
 import DropdownSelectOption from '../../../../../../components/ui/DropdownSelect/DropdownSelectOption';
-import useDropdownSelect from '../../../../../../components/ui/DropdownSelect/useDropdownSelect';
+import useDropdown from '../../../../../../components/ui/Dropdown/useDropdown';
 import { FONTS } from '../../../../constants';
 import { EditorContainer } from '../../../../containers/EditorContainer/EditorContainer';
 import SideMenuSetting from '../../../ui/SideMenuSetting';
@@ -15,7 +15,7 @@ interface Props {
 
 function FontFamilySetting({ elementId, elementProps }: Props) {
   const { dispatch } = EditorContainer.useContainer();
-  const { setTargetElement, targetElement } = useDropdownSelect();
+  const { setTargetElement, targetElement } = useDropdown();
 
   const handleChangeOption = (fontFamily?: string) => {
     dispatch({ type: 'update_element', id: elementId, props: { fontFamily } });

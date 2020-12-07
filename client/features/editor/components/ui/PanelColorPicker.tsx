@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { ColorResult, RGBColor, SketchPicker } from 'react-color';
 import Dropdown from '../../../../components/ui/Dropdown/Dropdown';
-import useDropdown from '../../../../components/ui/DropdownMenu/useDropdown';
+import useDropdown from '../../../../components/ui/Dropdown/useDropdown';
 import Popover from '../../../../components/ui/Popover/Popover';
 import Slider from '../../../../components/ui/Slider';
 import classNames from '../../../../utils/classNames';

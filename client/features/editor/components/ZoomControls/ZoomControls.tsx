@@ -2,7 +2,7 @@ import React, { RefObject } from 'react';
 import DropdownMenuAnchor from '../../../../components/ui/DropdownMenu/DropdownMenuAnchor';
 import DropdownMenu from '../../../../components/ui/DropdownMenu/DropdownMenu';
 import DropdownMenuButton from '../../../../components/ui/DropdownMenu/DropdownMenuButton';
-import useDropdownMenu from '../../../../components/ui/DropdownMenu/useDropdownMenu';
+import useDropdown from '../../../../components/ui/Dropdown/useDropdown';
 import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
 import useZoom from '../../hooks/useZoom';
 import ClearButton from '../ui/ClearButton';
@@ -20,7 +20,7 @@ function ZoomControls({ editorMargin, editorAreaRef }: Props) {
     editorAreaRef,
     editorMargin,
   });
-  const { setTargetElement, targetElement } = useDropdownMenu();
+  const { setTargetElement, targetElement } = useDropdown();
 
   return (
     <DropdownMenu

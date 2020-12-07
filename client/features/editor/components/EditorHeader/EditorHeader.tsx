@@ -1,16 +1,13 @@
 import React from 'react';
 import Button from '../../../../components/ui/Button';
 import Logo from '../../../../components/ui/Logo/Logo';
-import {
-  FolderOpenOutline,
-  SaveAsOutline,
-  SparklesOutline,
-  VideoCameraOutline,
-} from 'heroicons-react';
-import ClearButton from '../ui/ClearButton';
+import { SparklesOutline } from 'heroicons-react';
 import ExportButton from './ExportButton';
 import { UserContainer } from '../../../../containers/UserContainer';
 import { Plan } from '../../../../containers/interfaces';
+import OpenTemplateButton from './OpenTemplateButton';
+import SaveTemplateButton from './SaveTemplateButton';
+import VideosButton from './VideosButton';
 
 function EditorHeader() {
   const { userPlan } = UserContainer.useContainer();
@@ -25,18 +22,9 @@ function EditorHeader() {
 
       <div className="flex flex-grow items-center justify-between">
         <div className="flex items-center space-x-2">
-          <ClearButton icon={FolderOpenOutline} className="px-2.5">
-            Open template
-          </ClearButton>
-
-          <ClearButton icon={SaveAsOutline} className="px-2.5">
-            Save template
-          </ClearButton>
-
-          <ClearButton className="px-2.5" icon={VideoCameraOutline}>
-            Videos
-          </ClearButton>
-
+          <OpenTemplateButton />
+          <SaveTemplateButton />
+          <VideosButton />
           <Button
             type="custom"
             icon={SparklesOutline}
