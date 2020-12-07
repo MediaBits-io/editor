@@ -5,11 +5,3 @@ export enum ShapeType {
   Waveform = 'waveform',
   Image = 'image',
 }
-
-export interface ShapeTransformerConfig {
-  type?: 'scale' | 'resize';
-  anchors?: {
-    x: boolean;
-    y: boolean;
-  };
-}

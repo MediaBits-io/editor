@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect } from 'react';
+import React, { RefObject, useCallback, useEffect } from 'react';
 import { Stage, Layer, Rect, Text, Image } from 'react-konva';
 import {
   ProgressBar,
@@ -7,10 +7,10 @@ import {
   WaveformConfig,
 } from 'konva-elements';
 import { EditorContainer } from '../containers/EditorContainer/EditorContainer';
-import { mul } from '../../../utils/number';
+import { mul, roundDecimal } from '../../../utils/number';
 import { ShapeType } from '../interfaces/Shape';
 import useZoom from '../hooks/useZoom';
-import InteractiveKonvaElement from './InteractiveKonvaElement';
+import InteractiveKonvaElement, { MIN_WIDTH } from './InteractiveKonvaElement';
 import Konva from 'konva';
 import UniqueIdContainer from '../../../containers/UniqueIdContainer';
 
@@ -33,6 +33,22 @@ function CanvasRenderer({ editorMargin, editorAreaRef }: Props) {
   const handleBackgroundClick = () => {
     dispatch({ type: 'clear_selection' });
   };
+
+  const transformTextFn = useCallback((node: Konva.Node): Konva.TextConfig => {
+    const textNode = node as Konva.Text;
+    const fontSize = textNode.fontSize();
+    const scaleY = textNode.scaleY();
+    const scaleX = textNode.scaleX();
+    return {
+      width: Math.max(textNode.width() * scaleX, MIN_WIDTH),
+      fontSize:
+        roundDecimal(scaleY, 5) !== 1
+          ? Math.floor(fontSize * scaleY)
+          : fontSize,
+      scaleX: 1,
+      scaleY: 1,
+    };
+  }, []);
 
   return (
     <div
@@ -63,12 +79,20 @@ function CanvasRenderer({ editorMargin, editorAreaRef }: Props) {
                 <InteractiveKonvaElement
                   key={id}
                   id={id}
-                  transformerConfig={
+                  anchors={
                     type === ShapeType.Text
-                      ? {
-                          type: 'resize',
-                        }
+                      ? [
+                          'middle-left',
+                          'middle-right',
+                          'top-left',
+                          'top-right',
+                          'bottom-left',
+                          'bottom-right',
+                        ]
                       : undefined
+                  }
+                  transformerFn={
+                    type === ShapeType.Text ? transformTextFn : undefined
                   }
                 >
                   {(additionalProps) => {

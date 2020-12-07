@@ -2,33 +2,28 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { EditorContainer } from '../containers/EditorContainer/EditorContainer';
 import { KonvaNodeEvents, Transformer } from 'react-konva';
 import Konva from 'konva';
-import { isTruthy } from '../../../utils/boolean';
-import { ShapeTransformerConfig } from '../interfaces/Shape';
 import useElements from '../hooks/useElements';
 
-const MIN_WIDTH = 1;
-const MIN_HEIGHT = 1;
+export const MIN_WIDTH = 1;
+export const MIN_HEIGHT = 1;
 
 interface Props {
   id: string;
   children: (props: Konva.ShapeConfig & KonvaNodeEvents) => React.ReactNode;
-  transformerConfig?: ShapeTransformerConfig;
+  transformerFn?: (node: Konva.Shape) => Konva.ShapeConfig;
+  anchors?: string[];
 }
 
 const InteractiveKonvaElement = ({
   id,
+  anchors,
   children,
-  transformerConfig = {},
+  transformerFn,
 }: Props) => {
   const shapeRef = useRef<Konva.Shape>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
   const { selectedElement } = useElements();
   const { dispatch } = EditorContainer.useContainer();
-
-  const {
-    anchors = { x: true, y: true },
-    type: transformerType = 'scale',
-  } = transformerConfig;
 
   const isSelected = selectedElement?.id === id;
 
@@ -38,18 +33,6 @@ const InteractiveKonvaElement = ({
       transformerRef.current.getLayer()?.batchDraw();
     }
   }, [isSelected, selectedElement]);
-
-  const resetNodeScale = useCallback(() => {
-    const node = shapeRef.current;
-    if (node && transformerType === 'resize') {
-      node.setAttrs({
-        width: Math.max(node.width() * node.scaleX(), MIN_WIDTH),
-        height: Math.max(node.height() * node.scaleY(), MIN_HEIGHT),
-        scaleX: 1,
-        scaleY: 1,
-      });
-    }
-  }, [transformerType]);
 
   const handleSelect = () => {
     dispatch({ type: 'select_element', id });
@@ -66,11 +49,18 @@ const InteractiveKonvaElement = ({
     });
   };
 
+  const handleTransform = useCallback(() => {
+    const node = shapeRef.current;
+    if (node && transformerFn) {
+      node.setAttrs(transformerFn(node));
+    }
+  }, [transformerFn]);
+
   const handleTransformEnd = () => {
     const node = shapeRef.current;
 
     if (node) {
-      resetNodeScale();
+      handleTransform();
       handleChange({
         ...node.getAttrs(),
       });
@@ -87,22 +77,13 @@ const InteractiveKonvaElement = ({
         draggable: true,
         onDragEnd: handleDragEnd,
         onTransformEnd: handleTransformEnd,
-        onTransform: resetNodeScale,
+        onTransform: handleTransform,
       })}
 
       {isSelected && (
         <Transformer
           ref={transformerRef}
-          enabledAnchors={[
-            anchors.x && 'middle-left',
-            anchors.x && 'middle-right',
-            anchors.y && 'top-center',
-            anchors.y && 'bottom-center',
-            anchors.y && anchors.x && 'top-left',
-            anchors.y && anchors.x && 'top-right',
-            anchors.y && anchors.x && 'bottom-left',
-            anchors.y && anchors.x && 'bottom-right',
-          ].filter(isTruthy)}
+          enabledAnchors={anchors}
           boundBoxFunc={(oldBox, newBox) =>
             newBox.width < MIN_WIDTH || newBox.height < MIN_HEIGHT
               ? oldBox
