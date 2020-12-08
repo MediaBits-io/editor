@@ -9,6 +9,7 @@ import { EditorContainer } from '../../containers/EditorContainer/EditorContaine
 import ClearButton from '../ui/ClearButton';
 import { toTemplateJSON } from '../../utils/template';
 import { useToasts } from 'react-toast-notifications';
+import FlyoutMenuButton from './FlyoutMenuButton';
 
 function SaveTemplateButton() {
   const { template, dispatch } = EditorContainer.useContainer();
@@ -48,34 +49,19 @@ function SaveTemplateButton() {
         isOpen={isOpen}
         close={close}
       >
-        <button
-          type="button"
+        <FlyoutMenuButton
+          title="Save to disk"
+          description="Download the template file to your computer"
           onClick={downloadTemplate}
-          className="w-56 text-left p-2 flex items-start rounded-md hover:bg-gray-50 focus:ring-gray-300 focus-visible:ring-2 focus:outline-none transition ease-in-out duration-150"
-        >
-          <DownloadToDiskIcon className="flex-shrink-0 p-0.5 h-6 w-6 text-blue-600" />
-          <div className="ml-4">
-            <p className="text-base font-medium text-gray-900">Save to disk</p>
-            <p className="mt-1 text-sm text-gray-500">
-              Download the template file to your computer.
-            </p>
-          </div>
-        </button>
-        <button
-          type="button"
-          disabled
-          className="w-56 cursor-default text-left p-2 flex items-start rounded-md bg-yellow-50 opacity-50 focus:ring-gray-300 focus-visible:ring-2 focus:outline-none transition ease-in-out duration-150"
-        >
-          <CloudUpload className="flex-shrink-0 h-6 w-6 text-yellow-700" />
-          <div className="ml-4">
-            <p className="text-base font-medium text-yellow-900">
-              Save to cloud
-            </p>
-            <p className="mt-1 text-sm text-yellow-600">
-              Upload the template to mediabits.io cloud (PRO)
-            </p>
-          </div>
-        </button>
+          icon={DownloadToDiskIcon}
+        />
+        <FlyoutMenuButton
+          title="Export to cloud"
+          description="Upload the template to mediabits.io cloud (PRO)"
+          onClick={() => console.info('not implemented yet')}
+          icon={CloudUpload}
+          onlyPro
+        />
       </Flyout>
     </>
   );

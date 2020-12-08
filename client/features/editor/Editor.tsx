@@ -18,7 +18,7 @@ const editorMargin = 8;
 function Editor() {
   const { redo, undo } = useEditorHistory();
   const { selectedElement } = useElements();
-  const { state, template, dispatch } = EditorContainer.useContainer();
+  const { state, dispatch, hasUnsavedChanges } = EditorContainer.useContainer();
   const editorAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ function Editor() {
   }, []);
 
   useEffect(() => {
-    if (state.lastSaved === template) {
+    if (!hasUnsavedChanges) {
       return;
     }
 
@@ -40,7 +40,7 @@ function Editor() {
     return () => {
       window.removeEventListener('beforeunload', unloadCallback);
     };
-  }, [state.lastSaved, template]);
+  }, [hasUnsavedChanges]);
 
   useEditorKeyCommand('ctrl+z', undo, process.browser ? document : undefined);
   useEditorKeyCommand('ctrl+y', redo, process.browser ? document : undefined);

@@ -1,7 +1,7 @@
 import { last } from 'ramda';
 import { SHAPE_PROPERTIES_PANEL, SHAPE_TOOL_PANEL } from '../../../constants';
 import { EditorPanel } from '../../../interfaces/Editor';
-import { CanvasElement } from '../../../interfaces/StageConfig';
+import { CanvasElement, Template } from '../../../interfaces/StageConfig';
 import { EditorState } from '../interfaces';
 import { Action as UndoableAction } from './undoable';
 
@@ -18,6 +18,7 @@ export type EditorAction =
   | { type: 'open_editor_panel'; panel: EditorPanel }
   | { type: 'delete_element'; id: string }
   | { type: 'save_changes' }
+  | { type: 'load_template'; template: Template }
   | UndoableAction;
 
 const reducer = (state: EditorState, action: EditorAction): EditorState => {
@@ -129,6 +130,17 @@ const reducer = (state: EditorState, action: EditorAction): EditorState => {
             selectedId: undefined,
           };
     }
+    case 'load_template':
+      return {
+        ...state,
+        activePanel: EditorPanel.Settings,
+        lastSaved: action.template,
+        template: {
+          past: [],
+          future: [],
+          present: action.template,
+        },
+      };
     default:
       return state;
   }

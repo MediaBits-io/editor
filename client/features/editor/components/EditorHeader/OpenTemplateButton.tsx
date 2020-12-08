@@ -1,10 +1,19 @@
-import React from 'react';
+import { CloudDownload } from 'heroicons-react';
+import React, { useRef, useState } from 'react';
 import useDropdown from '../../../../components/ui/Dropdown/useDropdown';
 import Flyout from '../../../../components/ui/Flyout';
 import OpenIcon from '../../../../components/ui/Icons/OpenIcon';
+import UploadToDiskIcon from '../../../../components/ui/Icons/UploadToDiskIcon';
+import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
 import ClearButton from '../ui/ClearButton';
+import FlyoutMenuButton from './FlyoutMenuButton';
+import { readBlobAsText } from '../../../../utils/blob';
+import DiscardChangesModal from '../DiscardChangesModal';
 
 function OpenTemplateButton() {
+  const { dispatch, hasUnsavedChanges } = EditorContainer.useContainer();
+  const [isDiscardChangesVisible, setDiscardChangesVisible] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const {
     isOpen,
     close,
@@ -13,8 +22,59 @@ function OpenTemplateButton() {
     targetElement,
   } = useDropdown();
 
+  const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.currentTarget.files?.[0];
+
+    if (
+      file &&
+      (file.type === 'application/json' || file.name.endsWith('.json'))
+    ) {
+      try {
+        dispatch({
+          type: 'load_template',
+          template: JSON.parse(await readBlobAsText(file)),
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  };
+
+  const handleClickOpen = () => {
+    if (hasUnsavedChanges) {
+      setDiscardChangesVisible(true);
+    } else {
+      inputRef.current?.click();
+    }
+  };
+
+  const handleDiscardClick = () => {
+    inputRef.current?.click();
+    setDiscardChangesVisible(false);
+  };
+
+  const handleCancelDiscardClick = () => {
+    setDiscardChangesVisible(false);
+  };
+
   return (
     <>
+      <DiscardChangesModal
+        visible={isDiscardChangesVisible}
+        ok={handleDiscardClick}
+        cancel={handleCancelDiscardClick}
+      />
+      <input
+        ref={inputRef}
+        type="file"
+        onChange={handleChangeFile}
+        className="hidden"
+        accept=".json,application/json"
+      />
       <ClearButton
         onClick={open}
         ref={setTargetElement}
@@ -24,12 +84,24 @@ function OpenTemplateButton() {
         Open template
       </ClearButton>
       <Flyout
-        placement="bottom-end"
+        className="p-3 space-y-2"
         targetElement={targetElement}
         isOpen={isOpen}
         close={close}
       >
-        Open
+        <FlyoutMenuButton
+          title="Open from disk"
+          description="Select the template file from your computer"
+          onClick={handleClickOpen}
+          icon={UploadToDiskIcon}
+        />
+        <FlyoutMenuButton
+          title="Import from cloud"
+          description="Download the template from mediabits.io cloud (PRO)"
+          onClick={() => console.info('not implemented yet')}
+          icon={CloudDownload}
+          onlyPro
+        />
       </Flyout>
     </>
   );

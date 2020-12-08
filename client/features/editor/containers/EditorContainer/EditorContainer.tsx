@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useMemo, useReducer } from 'react';
 import { createContainer } from 'unstated-next';
 import { EditorPanel } from '../../interfaces/Editor';
 import { Template } from '../../interfaces/StageConfig';
@@ -39,10 +39,18 @@ function useEditorState(
 ) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const template = state.template.present;
+
+  const hasUnsavedChanges = useMemo(() => state.lastSaved !== template, [
+    state.lastSaved,
+    template,
+  ]);
+
   return {
     state,
-    template: state.template.present,
+    template,
     dispatch,
+    hasUnsavedChanges,
     ...initialValue.override,
   };
 }
