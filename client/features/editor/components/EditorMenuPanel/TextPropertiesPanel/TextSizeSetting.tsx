@@ -21,7 +21,7 @@ function TextSizeSetting({ elementId, elementProps }: Props) {
     setTargetElement,
     targetElement,
     isOpen,
-    open,
+    toggle,
     close,
   } = useDropdown();
   const [inputValue, setInputValue] = useState(elementProps.fontSize);
@@ -86,7 +86,7 @@ function TextSizeSetting({ elementId, elementProps }: Props) {
           type="custom"
           className="bg-gray-100 focus:outline-none px-0.5 hover:bg-gray-200 focus:bg-gray-200"
           ref={setTargetElement}
-          onClick={open}
+          onClick={toggle}
         >
           <ChevronDown className="w-4 h-4" />
         </Button>

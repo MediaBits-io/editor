@@ -16,7 +16,7 @@ function SaveTemplateButton() {
   const {
     isOpen,
     close,
-    open,
+    toggle,
     setTargetElement,
     targetElement,
   } = useDropdown();
@@ -35,7 +35,7 @@ function SaveTemplateButton() {
   return (
     <>
       <ClearButton
-        onClick={open}
+        onClick={toggle}
         ref={setTargetElement}
         icon={SaveIcon}
         className="px-2.5"

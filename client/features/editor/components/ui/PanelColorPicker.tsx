@@ -23,7 +23,7 @@ function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
     setTargetElement,
     targetElement,
     isOpen,
-    open,
+    toggle,
     close,
   } = useDropdown();
   const [inputValue, setInputValue] = useState(color);
@@ -106,7 +106,7 @@ function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
               ref={setTargetElement}
               id={`button-${id}`}
               type="button"
-              onClick={open}
+              onClick={toggle}
               style={{ backgroundColor: color }}
               className="flex items-center justify-center rounded h-4 w-4 focus:outline-none"
             />

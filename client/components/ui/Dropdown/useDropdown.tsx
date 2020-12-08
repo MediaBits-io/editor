@@ -12,10 +12,17 @@ function useDropdown() {
     setOpen(false);
   }, []);
 
+  const toggle = useCallback(() => (isOpen ? close() : open()), [
+    close,
+    isOpen,
+    open,
+  ]);
+
   return {
     open,
     isOpen,
     close,
+    toggle,
     targetElement,
     setTargetElement,
   };
