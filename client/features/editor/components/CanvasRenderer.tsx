@@ -13,6 +13,7 @@ import useZoom from '../hooks/useZoom';
 import InteractiveKonvaElement, { MIN_WIDTH } from './InteractiveKonvaElement';
 import Konva from 'konva';
 import UniqueIdContainer from '../../../containers/UniqueIdContainer';
+import Loader from '../../../components/ui/Loader/Loader';
 
 interface Props {
   editorAreaRef: RefObject<HTMLDivElement>;
@@ -52,13 +53,26 @@ function CanvasRenderer({ editorMargin, editorAreaRef }: Props) {
 
   return (
     <div
-      className="flex flex-grow"
+      className="relative flex flex-grow"
       onClick={(e) => {
         if ('tagName' in e.target && (e.target as any).tagName !== 'CANVAS') {
           handleBackgroundClick();
         }
       }}
     >
+      {state.loading && (
+        <>
+          <div
+            className="z-10 absolute inset-0 m-auto rounded-lg bg-gray-900 opacity-75"
+            style={{
+              width: mul(template.dimensions.width, state.zoom),
+              height: mul(template.dimensions.height, state.zoom),
+            }}
+          ></div>
+          <Loader className="z-10 absolute inset-0 m-auto h-10 text-white" />
+        </>
+      )}
+
       <Stage
         className="flex flex-grow"
         style={{ margin: editorMargin }}

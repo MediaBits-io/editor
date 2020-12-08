@@ -25,6 +25,7 @@ const initialState: EditorState = {
   lastSaved: initialTemplate,
   activePanel: EditorPanel.Settings,
   zoom: 1,
+  loading: false,
 };
 
 interface OverridableProps {

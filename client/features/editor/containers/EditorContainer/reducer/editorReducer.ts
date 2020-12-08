@@ -18,6 +18,7 @@ export type EditorAction =
   | { type: 'open_editor_panel'; panel: EditorPanel }
   | { type: 'delete_element'; id: string }
   | { type: 'save_changes' }
+  | { type: 'loading_template' }
   | { type: 'load_template'; template: Template }
   | UndoableAction;
 
@@ -130,9 +131,15 @@ const reducer = (state: EditorState, action: EditorAction): EditorState => {
             selectedId: undefined,
           };
     }
+    case 'loading_template':
+      return {
+        ...state,
+        loading: true,
+      };
     case 'load_template':
       return {
         ...state,
+        loading: false,
         activePanel: EditorPanel.Settings,
         lastSaved: action.template,
         template: {

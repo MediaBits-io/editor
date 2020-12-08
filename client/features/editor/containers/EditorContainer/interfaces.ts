@@ -10,4 +10,5 @@ export type EditorState = {
   activePanel: EditorPanel;
   audio?: AudioState;
   zoom: number;
+  loading: boolean;
 };

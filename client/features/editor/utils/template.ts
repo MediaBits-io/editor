@@ -29,3 +29,15 @@ export async function toTemplateJSON(template: Template) {
     return value;
   });
 }
+
+export default function extractTemplateFonts(template: Template) {
+  const fonts = new Set<string>();
+
+  template.elements.forEach((element) => {
+    if ('fontFamily' in element.props) {
+      fonts.add(element.props.fontFamily);
+    }
+  });
+
+  return Array.from(fonts);
+}

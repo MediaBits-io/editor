@@ -9,9 +9,16 @@ import ClearButton from '../ui/ClearButton';
 import FlyoutMenuButton from './FlyoutMenuButton';
 import { readBlobAsText } from '../../../../utils/blob';
 import DiscardChangesModal from '../DiscardChangesModal';
+import extractTemplateFonts from '../../utils/template';
+import { loadFonts } from '../../../../utils/fonts';
 
 function OpenTemplateButton() {
-  const { dispatch, hasUnsavedChanges } = EditorContainer.useContainer();
+  const {
+    dispatch,
+    hasUnsavedChanges,
+    state,
+    template,
+  } = EditorContainer.useContainer();
   const [isDiscardChangesVisible, setDiscardChangesVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const {
@@ -25,22 +32,36 @@ function OpenTemplateButton() {
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
 
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+
     if (
       file &&
       (file.type === 'application/json' || file.name.endsWith('.json'))
     ) {
       try {
+        const template = JSON.parse(await readBlobAsText(file));
+        const fonts = extractTemplateFonts(template);
+
+        if (fonts.length) {
+          const loadingTimeout = setTimeout(() => {
+            dispatch({ type: 'loading_template' });
+          }, 1000);
+
+          await loadFonts(fonts);
+
+          // Do not show loader if all fonts loaded from cache
+          clearTimeout(loadingTimeout);
+        }
+
         dispatch({
           type: 'load_template',
-          template: JSON.parse(await readBlobAsText(file)),
+          template,
         });
       } catch (e) {
         console.error(e);
       }
-    }
-
-    if (inputRef.current) {
-      inputRef.current.value = '';
     }
   };
 
