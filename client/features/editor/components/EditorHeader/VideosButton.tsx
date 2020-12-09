@@ -8,7 +8,7 @@ function VideosButton() {
   const {
     isOpen,
     close,
-    open,
+    toggle,
     setTargetElement,
     targetElement,
   } = useDropdown();
@@ -16,7 +16,7 @@ function VideosButton() {
   return (
     <>
       <ClearButton
-        onClick={open}
+        onClick={toggle}
         ref={setTargetElement}
         icon={VideoCameraOutline}
         className="px-2.5"

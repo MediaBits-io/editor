@@ -19,7 +19,7 @@ function OpenTemplateButton() {
   const {
     isOpen,
     close,
-    open,
+    toggle,
     setTargetElement,
     targetElement,
   } = useDropdown();
@@ -92,7 +92,7 @@ function OpenTemplateButton() {
         accept=".json,application/json"
       />
       <ClearButton
-        onClick={open}
+        onClick={toggle}
         ref={setTargetElement}
         icon={OpenIcon}
         className="px-2.5"

@@ -110,29 +110,30 @@ function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
               style={{ backgroundColor: color }}
               className="flex items-center justify-center rounded h-4 w-4 focus:outline-none"
             />
-            <Dropdown
-              placement="bottom"
-              autoClose={false}
-              targetElement={targetElement}
-              isOpen={isOpen}
-              close={close}
-            >
-              <SketchPicker
-                disableAlpha={disableAlpha}
-                styles={{
-                  default: {
-                    picker: {
-                      boxShadow: 'inherit',
-                      borderRadius: 'inherit',
-                      borderColor: 'inherit',
-                    },
-                  },
-                }}
-                color={rgba}
-                onChange={handleChangeColor}
-              />
-            </Dropdown>
           </Popover>
+
+          <Dropdown
+            placement="bottom-end"
+            autoClose={false}
+            targetElement={targetElement}
+            isOpen={isOpen}
+            close={close}
+          >
+            <SketchPicker
+              disableAlpha={disableAlpha}
+              styles={{
+                default: {
+                  picker: {
+                    boxShadow: 'inherit',
+                    borderRadius: 'inherit',
+                    borderColor: 'inherit',
+                  },
+                },
+              }}
+              color={rgba}
+              onChange={handleChangeColor}
+            />
+          </Dropdown>
         </div>
       </div>
       {!disableAlpha && (

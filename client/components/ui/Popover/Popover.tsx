@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Options as PopperOptions } from '@popperjs/core';
 import Popper from '../Popper';
 
@@ -38,12 +38,6 @@ function Popover({
     }),
     [arrowElement, popperOptions]
   );
-
-  useEffect(() => {
-    if (closed && isOpen) {
-      setOpen(false);
-    }
-  }, [closed, isOpen]);
 
   return (
     <div
