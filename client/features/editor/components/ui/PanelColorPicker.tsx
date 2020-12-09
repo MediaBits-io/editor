@@ -111,7 +111,7 @@ function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
               className="flex items-center justify-center rounded h-4 w-4 focus:outline-none"
             />
             <Dropdown
-              placement="bottom-end"
+              placement="bottom"
               autoClose={false}
               targetElement={targetElement}
               isOpen={isOpen}

@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@etercast/mp3": "1.0.1",
-    "@headlessui/react": "^0.2.0",
+    "@headlessui/react": "0.0.0-2472521",
     "@mirco312312/react-imask": "^6.0.6",
     "@popperjs/core": "^2.5.4",
     "@tailwindcss/aspect-ratio": "^0.2.0",

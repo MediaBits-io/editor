@@ -13,12 +13,7 @@ import extractTemplateFonts from '../../utils/template';
 import { loadFonts } from '../../../../utils/fonts';
 
 function OpenTemplateButton() {
-  const {
-    dispatch,
-    hasUnsavedChanges,
-    state,
-    template,
-  } = EditorContainer.useContainer();
+  const { dispatch, hasUnsavedChanges } = EditorContainer.useContainer();
   const [isDiscardChangesVisible, setDiscardChangesVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const {

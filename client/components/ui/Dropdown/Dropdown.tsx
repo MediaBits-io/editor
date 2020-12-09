@@ -1,12 +1,10 @@
-import { Transition } from '@headlessui/react';
 import React, { useEffect, useRef } from 'react';
 import { Options as PopperOptions } from '@popperjs/core';
-import { Portal } from 'react-portal';
-import usePopper from '../../../utils/hooks/usePopper';
 import classNames from '../../../utils/classNames';
+import Popper from '../Popper';
 
 export interface Props extends Partial<PopperOptions> {
-  targetElement: Element | null;
+  targetElement: HTMLElement | null;
   children: React.ReactNode;
   isOpen: boolean;
   close: () => void;
@@ -25,10 +23,7 @@ function Dropdown({
   className,
   ...popperOptions
 }: Props) {
-  const [{ popperProps }, setPopperElement, popperElement] = usePopper(
-    targetElement,
-    popperOptions
-  );
+  const containerElRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isOpen) {
@@ -40,7 +35,7 @@ function Dropdown({
       if (
         isOpen &&
         !targetElement?.contains(target) &&
-        (!popperElement?.contains(target) || autoClose)
+        (!containerElRef.current?.contains(target) || autoClose)
       ) {
         close();
       }
@@ -53,34 +48,24 @@ function Dropdown({
         document.removeEventListener('click', handler);
       };
     }
-  }, [autoClose, close, isOpen, popperElement, targetElement]);
+  }, [autoClose, close, isOpen, targetElement]);
 
   return (
-    <Portal>
-      <Transition
-        show={isOpen}
-        enter="transition ease-out duration-100"
-        enterFrom={classNames('transform opacity-0', transitionClass[0])}
-        enterTo={classNames('transform opacity-100', transitionClass[1])}
-        leave="transition ease-in duration-100"
-        leaveFrom={classNames('transform opacity-100', transitionClass[1])}
-        leaveTo={classNames('transform opacity-0', transitionClass[0])}
-      >
-        {(ref) => (
-          <div ref={setPopperElement} {...popperProps}>
-            <div
-              ref={ref}
-              className={classNames(
-                'outline-none overflow-hidden bg-white border border-gray-200 rounded-md shadow-lg',
-                className
-              )}
-            >
-              {children}
-            </div>
-          </div>
+    <Popper
+      isOpen={isOpen}
+      targetElement={targetElement}
+      popperOptions={popperOptions}
+    >
+      <div
+        ref={containerElRef}
+        className={classNames(
+          'outline-none overflow-hidden bg-white border border-gray-200 rounded-md shadow-lg',
+          className
         )}
-      </Transition>
-    </Portal>
+      >
+        {children}
+      </div>
+    </Popper>
   );
 }
 

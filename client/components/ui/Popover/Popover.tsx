@@ -1,8 +1,6 @@
-import { Transition } from '@headlessui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Options as PopperOptions } from '@popperjs/core';
-import { Portal } from 'react-portal';
-import usePopper from '../../../utils/hooks/usePopper';
+import Popper from '../Popper';
 
 interface Props extends Partial<PopperOptions> {
   children: React.ReactNode;
@@ -23,9 +21,9 @@ function Popover({
   const [targetElement, setTargetElement] = useState<HTMLDivElement | null>(
     null
   );
-  const [{ popperProps, arrowProps }, setPopperElement] = usePopper(
-    targetElement,
-    {
+
+  const mergedPopperOptions = useMemo(
+    () => ({
       ...popperOptions,
       modifiers: [
         ...(popperOptions?.modifiers ?? []),
@@ -37,7 +35,8 @@ function Popover({
           },
         },
       ],
-    }
+    }),
+    [arrowElement, popperOptions]
   );
 
   useEffect(() => {
@@ -62,32 +61,25 @@ function Popover({
       }}
     >
       {children}
-      <Portal>
-        <Transition
-          show={isOpen && !closed}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-100"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          {(ref) => (
-            <div className="popover" ref={setPopperElement} {...popperProps}>
-              <div ref={ref}>
-                <div
-                  ref={setArrowElement}
-                  {...arrowProps}
-                  className="popover-arrow"
-                ></div>
-                <div className="outline-none rounded-md shadow-sm p-2 text-xs leading-4 bg-gray-700 text-white">
-                  {content}
-                </div>
-              </div>
+      <Popper
+        isOpen={isOpen && !closed}
+        targetElement={targetElement}
+        className="popover"
+        popperOptions={mergedPopperOptions}
+      >
+        {(arrowProps) => (
+          <>
+            <div
+              {...arrowProps}
+              ref={setArrowElement}
+              className="popover-arrow"
+            ></div>
+            <div className="outline-none rounded-md shadow-sm p-2 text-xs leading-4 bg-gray-700 text-white">
+              {content}
             </div>
-          )}
-        </Transition>
-      </Portal>
+          </>
+        )}
+      </Popper>
     </div>
   );
 }
