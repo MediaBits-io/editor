@@ -17,12 +17,13 @@ function ExportButton() {
   const saveAndExportVideo = async (clipBuffer: Blob) => {
     try {
       setLoading(true);
-      await exportVideo(clipBuffer, template);
+      const exportPromise = exportVideo(clipBuffer, template);
       dispatch({
         type: 'add_audio',
         clipBuffer,
         blobUrl: URL.createObjectURL(clipBuffer),
       });
+      await exportPromise;
       dispatch({ type: 'save_changes' });
       addToast(
         <NotificationContent title="Video exported successfully">
