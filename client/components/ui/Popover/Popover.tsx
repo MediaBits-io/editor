@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Options as PopperOptions } from '@popperjs/core';
 import Popper from '../Popper';
 
@@ -17,31 +17,11 @@ function Popover({
   ...popperOptions
 }: Props) {
   const [isOpen, setOpen] = useState(false);
-  const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
-  const [targetElement, setTargetElement] = useState<HTMLDivElement | null>(
-    null
-  );
-
-  const mergedPopperOptions = useMemo(
-    () => ({
-      ...popperOptions,
-      modifiers: [
-        ...(popperOptions?.modifiers ?? []),
-        {
-          name: 'arrow',
-          options: {
-            element: arrowElement,
-            padding: 5,
-          },
-        },
-      ],
-    }),
-    [arrowElement, popperOptions]
-  );
+  const targetElRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
-      ref={setTargetElement}
+      ref={targetElRef}
       className={className}
       onMouseOver={() => {
         if (!isOpen && !closed) {
@@ -56,18 +36,15 @@ function Popover({
     >
       {children}
       <Popper
+        hasArrow
         isOpen={isOpen && !closed}
-        targetElement={targetElement}
+        targetElement={targetElRef.current}
         className="popover"
-        popperOptions={mergedPopperOptions}
+        popperOptions={popperOptions}
       >
         {(arrowProps) => (
           <>
-            <div
-              {...arrowProps}
-              ref={setArrowElement}
-              className="popover-arrow"
-            ></div>
+            <div {...arrowProps} className="popover-arrow"></div>
             <div className="outline-none rounded-md shadow-sm p-2 text-xs leading-4 bg-gray-700 text-white">
               {content}
             </div>

@@ -7,32 +7,38 @@ import { EditorContainer } from '../../../../containers/EditorContainer/EditorCo
 import useZoom from '../../../../hooks/useZoom';
 import SideMenuSetting from '../../../ui/SideMenuSetting';
 import AspectRatioOption from './AspectRatioOption';
+import Popover from '../../../../../../components/ui/Popover/Popover';
 
 export const options = [
   {
     dimensions: { width: 1080, height: 1920 },
     orientation: 'Portrait',
+    description: 'Instagram & Facebook stories, Snapchat and TikTok',
     ratio: '9:16',
   },
   {
     dimensions: { width: 1536, height: 1920 },
     orientation: 'Portrait',
+    description: 'Twitter, Instagram and Facebook',
     ratio: '4:5',
   },
   {
     dimensions: { width: 1080, height: 1080 },
     orientation: 'Square',
+    description: 'Twitter, Instagram and Facebook',
     ratio: '1:1',
-  },
-  {
-    dimensions: { width: 1920, height: 1080 },
-    orientation: 'Landscape',
-    ratio: '16:9',
   },
   {
     dimensions: { width: 1920, height: 1536 },
     orientation: 'Landscape',
+    description: 'Twitter, Instagram and Facebook',
     ratio: '5:4',
+  },
+  {
+    dimensions: { width: 1920, height: 1080 },
+    orientation: 'Landscape',
+    description: 'Youtube and websites',
+    ratio: '16:9',
   },
 ];
 
@@ -74,13 +80,18 @@ function AspectRatioSetting({ editorAreaRef, editorMargin }: Props) {
             </DropdownSelectAnchor>
           )}
         >
-          {options.map(({ dimensions, orientation, ratio }) => (
-            <AspectRatioOption
+          {options.map(({ dimensions, orientation, ratio, description }) => (
+            <Popover
               key={`${dimensions.width}x${dimensions.height}`}
-              dimensions={dimensions}
-              orientation={orientation}
-              value={ratio}
-            />
+              content={description}
+              placement="right"
+            >
+              <AspectRatioOption
+                dimensions={dimensions}
+                orientation={orientation}
+                value={ratio}
+              />
+            </Popover>
           ))}
         </DropdownSelect>
       </div>

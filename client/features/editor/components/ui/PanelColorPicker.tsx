@@ -95,7 +95,7 @@ function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
         <div className="w-20 ml-1 flex">
           <Popover
             content="Pick a color"
-            placement="top"
+            placement="right"
             closed={isOpen}
             className={classNames(
               'ml-auto rounded-md p-0.5 border focus:ring-blue-300 focus-within:border-blue-300 focus-within:ring-2 hover:border-blue-300 transition duration-150',

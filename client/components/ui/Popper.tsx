@@ -4,17 +4,22 @@ import { Portal } from 'react-portal';
 import { Options as PopperOptions } from '@popperjs/core';
 import { usePopper } from 'react-popper';
 import classNames from '../../utils/classNames';
+import { isTruthy } from '../../utils/boolean';
 
 interface Props {
   targetElement: HTMLElement | null;
   children:
     | React.ReactNode
-    | ((arrowProps: { style: React.CSSProperties }) => React.ReactNode);
+    | ((arrowProps: {
+        style: React.CSSProperties;
+        ref?: (instance: HTMLDivElement | null) => void;
+      }) => React.ReactNode);
   isOpen: boolean;
   className?: string;
   transitionClass?: [string, string];
   transitionActiveClass?: [string, string];
   popperOptions?: Partial<PopperOptions>;
+  hasArrow?: boolean;
 }
 
 function Popper({
@@ -23,12 +28,14 @@ function Popper({
   className,
   targetElement,
   popperOptions,
+  hasArrow,
   transitionActiveClass = ['scale-95', 'scale-100'],
   transitionClass = ['duration-100', 'duration-75'],
 }: Props) {
   const [isMounted, setMounted] = useState(false);
   const popperElRef = useRef<HTMLDivElement>(null);
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
+  const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
   const { styles, attributes } = usePopper(targetElement, popperElement, {
     modifiers: [
       {
@@ -37,7 +44,14 @@ function Popper({
           offset: [0, 8],
         },
       },
-    ],
+      hasArrow && {
+        name: 'arrow',
+        options: {
+          element: arrowElement,
+          padding: 8,
+        },
+      },
+    ].filter(isTruthy),
     ...popperOptions,
   });
 
@@ -78,7 +92,7 @@ function Popper({
           afterLeave={() => setPopperElement(null)}
         >
           {typeof children === 'function'
-            ? children({ style: styles.arrow })
+            ? children({ style: styles.arrow, ref: setArrowElement })
             : children}
         </Transition>
       </div>
