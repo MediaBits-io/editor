@@ -1,5 +1,5 @@
 import { Transition } from '@headlessui/react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Portal } from 'react-portal';
 import { Options as PopperOptions } from '@popperjs/core';
 import { usePopper } from 'react-popper';
@@ -26,6 +26,7 @@ function Popper({
   transitionActiveClass = ['scale-95', 'scale-100'],
   transitionClass = ['duration-100', 'duration-75'],
 }: Props) {
+  const [isMounted, setMounted] = useState(false);
   const popperElRef = useRef<HTMLDivElement>(null);
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const { styles, attributes } = usePopper(targetElement, popperElement, {
@@ -39,6 +40,14 @@ function Popper({
     ],
     ...popperOptions,
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <Portal>

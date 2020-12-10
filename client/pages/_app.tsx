@@ -3,16 +3,21 @@ import firebase from 'firebase/app';
 import 'firebase/analytics';
 import '../styles/global.css';
 import firebaseConfig from '../firebaseConfig';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  if (typeof window !== 'undefined' && !firebase.apps.length) {
+  if (process.browser && !firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
     if (process.env.NODE_ENV === 'production') {
       firebase.analytics();
     }
   }
 
-  return <Component {...pageProps} />;
+  return (
+    <ErrorBoundary>
+      <Component {...pageProps} />
+    </ErrorBoundary>
+  );
 }
 
 export default MyApp;

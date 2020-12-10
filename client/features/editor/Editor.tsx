@@ -78,11 +78,7 @@ function Editor() {
             <HistoryControls />
           </div>
         </div>
-        <MainArea
-          onKeyDown={handleKeyDown}
-          className="overflow-x-auto focus:outline-none"
-          ref={editorAreaRef}
-        >
+        <MainArea onKeyDown={handleKeyDown} ref={editorAreaRef}>
           <CanvasRenderer
             editorAreaRef={editorAreaRef}
             editorMargin={editorMargin}
