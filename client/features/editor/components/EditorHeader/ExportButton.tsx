@@ -24,7 +24,6 @@ function ExportButton() {
         blobUrl: URL.createObjectURL(clipBuffer),
       });
       await exportPromise;
-      dispatch({ type: 'save_changes' });
       addToast(
         <NotificationContent title="Video exported successfully">
           It may take a few minutes for the video to get processed
