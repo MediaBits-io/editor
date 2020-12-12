@@ -44,7 +44,7 @@ function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
 
   useEffect(() => {
     if (visible) {
-      setAudio(initialAudio);
+      setAudio((audio) => audio ?? initialAudio);
     }
   }, [initialAudio, visible]);
 
