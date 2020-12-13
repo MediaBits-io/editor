@@ -5,9 +5,9 @@ import { SparklesOutline } from 'heroicons-react';
 import ExportButton from './ExportButton';
 import { UserContainer } from '../../../../containers/UserContainer';
 import { Plan } from '../../../../containers/interfaces';
-import OpenTemplateButton from './OpenTemplateButton';
-import SaveTemplateButton from './SaveTemplateButton';
-import VideosButton from './VideosButton';
+import OpenTemplateButton from './OpenTemplate/OpenTemplateButton';
+import SaveTemplateButton from './SaveTemplate/SaveTemplateButton';
+import VideosButton from './Videos/VideosButton';
 
 function EditorHeader() {
   const { userPlan } = UserContainer.useContainer();

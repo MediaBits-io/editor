@@ -1,28 +1,24 @@
 import { CloudDownload } from 'heroicons-react';
 import React, { useRef, useState } from 'react';
-import useDropdown from '../../../../components/ui/Dropdown/useDropdown';
-import Flyout from '../../../../components/ui/Flyout';
-import OpenIcon from '../../../../components/ui/Icons/OpenIcon';
-import UploadToDiskIcon from '../../../../components/ui/Icons/UploadToDiskIcon';
-import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
-import ClearButton from '../ui/ClearButton';
-import FlyoutMenuButton from './FlyoutMenuButton';
-import { readBlobAsText } from '../../../../utils/blob';
-import DiscardChangesModal from '../DiscardChangesModal';
-import extractTemplateFonts from '../../utils/template';
-import { loadFonts } from '../../../../utils/fonts';
+import Flyout from '../../../../../components/ui/Flyout';
+import UploadToDiskIcon from '../../../../../components/ui/Icons/UploadToDiskIcon';
+import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import FlyoutMenuButton from '../FlyoutMenuButton';
+import { readBlobAsText } from '../../../../../utils/blob';
+import DiscardChangesModal from '../../DiscardChangesModal';
+import extractTemplateFonts from '../../../utils/template';
+import { loadFonts } from '../../../../../utils/fonts';
 
-function OpenTemplateButton() {
+interface Props {
+  isOpen: boolean;
+  close: () => void;
+  targetElement: HTMLElement | null;
+}
+
+function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
   const { dispatch, hasUnsavedChanges } = EditorContainer.useContainer();
   const [isDiscardChangesVisible, setDiscardChangesVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const {
-    isOpen,
-    close,
-    toggle,
-    setTargetElement,
-    targetElement,
-  } = useDropdown();
 
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
@@ -91,14 +87,6 @@ function OpenTemplateButton() {
         className="hidden"
         accept=".json,application/json"
       />
-      <ClearButton
-        onClick={toggle}
-        ref={setTargetElement}
-        icon={OpenIcon}
-        className="px-2.5"
-      >
-        Open template
-      </ClearButton>
       <Flyout
         className="p-3 space-y-2"
         targetElement={targetElement}
@@ -123,4 +111,4 @@ function OpenTemplateButton() {
   );
 }
 
-export default OpenTemplateButton;
+export default OpenTemplateFlyout;

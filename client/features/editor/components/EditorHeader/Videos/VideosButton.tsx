@@ -1,8 +1,8 @@
 import { VideoCameraOutline } from 'heroicons-react';
 import React from 'react';
-import useDropdown from '../../../../components/ui/Dropdown/useDropdown';
-import Flyout from '../../../../components/ui/Flyout';
-import ClearButton from '../ui/ClearButton';
+import useDropdown from '../../../../../components/ui/Dropdown/useDropdown';
+import ClearButton from '../../ui/ClearButton';
+import VideosFlyout from './VideosFlyout';
 
 function VideosButton() {
   const {
@@ -23,14 +23,11 @@ function VideosButton() {
       >
         Videos
       </ClearButton>
-      <Flyout
-        placement="bottom-end"
-        targetElement={targetElement}
-        isOpen={isOpen}
+      <VideosFlyout
         close={close}
-      >
-        Videos
-      </Flyout>
+        isOpen={isOpen}
+        targetElement={targetElement}
+      />
     </>
   );
 }

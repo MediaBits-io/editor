@@ -10,6 +10,7 @@ export interface Props extends Partial<PopperOptions> {
   close: () => void;
   autoClose?: boolean;
   className?: string;
+  wrapperClass?: string;
   transitionClass?: [string, string];
 }
 
@@ -20,6 +21,7 @@ function Dropdown({
   close,
   autoClose = true,
   transitionClass = ['scale-95', 'scale-100'],
+  wrapperClass,
   className,
   ...popperOptions
 }: Props) {
@@ -55,6 +57,7 @@ function Dropdown({
       isOpen={isOpen}
       targetElement={targetElement}
       popperOptions={popperOptions}
+      className={wrapperClass}
     >
       <div
         ref={containerElRef}

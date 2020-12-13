@@ -10,14 +10,18 @@ import { isTruthy } from '../utils/boolean';
 import useLocalStorage from '../utils/hooks/useLocalStorage';
 
 export interface VideoDTO {
-  date: string;
+  createdAt: string;
+  updatedAt?: string;
+  deletedAt?: string;
   duration: number;
-  title?: string;
   url?: string;
 }
 
-export interface Video extends Omit<VideoDTO, 'date'> {
-  date: Date;
+export interface Video
+  extends Omit<VideoDTO, 'createdAt' | 'deletedAt' | 'updatedAt'> {
+  createdAt: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
 }
 
 interface VideosDTO {
@@ -32,7 +36,9 @@ const deserializeResponse = (videos: VideosDTO): Videos =>
   Object.entries(videos).reduce<Videos>((res, [id, video]) => {
     res[id] = {
       ...video,
-      date: new Date(video.date),
+      createdAt: new Date(video.createdAt),
+      updatedAt: video.updatedAt ? new Date(video.updatedAt) : undefined,
+      deletedAt: video.deletedAt ? new Date(video.deletedAt) : undefined,
     };
     return res;
   }, {});
@@ -41,7 +47,6 @@ const deserializeResponse = (videos: VideosDTO): Videos =>
 function useVideos() {
   const pollingIdsRef = useRef<string[]>([]);
   const pollingIntervalRef = useRef<any>();
-  const [loading, setLoading] = useState(true);
   const [videos, setVideos] = useState<Videos>();
   const { addToast } = useToasts();
   const storage = useLocalStorage();
@@ -115,7 +120,6 @@ function useVideos() {
     const allPending = new Set([...videos, ...pollingIdsRef.current]);
 
     if (allPending.size) {
-      setLoading(true);
       fetchPendingVideos(Array.from(allPending))
         .then((videos) => {
           setVideos((old) => ({ ...old, ...videos }));
@@ -124,8 +128,9 @@ function useVideos() {
         .catch(console.error) // TODO: show alert
         .finally(() => {
           startPollingInterval();
-          setLoading(false);
         });
+    } else {
+      setVideos({});
     }
   }, [fetchPendingVideos, startPollingInterval, storage, updatePolling]);
 
@@ -164,7 +169,6 @@ function useVideos() {
 
   return {
     exportVideo,
-    loading,
     videos,
   };
 }
