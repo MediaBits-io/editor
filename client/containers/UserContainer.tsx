@@ -23,7 +23,7 @@ function useUser() {
     },
   });
   const [userPlan] = useState<UserPlan>({
-    plan: Plan.Free,
+    plan: Plan.Professional,
     createdAt: new Date(),
     expiresAt: new Date(Date.now() + 24 * 3600 * 1000),
   });

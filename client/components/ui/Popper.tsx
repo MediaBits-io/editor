@@ -37,6 +37,7 @@ function Popper({
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
   const { styles, attributes } = usePopper(targetElement, popperElement, {
+    ...popperOptions,
     modifiers: [
       {
         name: 'offset',
@@ -44,15 +45,14 @@ function Popper({
           offset: [0, 8],
         },
       },
+      ...(popperOptions?.modifiers ?? []),
       hasArrow && {
         name: 'arrow',
         options: {
           element: arrowElement,
-          padding: 8,
         },
       },
     ].filter(isTruthy),
-    ...popperOptions,
   });
 
   useEffect(() => {

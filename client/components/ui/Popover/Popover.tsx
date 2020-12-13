@@ -40,7 +40,17 @@ function Popover({
         isOpen={isOpen && !closed}
         targetElement={targetElRef.current}
         className="popover"
-        popperOptions={popperOptions}
+        popperOptions={{
+          ...popperOptions,
+          modifiers: popperOptions.modifiers ?? [
+            {
+              name: 'offset',
+              options: {
+                offset: [0, 4],
+              },
+            },
+          ],
+        }}
       >
         {(arrowProps) => (
           <>

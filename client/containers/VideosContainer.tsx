@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { createContainer } from 'unstated-next';
 import { api } from '../utils/api';
 import { useToasts } from 'react-toast-notifications';
@@ -7,6 +7,7 @@ import { toTemplateJSON } from '../features/editor/utils/template';
 import NotificationContent from '../components/ui/Notification/NotificationContent';
 import ExternalLink from '../components/ui/ExternalLink';
 import { isTruthy } from '../utils/boolean';
+import useLocalStorage from '../utils/hooks/useLocalStorage';
 
 export interface VideoDTO {
   date: string;
@@ -36,19 +37,47 @@ const deserializeResponse = (videos: VideosDTO): Videos =>
     return res;
   }, {});
 
+// TODO: delete videos with deleted_at set on fetch
 function useVideos() {
   const pollingIdsRef = useRef<string[]>([]);
   const pollingIntervalRef = useRef<any>();
+  const [loading, setLoading] = useState(true);
+  const [videos, setVideos] = useState<Videos>();
   const { addToast } = useToasts();
+  const storage = useLocalStorage();
+
+  const fetchPendingVideos = useCallback(async (ids: string[]) => {
+    if (!ids.length) {
+      return {};
+    }
+    const res = await api.get<VideosDTO>('/videos', {
+      params: {
+        ids,
+      },
+    });
+    return deserializeResponse(res.data);
+  }, []);
+
+  const updatePolling = useCallback(
+    (videos: Videos) => {
+      pollingIdsRef.current = pollingIdsRef.current.filter(
+        (id) => !videos[id]?.url
+      );
+      storage.set<string[]>('polling', pollingIdsRef.current);
+      if (!pollingIdsRef.current.length && pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+        pollingIntervalRef.current = undefined;
+      }
+    },
+    [storage]
+  );
 
   const startPollingInterval = useCallback(() => {
     pollingIntervalRef.current = setInterval(async () => {
-      const res = await api.get<VideosDTO>('/videos', {
-        params: {
-          ids: pollingIdsRef.current,
-        },
-      });
-      const videos = deserializeResponse(res.data);
+      const videos = await fetchPendingVideos(pollingIdsRef.current);
+      setVideos((old) => ({ ...old, ...videos }));
+      updatePolling(videos);
+
       const exportedVideos = Object.values(videos)
         .map(({ url }) => url)
         .filter(isTruthy);
@@ -64,28 +93,45 @@ function useVideos() {
             { appearance: 'info', autoDismiss: false }
           );
         });
-
-        pollingIdsRef.current = pollingIdsRef.current.filter(
-          (id) => !videos[id]?.url
-        );
-        if (!pollingIdsRef.current.length) {
-          clearInterval(pollingIntervalRef.current);
-          pollingIntervalRef.current = undefined;
-        }
       }
     }, 3000);
-  }, [addToast]);
+  }, [addToast, fetchPendingVideos, updatePolling]);
 
   const pollVideo = useCallback(
     (id: string) => {
       pollingIdsRef.current.push(id);
+      storage.set<string[]>('polling', pollingIdsRef.current);
 
       if (!pollingIntervalRef.current) {
         startPollingInterval();
       }
     },
-    [startPollingInterval]
+    [startPollingInterval, storage]
   );
+
+  useEffect(() => {
+    pollingIdsRef.current = storage.get<string[]>('polling') ?? [];
+    const videos = storage.get<string[]>('videos') ?? [];
+    const allPending = new Set([...videos, ...pollingIdsRef.current]);
+
+    if (allPending.size) {
+      setLoading(true);
+      fetchPendingVideos(Array.from(allPending))
+        .then((videos) => {
+          setVideos((old) => ({ ...old, ...videos }));
+          updatePolling(videos);
+        })
+        .catch(console.error) // TODO: show alert
+        .finally(() => {
+          startPollingInterval();
+          setLoading(false);
+        });
+    }
+  }, [fetchPendingVideos, startPollingInterval, storage, updatePolling]);
+
+  useEffect(() => {
+    storage.set('videos', videos ? Object.keys(videos) : []);
+  }, [storage, videos]);
 
   // Stop all polling on unmount
   useEffect(
@@ -118,6 +164,8 @@ function useVideos() {
 
   return {
     exportVideo,
+    loading,
+    videos,
   };
 }
 
