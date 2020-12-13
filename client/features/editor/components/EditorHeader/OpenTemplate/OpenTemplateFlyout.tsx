@@ -6,7 +6,10 @@ import { EditorContainer } from '../../../containers/EditorContainer/EditorConta
 import FlyoutMenuButton from '../FlyoutMenuButton';
 import { readBlobAsText } from '../../../../../utils/blob';
 import DiscardChangesModal from '../../DiscardChangesModal';
-import extractTemplateFonts from '../../../utils/template';
+import {
+  extractTemplateFonts,
+  loadTemplateImages,
+} from '../../../utils/template';
 import { loadFonts } from '../../../../../utils/fonts';
 
 interface Props {
@@ -32,19 +35,19 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
       (file.type === 'application/json' || file.name.endsWith('.json'))
     ) {
       try {
+        const loadingTimeout = setTimeout(() => {
+          dispatch({ type: 'loading_template' });
+        }, 1000);
+
         const template = JSON.parse(await readBlobAsText(file));
         const fonts = extractTemplateFonts(template);
+        await Promise.all([
+          loadTemplateImages(template),
+          fonts.length ? loadFonts(fonts) : undefined,
+        ]);
 
-        if (fonts.length) {
-          const loadingTimeout = setTimeout(() => {
-            dispatch({ type: 'loading_template' });
-          }, 1000);
-
-          await loadFonts(fonts);
-
-          // Do not show loader if all fonts loaded from cache
-          clearTimeout(loadingTimeout);
-        }
+        // Do not show loader if all fonts loaded from cache
+        clearTimeout(loadingTimeout);
 
         dispatch({
           type: 'load_template',

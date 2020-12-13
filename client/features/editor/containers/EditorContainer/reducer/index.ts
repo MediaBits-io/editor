@@ -1,5 +1,5 @@
 import mergeReducers from '../../../../../utils/reducer';
-import { EditorState } from '../interfaces';
+import { EditorState } from '../../../interfaces';
 import editorReducer, { EditorAction } from './editorReducer';
 import templateReducer, { TemplateAction } from './templateReducer';
 import undoable, { Action as UndoableAction } from './undoable';

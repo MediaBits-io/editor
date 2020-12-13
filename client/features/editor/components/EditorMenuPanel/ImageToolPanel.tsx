@@ -20,7 +20,12 @@ function ImageToolPanel() {
     const file = e.currentTarget.files?.[0];
 
     if (file) {
-      createElement(ShapeType.Image, await changeImage(file), Konva.Image);
+      const defaultProps = await changeImage(file);
+      createElement(
+        ShapeType.Image,
+        { ...defaultProps, blurRadius: 0 },
+        Konva.Image
+      );
     }
   };
 

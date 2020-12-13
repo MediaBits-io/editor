@@ -109,7 +109,7 @@ function CanvasRenderer({ editorMargin, editorAreaRef }: Props) {
                     type === ShapeType.Text ? transformTextFn : undefined
                   }
                 >
-                  {(additionalProps) => {
+                  {({ ref, ...additionalProps }) => {
                     switch (type) {
                       case ShapeType.Text:
                         return (
@@ -140,10 +140,15 @@ function CanvasRenderer({ editorMargin, editorAreaRef }: Props) {
                           />
                         );
                       case ShapeType.Image:
+                        // TODO: set cache on mount, not on ref
                         return (
                           <Image
                             {...(props as Konva.ImageConfig)}
                             {...additionalProps}
+                            ref={(el) => {
+                              el?.cache();
+                              ref.current = el;
+                            }}
                           />
                         );
                     }

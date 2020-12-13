@@ -4,7 +4,7 @@ import Logo from '../../../../components/ui/Logo/Logo';
 import { SparklesOutline } from 'heroicons-react';
 import ExportButton from './ExportButton';
 import { UserContainer } from '../../../../containers/UserContainer';
-import { Plan } from '../../../../containers/interfaces';
+import { Plan } from '../../../../interfaces';
 import OpenTemplateButton from './OpenTemplate/OpenTemplateButton';
 import SaveTemplateButton from './SaveTemplate/SaveTemplateButton';
 import VideosButton from './Videos/VideosButton';

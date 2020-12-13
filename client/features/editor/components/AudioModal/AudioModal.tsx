@@ -7,7 +7,7 @@ import ModalContent from '../../../../components/ui/Modal/ModalContent';
 import useAudioClipper from '../AudioClipper/useAudioClipper';
 import Alert from '../../../../components/ui/Alert';
 import { UserContainer } from '../../../../containers/UserContainer';
-import { Plan } from '../../../../containers/interfaces';
+import { Plan } from '../../../../interfaces';
 import FileTooBig from './FileTooBig';
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;

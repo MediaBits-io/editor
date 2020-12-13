@@ -1,4 +1,4 @@
-import { EditorState } from '../interfaces';
+import { EditorState } from '../../../interfaces';
 
 export type ZoomAction =
   | { type: 'zoom'; zoom: number }

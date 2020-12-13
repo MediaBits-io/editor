@@ -1,7 +1,7 @@
 import { UploadOutline } from 'heroicons-react';
 import React, { useEffect, useRef, useState } from 'react';
 import Button from '../../../../../components/ui/Button';
-import { Plan } from '../../../../../containers/interfaces';
+import { Plan } from '../../../../../interfaces';
 import { UserContainer } from '../../../../../containers/UserContainer';
 import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
 import AudioModal, { AudioState } from '../../AudioModal/AudioModal';

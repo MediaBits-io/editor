@@ -1,6 +1,6 @@
 import React from 'react';
 import Popover from '../../../../components/ui/Popover/Popover';
-import { Plan } from '../../../../containers/interfaces';
+import { Plan } from '../../../../interfaces';
 import { UserContainer } from '../../../../containers/UserContainer';
 import classNames from '../../../../utils/classNames';
 

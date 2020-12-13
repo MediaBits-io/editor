@@ -2,7 +2,7 @@ import 'firebase/analytics';
 import 'firebase/auth';
 import { useState } from 'react';
 import { createContainer } from 'unstated-next';
-import { Plan } from './interfaces';
+import { Plan } from '../interfaces';
 
 export interface UserPlan {
   expiresAt: Date;

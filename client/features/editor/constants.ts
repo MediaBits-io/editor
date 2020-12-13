@@ -1,6 +1,12 @@
+import Konva from 'konva';
+import { Filter } from 'konva/types/Node';
 import { dropRepeats } from 'ramda';
 import { EditorPanel } from './interfaces/Editor';
 import { ShapeType } from './interfaces/Shape';
+
+export const IMAGE_FILTERS: { [filter: string]: Filter } = {
+  blur: Konva.Filters.Blur,
+};
 
 export const SHAPE_PROPERTIES_PANEL: Partial<
   { [key in ShapeType]: EditorPanel }
