@@ -1,24 +1,21 @@
-<p align="center">
-  <img width="300" src="https://images2.imgbox.com/f7/a2/HACjzYnu_o.png">
-</p>
-
-# Mediabits.io
+# <img  src="https://res.cloudinary.com/dpqtultzq/image/upload/v1607885874/Group_3_hoojqu.png"> Mediabits.io
 
 Mediabits.io lets anyone create engaging videos for their audio, perfect for sharing on social media.
 
-<p align="center">
-  <img width="600" src="https://images2.imgbox.com/50/8c/oC01iZtt_o.png">
-</p>
-
 This is a repository for the main editor, which is currently being rebuilt from scratch. An old version is live on https://mediabits.io
 
-Mediabits.io aims to:
+<p align="center">
+  <img src="https://res.cloudinary.com/dpqtultzq/image/upload/v1607885719/frame_generic_dark_9_evcn5l.png">
+</p>
+
+## Goals
+
+Mediabits.io will:
 
 - Be open-source
 - Have no watermarks
 - Need no login or registration
 - Give access to all video editor features for free
-- Include no features unrelated to video editing
 
 Mediabits.io Pro will:
 
