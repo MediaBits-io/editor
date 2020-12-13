@@ -12,7 +12,8 @@ interface Props {
 function ImageBlurSetting({ elementId, elementProps }: Props) {
   const { dispatch } = EditorContainer.useContainer();
 
-  const handleChangeOpacity = async (value: number) => {
+  // TODO: save filter as string in template and let renderer handle conversion
+  const handleChangeBlur = async (value: number) => {
     let filters = elementProps.filters;
 
     if (value > 0 && !filters?.includes(Konva.Filters.Blur)) {
@@ -39,7 +40,7 @@ function ImageBlurSetting({ elementId, elementProps }: Props) {
             max={100}
             value={elementProps.blurRadius}
             step={1}
-            onChange={handleChangeOpacity}
+            onChange={handleChangeBlur}
           />
           <span className="text-xs w-20 ml-1 text-right leading-3">
             {elementProps.blurRadius}px
