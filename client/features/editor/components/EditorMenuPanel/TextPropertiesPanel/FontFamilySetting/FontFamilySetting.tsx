@@ -27,6 +27,7 @@ function FontFamilySetting({ elementId, elementProps }: Props) {
         <DropdownSelect
           placement="bottom"
           value={elementProps.fontFamily}
+          wrapperClass="w-68"
           onChange={handleChangeOption}
           targetElement={targetElement}
           target={({ open }) => (
@@ -46,7 +47,7 @@ function FontFamilySetting({ elementId, elementProps }: Props) {
               value={fontFamily}
               style={{ fontFamily }}
             >
-              <span className="w-52 text-base">{fontFamily}</span>
+              <span className="text-base">{fontFamily}</span>
             </DropdownSelectOption>
           ))}
         </DropdownSelect>

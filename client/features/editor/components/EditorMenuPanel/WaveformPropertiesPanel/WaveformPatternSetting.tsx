@@ -60,6 +60,7 @@ function WaveformPatternSetting({ elementId, elementProps }: Props) {
           value={selectedPattern.value}
           onChange={handleChangeOption}
           targetElement={targetElement}
+          wrapperClass="w-68"
           target={({ open }) => (
             <DropdownSelectAnchor
               className={classNames('panel-item', open && 'border-blue-300')}
@@ -70,7 +71,7 @@ function WaveformPatternSetting({ elementId, elementProps }: Props) {
         >
           {options.map(({ label, value }) => (
             <DropdownSelectOption key={value} value={value}>
-              <span className="w-52">{label}</span>
+              {label}
             </DropdownSelectOption>
           ))}
         </DropdownSelect>

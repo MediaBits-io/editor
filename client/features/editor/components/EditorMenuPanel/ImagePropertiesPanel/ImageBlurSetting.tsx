@@ -12,7 +12,7 @@ interface Props {
 function ImageBlurSetting({ elementId, elementProps }: Props) {
   const { dispatch } = EditorContainer.useContainer();
 
-  // TODO: save filter as string in template and let renderer handle conversion
+  // TODO: maybe save filter as string in template and let renderer handle conversion
   const handleChangeBlur = async (value: number) => {
     let filters = elementProps.filters;
 

@@ -72,6 +72,7 @@ function AspectRatioSetting({ editorAreaRef, editorMargin }: Props) {
           value={selectedOption.ratio}
           onChange={handleChangeOption}
           targetElement={targetElement}
+          wrapperClass="w-68"
           target={({ open }) => (
             <DropdownSelectAnchor
               className={classNames('panel-item', open && 'border-blue-300')}

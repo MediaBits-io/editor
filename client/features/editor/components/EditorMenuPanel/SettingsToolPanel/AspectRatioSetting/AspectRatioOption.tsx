@@ -28,7 +28,7 @@ function AspectRatioOption({ orientation, value, dimensions }: Props) {
               ratio={ratio}
             />
           </div>
-          <strong className="flex justify-between w-40">
+          <strong className="flex justify-between w-full">
             {orientation}
             <span
               className={classNames(

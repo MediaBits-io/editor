@@ -11,24 +11,28 @@ export default function useElements() {
   const createElement = useCallback(
     function <Config extends Konva.NodeConfig>(
       type: ShapeType,
-      { x, y, ...rest }: Config,
+      props: Config,
       BoundsShape: typeof Konva.Shape | typeof Konva.Image = Konva.Shape
     ) {
-      const bounds = new BoundsShape(rest as any);
-      const centeredX =
-        template.dimensions.width / 2 - (bounds.scaleX() * bounds.width()) / 2;
-      const centeredY =
-        template.dimensions.height / 2 -
-        (bounds.scaleX() * bounds.height()) / 2;
+      const { x, y, width, height, scaleX = 1, scaleY = 1 } = props;
+      const bounds = new BoundsShape(props as any);
+      const elWidth = width ? scaleX * width : bounds.scaleX() * bounds.width();
+      const elHeight = height
+        ? scaleY * height
+        : bounds.scaleY() * bounds.height();
+      const centeredX = template.dimensions.width / 2 - elWidth / 2;
+      const centeredY = template.dimensions.height / 2 - elHeight / 2;
 
       dispatch({
         type: 'create_element',
         element: {
           id: getUniqueId(`${type}-element`),
           props: {
+            ...props,
             x: x ?? centeredX,
             y: y ?? centeredY,
-            ...rest,
+            width: width || bounds.width(),
+            height: height || bounds.height(),
           },
           type,
         },

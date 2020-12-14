@@ -92,6 +92,7 @@ function TextSizeSetting({ elementId, elementProps }: Props) {
         </Button>
 
         <Dropdown
+          wrapperClass="w-29"
           placement="bottom-end"
           targetElement={targetElement}
           isOpen={isOpen}
@@ -106,7 +107,7 @@ function TextSizeSetting({ elementId, elementProps }: Props) {
                   value === elementProps.fontSize ? 'selected' : 'stateless'
                 }
               >
-                <span className="w-16 text-right">{value}px</span>
+                <span className="text-right">{value}px</span>
               </DropdownButton>
             ))}
           </div>

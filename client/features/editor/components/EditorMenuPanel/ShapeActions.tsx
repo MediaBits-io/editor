@@ -1,11 +1,13 @@
 import {
   ArrowDownOutline,
   ArrowUpOutline,
+  DuplicateOutline,
   TrashOutline,
 } from 'heroicons-react';
 import React from 'react';
 import Popover from '../../../../components/ui/Popover/Popover';
 import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
+import useElements from '../../hooks/useElements';
 import PanelActionButton from '../ui/PanelActionButton';
 
 interface Props {
@@ -13,7 +15,18 @@ interface Props {
 }
 
 function ShapeActions({ elementId }: Props) {
+  const { selectedElement, createElement } = useElements();
   const { dispatch, template } = EditorContainer.useContainer();
+
+  const handleDuplicateClick = () => {
+    if (selectedElement) {
+      createElement(selectedElement.type, {
+        ...selectedElement.props,
+        x: undefined,
+        y: undefined,
+      });
+    }
+  };
 
   const handleDeleteClick = () => {
     dispatch({ type: 'delete_element', id: elementId });
@@ -55,6 +68,12 @@ function ShapeActions({ elementId }: Props) {
           icon={ArrowDownOutline}
           onClick={handleMoveDownClick}
           disabled={moveUpDisabled}
+        />
+      </Popover>
+      <Popover content="Duplicate" placement="top" className="flex">
+        <PanelActionButton
+          icon={DuplicateOutline}
+          onClick={handleDuplicateClick}
         />
       </Popover>
       <Popover content="Remove (delete)" placement="top" className="flex">

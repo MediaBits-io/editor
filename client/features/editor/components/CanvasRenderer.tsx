@@ -109,7 +109,7 @@ function CanvasRenderer({ editorMargin, editorAreaRef }: Props) {
                     type === ShapeType.Text ? transformTextFn : undefined
                   }
                 >
-                  {({ ref, ...additionalProps }) => {
+                  {(additionalProps) => {
                     switch (type) {
                       case ShapeType.Text:
                         return (
@@ -147,7 +147,7 @@ function CanvasRenderer({ editorMargin, editorAreaRef }: Props) {
                             {...additionalProps}
                             ref={(el) => {
                               el?.cache();
-                              ref.current = el;
+                              additionalProps.ref.current = el;
                             }}
                           />
                         );
