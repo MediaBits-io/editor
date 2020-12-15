@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DropdownSelectAnchor from '../../../../../../components/ui/DropdownSelect/DropdownSelectAnchor';
 import classNames from '../../../../../../utils/classNames';
 import { loadFonts } from '../../../../../../utils/fonts';
-import { FONTS } from '../../../../constants';
+import { LOADABLE_FONTS } from '../../../../constants';
 
 interface Props {
   open?: boolean;
@@ -14,7 +14,7 @@ function FontFamilySelectAnchor({ open, children }: Props) {
 
   useEffect(() => {
     if (open && !loaded) {
-      loadFonts(FONTS);
+      loadFonts(LOADABLE_FONTS);
       setLoaded(true);
     }
   }, [open, loaded]);

@@ -3,7 +3,7 @@ import React from 'react';
 import DropdownSelect from '../../../../../../components/ui/DropdownSelect/DropdownSelect';
 import DropdownSelectOption from '../../../../../../components/ui/DropdownSelect/DropdownSelectOption';
 import useDropdown from '../../../../../../components/ui/Dropdown/useDropdown';
-import { FONTS } from '../../../../constants';
+import { ALL_FONTS } from '../../../../constants';
 import { EditorContainer } from '../../../../containers/EditorContainer/EditorContainer';
 import SideMenuSetting from '../../../ui/SideMenuSetting';
 import FontFamilySelectAnchor from './FontFamilySelectAnchor';
@@ -41,7 +41,7 @@ function FontFamilySetting({ elementId, elementProps }: Props) {
             </FontFamilySelectAnchor>
           )}
         >
-          {FONTS.map((fontFamily) => (
+          {ALL_FONTS.map((fontFamily) => (
             <DropdownSelectOption
               key={fontFamily}
               value={fontFamily}

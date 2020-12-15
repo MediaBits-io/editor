@@ -49,10 +49,12 @@
   }
 }
 
-.panel-item {
-  @apply text-left relative w-full rounded-md border border-gray-300 bg-white px-3 py-2 transition duration-150 sm:text-sm sm:leading-5 focus-within:outline-none focus-within:border-blue-300;
-}
+@layer components {
+  .panel-item {
+    @apply text-left relative w-full rounded-md border border-gray-300 bg-white px-3 py-2 transition duration-150 sm:text-sm sm:leading-5 focus-within:outline-none focus-within:border-blue-300;
+  }
 
-.button-default {
-  @apply inline-flex justify-center items-center text-base sm:text-sm leading-6 sm:leading-5 whitespace-nowrap font-medium transition ease-in-out duration-150;
+  .button-default {
+    @apply inline-flex justify-center items-center text-base sm:text-sm leading-6 sm:leading-5 whitespace-nowrap font-medium transition ease-in-out duration-150;
+  }
 }

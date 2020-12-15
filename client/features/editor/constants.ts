@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import { Filter } from 'konva/types/Node';
-import { dropRepeats } from 'ramda';
+import { uniq } from 'ramda';
 import { EditorPanel } from './interfaces/Editor';
 import { ShapeType } from './interfaces/Shape';
 
@@ -32,7 +32,7 @@ export enum DefaultFonts {
   Handwritten = 'Bad Script',
 }
 
-export const FONTS = [
+export const ALL_FONTS = [
   'Abril Fatface',
   'Alfa Slab One',
   'Anton',
@@ -48,6 +48,7 @@ export const FONTS = [
   'Iceberg',
   'Kumar One Outline',
   'Lobster',
+  'Open Sans',
   'Oleo Script',
   'Oswald',
   'Pacifico',
@@ -66,7 +67,21 @@ export const FONTS = [
   'Zilla Slab Highlight',
 ].sort();
 
-export const PRELOAD_FONTS = dropRepeats([
-  ...Object.values(DefaultFonts),
-  ...FONTS.slice(0, 8),
+export const PROPRIETARY_FONTS = [
+  'Courier',
+  'Helvetica',
+  'Georgia',
+  'Arial Black',
+  'Times',
+];
+
+export const LOADABLE_FONTS = ALL_FONTS.filter(
+  (font) => !PROPRIETARY_FONTS.includes(font)
+);
+
+export const PRELOAD_FONTS = uniq([
+  ...Object.values(DefaultFonts).filter((font) =>
+    LOADABLE_FONTS.includes(font)
+  ),
+  ...LOADABLE_FONTS.slice(0, 8),
 ]);

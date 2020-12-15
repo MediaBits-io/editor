@@ -11,6 +11,7 @@ import {
   loadTemplateImages,
 } from '../../../utils/template';
 import { loadFonts } from '../../../../../utils/fonts';
+import { LOADABLE_FONTS, PROPRIETARY_FONTS } from '../../../constants';
 
 interface Props {
   isOpen: boolean;
@@ -43,7 +44,9 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
         const fonts = extractTemplateFonts(template);
         await Promise.all([
           loadTemplateImages(template),
-          fonts.length ? loadFonts(fonts) : undefined,
+          fonts.length
+            ? loadFonts(fonts.filter((font) => LOADABLE_FONTS.includes(font)))
+            : undefined,
         ]);
 
         // Do not show loader if all fonts loaded from cache
