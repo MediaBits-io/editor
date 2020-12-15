@@ -1,7 +1,8 @@
 import { Transition } from '@headlessui/react';
-import { Pause, Play } from 'heroicons-react';
+import { DownloadOutline, Pause, Play } from 'heroicons-react';
 import React, { useEffect, useRef, useState } from 'react';
 import AspectRatio from 'react-aspect-ratio';
+import { saveAs } from 'file-saver';
 import Button from '../../../../../components/ui/Button';
 
 interface Props {
@@ -47,6 +48,10 @@ function Video({ url }: Props) {
     }
   };
 
+  const handleClickDownload = () => {
+    saveAs(url, 'video.mp4');
+  };
+
   return (
     <AspectRatio ratio={1}>
       <div
@@ -64,16 +69,27 @@ function Video({ url }: Props) {
           show={showControls}
           enter="transition duration-150"
           enterFrom="transform opacity-0"
-          leave="transition duration-90"
-          enterTo="transform opacity-0"
-          leaveFrom="transform opacity-90"
+          enterTo="transform opacity-100"
+          leave="transition duration-100"
+          leaveFrom="transform opacity-100"
           leaveTo="transform opacity-0"
         >
-          <div className="p-2 bg-gray-800 absolute bottom-0 left-0 right-0">
+          <div className="absolute left-0 right-0 bottom-0 p-2 space-x-1">
             <Button
+              className="opacity-75 hover:opacity-100 transition-opacity duration-150"
               round
+              type="dark"
               icon={isPlaying ? Pause : Play}
+              title={isPlaying ? 'Pause' : 'Play'}
               onClick={handleTogglePlay}
+            />
+            <Button
+              className="opacity-75 hover:opacity-100 transition-opacity duration-150 h-8 w-8"
+              round
+              type="secondary"
+              onClick={handleClickDownload}
+              icon={DownloadOutline}
+              title="Download"
             />
           </div>
         </Transition>

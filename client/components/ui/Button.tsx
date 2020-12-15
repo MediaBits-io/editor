@@ -39,7 +39,6 @@ const Button = forwardRef<HTMLButtonElement, Props>(
       onClick,
       round,
       tabIndex,
-
       ...rest
     },
     ref
