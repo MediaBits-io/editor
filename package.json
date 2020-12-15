@@ -15,11 +15,11 @@
     "build:server": "babel server --out-dir dist/server --source-maps",
     "build": "npm run build:client && npm run build:server",
     "preserve": "npm run build",
-    "serve": "cross-env NODE_ENV=production firebase serve --only functions,hosting:editor",
+    "serve": "cross-env NODE_ENV=production firebase serve --only functions,hosting",
     "predeploy": "rimraf dist/ && npm run build",
     "prestart": "npm run copy-encoder",
     "prebuild": "npm run copy-encoder",
-    "deploy": "cross-env NODE_ENV=production firebase deploy --only functions,hosting:editor",
+    "deploy": "cross-env NODE_ENV=production firebase deploy --only functions,hosting",
     "copy-encoder": "ncp ./node_modules/@etercast/mp3/dist/mp3.wasm ./client/public/mp3.wasm"
   },
   "dependencies": {
