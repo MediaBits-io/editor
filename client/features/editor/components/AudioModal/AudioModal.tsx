@@ -43,9 +43,7 @@ function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
   const { clipAudio } = useAudioClipper(audio?.data);
 
   useEffect(() => {
-    if (visible) {
-      setAudio((audio) => audio ?? initialAudio);
-    }
+    setAudio((audio) => (visible ? audio ?? initialAudio : initialAudio));
   }, [initialAudio, visible]);
 
   useEffect(() => {

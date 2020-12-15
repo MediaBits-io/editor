@@ -1,8 +1,8 @@
-# <img  src="https://res.cloudinary.com/dpqtultzq/image/upload/v1607885874/Group_3_hoojqu.png"> Mediabits.io
+# <img src="https://res.cloudinary.com/dpqtultzq/image/upload/v1607885874/Group_3_hoojqu.png"> Mediabits.io
 
-Mediabits.io lets anyone create engaging videos for their audio, perfect for sharing on social media.
+[Mediabits.io](https://app.mediabits.io) lets anyone create engaging videos for their audio, perfect for sharing on social media.
 
-This is a repository for the main editor, which is currently being rebuilt from scratch. An old version is live on https://mediabits.io
+This is a repository for the main editor, which is currently being rebuilt from scratch. It can be found on https://app.mediabits.io
 
 <p align="center">
   <img src="https://res.cloudinary.com/dpqtultzq/image/upload/v1607885719/frame_generic_dark_9_evcn5l.png">

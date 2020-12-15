@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "target": "editor",
     "public": "client/public",
     "cleanUrls": true,
     "rewrites": [

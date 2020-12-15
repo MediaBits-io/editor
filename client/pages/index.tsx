@@ -17,7 +17,19 @@ export default function Home() {
         <meta name="theme-color" content="#252f3f" />
         <meta
           name="description"
-          content="Generate custom videos from your podcast, music and audio clips to share on social media."
+          content="Create engaging videos from your podcast, music and audio clips to share on social media."
+        />
+        <meta
+          name="og:title"
+          content="Mediabits.io | Turn your audio into sharable video"
+        />
+        <meta
+          name="og:description"
+          content="Create engaging videos from your podcast, music and audio clips to share on social media."
+        />
+        <meta
+          name="og:image"
+          content="https://app.mediabits.io/images/fb.png"
         />
         <link rel="manifest" href="/manifest.json" />
         <title>Mediabits.io | Turn your audio into sharable video</title>
