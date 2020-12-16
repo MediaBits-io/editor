@@ -32,7 +32,7 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
       className="p-3 space-y-2"
       wrapperClass={classNames(
         'w-full',
-        generatedVideos.length === 1 ? 'max-w-xs' : 'max-w-md'
+        generatedVideos.length <= 1 ? 'max-w-xs' : 'max-w-md'
       )}
       targetElement={targetElement}
       isOpen={isOpen}
