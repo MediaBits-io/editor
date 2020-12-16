@@ -178,8 +178,16 @@ function AudioClipper({
       }, 10);
     };
 
+    const handleTogglePlay = () => {
+      if (wavesurferRef.current) {
+        setIsPlaying(wavesurferRef.current.isPlaying());
+      }
+    };
+
     wavesurferRef.current.on('region-updated', handleRegionUpdate);
     wavesurferRef.current.on('ready', handleReady);
+    wavesurferRef.current.on('pause', handleTogglePlay);
+    wavesurferRef.current.on('play', handleTogglePlay);
 
     return () => {
       wavesurferRef.current?.destroy();
@@ -228,14 +236,12 @@ function AudioClipper({
   const handleClickPlayPause = async () => {
     if (wavesurferRef.current) {
       await wavesurferRef.current.playPause();
-      setIsPlaying(wavesurferRef.current.isPlaying());
     }
   };
 
   const handleSeekToStart = async () => {
     if (wavesurferRef.current) {
       await wavesurferRef.current.pause();
-      setIsPlaying(wavesurferRef.current.isPlaying());
       const region: any = Object.values(wavesurferRef.current.regions.list)[0];
       if (region) {
         wavesurferRef.current.seekAndCenter(

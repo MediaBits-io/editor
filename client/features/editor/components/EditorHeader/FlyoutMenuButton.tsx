@@ -39,7 +39,7 @@ function FlyoutMenuButton({
       <Popover
         className="flex items-start p-2"
         placement="bottom"
-        content="Requires professional"
+        content="Upgrade is required"
         closed={!isDisabledPro}
       >
         <IconComponent
