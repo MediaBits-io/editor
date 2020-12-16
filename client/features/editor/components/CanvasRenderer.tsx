@@ -40,12 +40,11 @@ function CanvasRenderer({ editorMargin, editorAreaRef }: Props) {
     const fontSize = textNode.fontSize();
     const scaleY = textNode.scaleY();
     const scaleX = textNode.scaleX();
+    const fitToFont = roundDecimal(scaleY, 5) !== 1;
     return {
       width: Math.max(textNode.width() * scaleX, MIN_WIDTH),
-      fontSize:
-        roundDecimal(scaleY, 5) !== 1
-          ? Math.floor(fontSize * scaleY)
-          : fontSize,
+      height: fitToFont ? undefined : textNode.height(),
+      fontSize: fitToFont ? Math.floor(fontSize * scaleY) : fontSize,
       scaleX: 1,
       scaleY: 1,
     };

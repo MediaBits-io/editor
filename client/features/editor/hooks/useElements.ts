@@ -29,6 +29,8 @@ export default function useElements() {
           id: getUniqueId(`${type}-element`),
           props: {
             ...props,
+            scaleX,
+            scaleY,
             x: x ?? centeredX,
             y: y ?? centeredY,
             width: width || bounds.width(),

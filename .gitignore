@@ -19,6 +19,7 @@
 /dist
 
 # misc
+/.firebase
 .DS_Store
 *.pem
 
