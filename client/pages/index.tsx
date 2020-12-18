@@ -2,12 +2,19 @@ import Head from 'next/head';
 import { ToastProvider } from 'react-toast-notifications';
 import Notification from '../components/ui/Notification/Notification';
 import NotificationContainer from '../components/ui/Notification/NotificationContainer';
+import { PlansContainer } from '../containers/PlansContainer';
 import UniqueIdContainer from '../containers/UniqueIdContainer';
 import { UserContainer } from '../containers/UserContainer';
 import { VideosContainer } from '../containers/VideosContainer';
 import Editor from '../features/editor/Editor';
+import { Plans } from '../interfaces';
+import { api } from '../utils/api';
 
-export default function Home() {
+interface Props {
+  plans: Plans;
+}
+
+export default function Home({ plans }: Props) {
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-gray-50">
       <Head>
@@ -44,13 +51,25 @@ export default function Home() {
             ToastContainer: NotificationContainer,
           }}
         >
-          <UserContainer.Provider>
-            <VideosContainer.Provider>
-              <Editor />
-            </VideosContainer.Provider>
-          </UserContainer.Provider>
+          <PlansContainer.Provider initialState={{ plans }}>
+            <UserContainer.Provider>
+              <VideosContainer.Provider>
+                <Editor />
+              </VideosContainer.Provider>
+            </UserContainer.Provider>
+          </PlansContainer.Provider>
         </ToastProvider>
       </UniqueIdContainer.Provider>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const plans = await api.get<Plans>('/plans').then(({ data }) => data);
+
+  return {
+    props: {
+      plans,
+    },
+  };
 }

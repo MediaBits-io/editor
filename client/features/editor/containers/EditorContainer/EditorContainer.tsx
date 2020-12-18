@@ -33,11 +33,7 @@ interface OverridableProps {
   dispatch: React.Dispatch<any>;
 }
 
-function useEditorState(
-  initialValue: {
-    override?: OverridableProps;
-  } = {}
-) {
+function useEditorState(initialValue: { override?: OverridableProps } = {}) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const template = state.template.present;

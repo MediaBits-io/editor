@@ -3,6 +3,7 @@ import 'firebase/auth';
 import { useState } from 'react';
 import { createContainer } from 'unstated-next';
 import { Plan } from '../interfaces';
+import { PlansContainer } from './PlansContainer';
 
 export interface UserPlan {
   expiresAt: Date;
@@ -11,17 +12,7 @@ export interface UserPlan {
 }
 
 function useUser() {
-  // TODO: get from backend
-  const [plans] = useState({
-    [Plan.Free]: {
-      price: 0,
-      durationLimit: 60,
-    },
-    [Plan.Professional]: {
-      price: 900,
-      durationLimit: 60 * 60,
-    },
-  });
+  const { plans } = PlansContainer.useContainer();
   const [userPlan] = useState<UserPlan>({
     plan: Plan.Free,
     createdAt: new Date(),
