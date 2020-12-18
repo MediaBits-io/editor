@@ -13,3 +13,19 @@ export type PlanConfig = {
 export type Plans = {
   [plan in Plan]: PlanConfig;
 };
+
+export interface AuthInfo {
+  user: UserInfo;
+  plan: UserPlan | null;
+}
+
+export interface UserPlan {
+  expiresAt?: Date;
+  createdAt: Date;
+  plan: Plan;
+}
+
+export interface UserInfo {
+  uid: string;
+  email?: string;
+}

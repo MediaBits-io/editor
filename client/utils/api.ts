@@ -17,8 +17,8 @@ api.interceptors.response.use(
   }
 );
 
-export const getAuthHeaders = async () => {
-  const token = await firebase.auth().currentUser?.getIdToken();
+export const getAuthHeaders = async (userToken?: string) => {
+  const token = userToken ?? (await firebase.auth().currentUser?.getIdToken());
   if (!token) {
     throw new Error('No user token to fetch links');
   }
