@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import firebase from 'firebase/app';
-import { API_URL } from '../constants';
+import { API_URL } from '../../constants';
 
 export const api = Axios.create({
   baseURL: API_URL,

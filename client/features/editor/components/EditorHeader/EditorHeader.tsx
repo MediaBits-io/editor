@@ -12,9 +12,7 @@ import LoginModal from '../LoginModal';
 
 function EditorHeader() {
   const [loginVisible, setLoginVisible] = useState(false);
-  const { userPlan, userInfo } = UserContainer.useContainer();
-
-  console.log('UserInfo', userInfo, userPlan);
+  const { userPlan } = UserContainer.useContainer();
 
   const isPro = userPlan.plan === Plan.Professional;
 

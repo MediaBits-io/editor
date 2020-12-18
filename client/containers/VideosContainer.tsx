@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { createContainer } from 'unstated-next';
-import { api } from '../utils/api';
+import { api } from '../utils/api/api';
 import { useToasts } from 'react-toast-notifications';
 import { Template } from '../features/editor/interfaces/StageConfig';
 import { toTemplateJSON } from '../features/editor/utils/template';

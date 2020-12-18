@@ -9,12 +9,13 @@ import UniqueIdContainer from '../containers/UniqueIdContainer';
 import { UserContainer } from '../containers/UserContainer';
 import { VideosContainer } from '../containers/VideosContainer';
 import Editor from '../features/editor/Editor';
-import { AuthInfo, Plans } from '../interfaces';
-import { api, getAuthHeaders } from '../utils/api';
+import { AuthInfoDTO, deserializeAuthInfoDTO, Plans } from '../interfaces';
+import { api } from '../utils/api/api';
+import { fetchAuthInfo } from '../utils/api/auth';
 
 interface Props {
   plans: Plans;
-  authInfo: AuthInfo | null;
+  authInfo: AuthInfoDTO | null;
 }
 
 export default function Home({ plans, authInfo }: Props) {
@@ -57,8 +58,7 @@ export default function Home({ plans, authInfo }: Props) {
           <PlansContainer.Provider initialState={{ plans }}>
             <UserContainer.Provider
               initialState={{
-                user: authInfo && authInfo.user,
-                plan: authInfo && authInfo.plan,
+                authInfo: deserializeAuthInfoDTO(authInfo),
               }}
             >
               <VideosContainer.Provider>
@@ -73,18 +73,12 @@ export default function Home({ plans, authInfo }: Props) {
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
-  const plans = await api.get<Plans>('/plans').then(({ data }) => data);
+  const { userToken } = parseCookies(ctx);
 
-  const cookies = parseCookies(ctx);
-
-  const authInfo = cookies.userToken
-    ? await api
-        .get<AuthInfo>('/me', {
-          headers: await getAuthHeaders(cookies.userToken),
-        })
-        .then(({ data }) => data)
-        .catch(() => null)
-    : null;
+  const [plans, authInfo] = await Promise.all([
+    api.get<Plans>('/plans').then(({ data }) => data),
+    userToken ? fetchAuthInfo(userToken).catch(() => null) : null,
+  ]);
 
   return {
     props: {

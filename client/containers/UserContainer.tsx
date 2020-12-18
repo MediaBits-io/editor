@@ -4,26 +4,18 @@ import 'firebase/auth';
 import { useCallback, useEffect, useState } from 'react';
 import { createContainer } from 'unstated-next';
 import cookies from 'js-cookie';
-import { AuthInfo, Plan, UserInfo, UserPlan } from '../interfaces';
+import { AuthInfo, deserializeAuthInfoDTO, Plan } from '../interfaces';
 import { PlansContainer } from './PlansContainer';
-import { api, getAuthHeaders } from '../utils/api';
-
-const defaultPlan = {
-  plan: Plan.Free,
-  createdAt: new Date(),
-};
+import { fetchAuthInfo } from '../utils/api/auth';
 
 interface InitialState {
-  user: UserInfo | null;
-  plan: UserPlan | null;
+  authInfo: AuthInfo;
 }
 
 function useUser(initialState: InitialState) {
   const { plans } = PlansContainer.useContainer();
-  const [userInfo, setUserInfo] = useState(initialState.user);
-  const [userPlan, setUserPlan] = useState<UserPlan>(
-    initialState.plan || defaultPlan
-  );
+  const [userInfo, setUserInfo] = useState(initialState.authInfo?.user);
+  const [userPlan, setUserPlan] = useState(initialState.authInfo?.plan);
 
   const signIn = useCallback(async (email: string, password: string) => {
     await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -35,18 +27,18 @@ function useUser(initialState: InitialState) {
         const token = await user.getIdToken();
         cookies.set('userToken', token, { expires: 14 });
 
-        const authInfo = await api
-          .get<AuthInfo>('/me', {
-            headers: await getAuthHeaders(token),
-          })
-          .then(({ data }) => data);
-
+        const authInfo = await fetchAuthInfo(token).then(
+          deserializeAuthInfoDTO
+        );
         setUserInfo(authInfo.user);
-        setUserPlan(authInfo.plan || defaultPlan);
+        setUserPlan(authInfo.plan);
       } else {
-        setUserInfo(null);
-        setUserPlan(defaultPlan);
         cookies.remove('userToken');
+        setUserInfo(undefined);
+        setUserPlan({
+          plan: Plan.Free,
+          createdAt: new Date(),
+        });
       }
     });
   }, []);
