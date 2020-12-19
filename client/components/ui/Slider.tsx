@@ -1,6 +1,5 @@
 import React from 'react';
 import { Range, getTrackBackground } from 'react-range';
-import colors from 'tailwindcss/colors';
 
 interface Props {
   value: number;
@@ -28,7 +27,7 @@ function Slider({ min = 0, max, onChange, value, step }: Props) {
               min,
               max,
               values: [value],
-              colors: [colors.blue[300], colors.gray[100]],
+              colors: ['rgb(147 197 253)', 'rgb(243 244 246)'],
             }),
           }}
         >
