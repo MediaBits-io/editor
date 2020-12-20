@@ -11,7 +11,7 @@ import {
   loadTemplateImages,
 } from '../../../utils/template';
 import { loadFonts } from '../../../../../utils/fonts';
-import { LOADABLE_FONTS, PROPRIETARY_FONTS } from '../../../constants';
+import { LOADABLE_FONTS } from '../../../constants';
 
 interface Props {
   isOpen: boolean;
@@ -94,6 +94,7 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
         accept=".json,application/json"
       />
       <Flyout
+        wrapperClass="w-72"
         className="p-3 space-y-2"
         targetElement={targetElement}
         isOpen={isOpen}

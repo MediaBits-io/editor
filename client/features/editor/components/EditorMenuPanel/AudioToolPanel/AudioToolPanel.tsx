@@ -83,9 +83,12 @@ function AudioToolPanel() {
     e: React.SyntheticEvent<HTMLAudioElement, Event>
   ) => {
     // Automatically open clipping when audio is too long
-    if (audio && e.currentTarget.duration > userPlanInfo.durationLimit) {
+    if (
+      audio &&
+      Math.round(e.currentTarget.duration) > userPlanInfo.durationLimit
+    ) {
       openTrimModal();
-    } else if (audio) {
+    } else if (audio && audio.url !== state.audio?.url) {
       dispatch({
         type: 'add_audio',
         clipBuffer: audio.data,

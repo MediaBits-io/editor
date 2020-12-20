@@ -22,7 +22,7 @@ function TimestampInput({ value, onChange, className, label }: Props) {
         radix="."
         lazy={false}
         pattern="HH:mm:ss.m3"
-        className="bg-gray-600 text-white p-2 rounded-md w-28 focus:ring-blue-300 focus:outline-none focus:ring-2"
+        className="bg-gray-600 text-white p-2 rounded-md w-28 focus:ring-gray-500 focus:outline-none focus:ring-2"
         blocks={{
           HH: {
             mask: IMask.MaskedRange,

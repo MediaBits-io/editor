@@ -3,6 +3,7 @@ import Popover from '../../../../components/ui/Popover/Popover';
 import { Plan } from '../../../../interfaces';
 import { UserContainer } from '../../../../containers/UserContainer';
 import classNames from '../../../../utils/classNames';
+import { ENABLE_UPGRADES } from '../../../../constants';
 
 interface Props {
   onClick: () => void;
@@ -30,7 +31,7 @@ function FlyoutMenuButton({
       onClick={isDisabledPro ? undefined : onClick}
       disabled={isDisabledPro}
       className={classNames(
-        'w-56 text-left flex rounded-md focus:outline-none transition ease-in-out duration-150',
+        'text-left flex rounded-md focus:outline-none transition ease-in-out duration-150',
         isDisabledPro
           ? 'cursor-default bg-yellow-50 opacity-50'
           : 'hover:bg-gray-50 focus:ring-gray-300 focus-visible:ring-2'
@@ -39,7 +40,11 @@ function FlyoutMenuButton({
       <Popover
         className="flex items-start p-2"
         placement="bottom"
-        content="Upgrade is required"
+        content={
+          ENABLE_UPGRADES
+            ? 'Upgrade is required'
+            : 'Coming soon for professional users'
+        }
         closed={!isDisabledPro}
       >
         <IconComponent

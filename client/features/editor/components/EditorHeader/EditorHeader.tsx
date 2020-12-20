@@ -9,6 +9,7 @@ import OpenTemplateButton from './OpenTemplate/OpenTemplateButton';
 import SaveTemplateButton from './SaveTemplate/SaveTemplateButton';
 import VideosButton from './Videos/VideosButton';
 import LoginModal from '../LoginModal';
+import { ENABLE_UPGRADES } from '../../../../constants';
 
 function EditorHeader() {
   const [loginVisible, setLoginVisible] = useState(false);
@@ -32,14 +33,16 @@ function EditorHeader() {
           <OpenTemplateButton />
           <SaveTemplateButton />
           <VideosButton />
-          <Button
-            onClick={handleClickUpgrade}
-            type="custom"
-            icon={SparklesOutline}
-            className="py-1.5 px-2.5 rounded-md font-semibold bg-yellow-50 hover:bg-yellow-100 focus:bg-yellow-100 transition duration-150 border border-transparent text-yellow-600 focus:text-yellow-700 hover:text-yellow-700 focus:ring-yellow-300 focus:outline-none focus:ring-2"
-          >
-            {isPro ? 'Professional' : 'Upgrade'}
-          </Button>
+          {ENABLE_UPGRADES && (
+            <Button
+              onClick={handleClickUpgrade}
+              type="custom"
+              icon={SparklesOutline}
+              className="py-1.5 px-2.5 rounded-md font-semibold bg-yellow-50 hover:bg-yellow-100 focus:bg-yellow-100 transition duration-150 border border-transparent text-yellow-600 focus:text-yellow-700 hover:text-yellow-700 focus:ring-yellow-300 focus:outline-none focus:ring-2"
+            >
+              {isPro ? 'Professional' : 'Upgrade'}
+            </Button>
+          )}
         </div>
 
         <ExportButton />

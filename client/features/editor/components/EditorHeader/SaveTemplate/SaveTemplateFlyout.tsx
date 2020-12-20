@@ -30,6 +30,7 @@ function SaveTemplateFlyout({ close, isOpen, targetElement }: Props) {
 
   return (
     <Flyout
+      wrapperClass="w-72"
       className="p-3 space-y-2"
       targetElement={targetElement}
       isOpen={isOpen}

@@ -28,7 +28,7 @@ export default function Home({ plans, authInfo }: Props) {
         <meta name="theme-color" content="#252f3f" />
         <meta
           name="description"
-          content="Create engaging videos from your podcast, music and audio clips to share on social media."
+          content="Create engaging videos for your podcast, music and audio clips to share on social media."
         />
         <meta
           name="og:title"
@@ -36,7 +36,7 @@ export default function Home({ plans, authInfo }: Props) {
         />
         <meta
           name="og:description"
-          content="Create engaging videos from your podcast, music and audio clips to share on social media."
+          content="Create engaging videos for your podcast, music and audio clips to share on social media."
         />
         <meta
           name="og:image"

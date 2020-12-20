@@ -9,6 +9,7 @@ import Alert from '../../../../components/ui/Alert';
 import { UserContainer } from '../../../../containers/UserContainer';
 import { Plan } from '../../../../interfaces';
 import FileTooBig from './FileTooBig';
+import { ENABLE_UPGRADES } from '../../../../constants';
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
@@ -91,7 +92,7 @@ function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
   };
 
   const clipDuration =
-    bounds && (bounds.endPart - bounds.startPart) * bounds.duration;
+    bounds && Math.round((bounds.endPart - bounds.startPart) * bounds.duration);
   const clipTooLong =
     !!clipDuration && userPlanInfo.durationLimit < clipDuration;
   const trimRequired =
@@ -115,9 +116,9 @@ function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
         >
           <div>
             Maximum duration is {userPlanInfo.durationLimit} seconds. Your clip
-            length is {Math.floor(clipDuration)} seconds.
+            length is {clipDuration} seconds.
           </div>
-          {isFree && <div>Upgrade for longer clips</div>}
+          {isFree && ENABLE_UPGRADES && <div>Upgrade for longer clips</div>}
         </Alert>
       );
     }
