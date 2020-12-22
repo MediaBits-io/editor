@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { createContainer } from 'unstated-next';
-import { api } from '../utils/api/api';
+import { api, getAuthHeaders } from '../utils/api/api';
 import { useToasts } from 'react-toast-notifications';
 import { Template } from '../features/editor/interfaces/StageConfig';
 import { toTemplateJSON } from '../features/editor/utils/template';
@@ -8,6 +8,7 @@ import NotificationContent from '../components/ui/Notification/NotificationConte
 import ExternalLink from '../components/ui/ExternalLink';
 import { isTruthy } from '../utils/boolean';
 import useLocalStorage from '../utils/hooks/useLocalStorage';
+import { UserContainer } from './UserContainer';
 
 export interface VideoDTO {
   createdAt: string;
@@ -45,6 +46,7 @@ const deserializeResponse = (videos: VideosDTO): Videos =>
 
 // TODO: delete videos with deleted_at set on fetch
 function useVideos() {
+  const { userInfo } = UserContainer.useContainer();
   const pollingIdsRef = useRef<string[]>([]);
   const pollingIntervalRef = useRef<any>();
   const [videos, setVideos] = useState<Videos>();
@@ -150,7 +152,6 @@ function useVideos() {
 
   const exportVideo = async (audioBuffer: Blob, template: Template) => {
     const formData = new FormData();
-    // TODO: get auth headers if pro
 
     formData.set('audio', audioBuffer);
     formData.set(
@@ -160,9 +161,13 @@ function useVideos() {
       })
     );
 
+    const headers = userInfo && (await getAuthHeaders());
+
     const {
       data: { id },
-    } = await api.post<{ id: string; duration: number }>('/export', formData);
+    } = await api.post<{ id: string; duration: number }>('/export', formData, {
+      headers,
+    });
 
     pollVideo(id);
   };

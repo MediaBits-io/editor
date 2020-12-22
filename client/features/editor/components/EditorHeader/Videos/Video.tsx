@@ -70,13 +70,12 @@ function Video({ url }: Props) {
           enter="transition duration-150"
           enterFrom="transform opacity-0"
           enterTo="transform opacity-100"
-          leave="transition duration-100"
+          leave="transition duration-150"
           leaveFrom="transform opacity-100"
           leaveTo="transform opacity-0"
         >
           <div className="absolute left-0 right-0 bottom-0 p-2 space-x-1">
             <Button
-              className="opacity-75 hover:opacity-100 transition-opacity duration-150"
               round
               type="dark"
               icon={isPlaying ? Pause : Play}
@@ -84,7 +83,7 @@ function Video({ url }: Props) {
               onClick={handleTogglePlay}
             />
             <Button
-              className="opacity-75 hover:opacity-100 transition-opacity duration-150 h-8 w-8"
+              className="h-8 w-8"
               round
               type="secondary"
               onClick={handleClickDownload}
