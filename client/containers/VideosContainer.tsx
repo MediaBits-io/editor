@@ -44,7 +44,6 @@ const deserializeResponse = (videos: VideosDTO): Videos =>
     return res;
   }, {});
 
-// TODO: delete videos with deleted_at set on fetch
 function useVideos() {
   const { userInfo } = UserContainer.useContainer();
   const pollingIdsRef = useRef<string[]>([]);
@@ -53,22 +52,10 @@ function useVideos() {
   const { addToast } = useToasts();
   const storage = useLocalStorage();
 
-  const fetchPendingVideos = useCallback(async (ids: string[]) => {
-    if (!ids.length) {
-      return {};
-    }
-    const res = await api.get<VideosDTO>('/videos', {
-      params: {
-        ids,
-      },
-    });
-    return deserializeResponse(res.data);
-  }, []);
-
   const updatePolling = useCallback(
     (videos: Videos) => {
       pollingIdsRef.current = pollingIdsRef.current.filter(
-        (id) => !videos[id]?.url
+        (id) => !videos[id] || (!videos[id].url && !videos[id].deletedAt)
       );
       storage.set<string[]>('polling', pollingIdsRef.current);
       if (!pollingIdsRef.current.length && pollingIntervalRef.current) {
@@ -79,11 +66,42 @@ function useVideos() {
     [storage]
   );
 
+  const fetchPendingVideos = useCallback(
+    async (ids: string[]) => {
+      let videos: Videos;
+
+      if (ids.length) {
+        const res = await api.get<VideosDTO>('/videos', {
+          params: {
+            ids,
+          },
+        });
+        videos = deserializeResponse(res.data);
+      } else {
+        videos = {};
+      }
+
+      updatePolling(videos);
+
+      const availableVideos = Object.entries(videos).reduce(
+        (obj, [id, video]) => {
+          if (!video.deletedAt) {
+            obj[id] = video;
+          }
+          return obj;
+        },
+        {} as Videos
+      );
+
+      setVideos((old) => ({ ...old, ...availableVideos }));
+      return availableVideos;
+    },
+    [updatePolling]
+  );
+
   const startPollingInterval = useCallback(() => {
     pollingIntervalRef.current = setInterval(async () => {
       const videos = await fetchPendingVideos(pollingIdsRef.current);
-      setVideos((old) => ({ ...old, ...videos }));
-      updatePolling(videos);
 
       const exportedVideos = Object.values(videos)
         .map(({ url }) => url)
@@ -102,7 +120,7 @@ function useVideos() {
         });
       }
     }, 3000);
-  }, [addToast, fetchPendingVideos, updatePolling]);
+  }, [addToast, fetchPendingVideos]);
 
   const pollVideo = useCallback(
     (id: string) => {
@@ -123,18 +141,19 @@ function useVideos() {
 
     if (allPending.size) {
       fetchPendingVideos(Array.from(allPending))
-        .then((videos) => {
-          setVideos((old) => ({ ...old, ...videos }));
-          updatePolling(videos);
+        .catch((err) => {
+          console.error(err);
+          addToast('Failed to generate video, try again later', {
+            appearance: 'error',
+          });
         })
-        .catch(console.error) // TODO: show alert
         .finally(() => {
           startPollingInterval();
         });
     } else {
       setVideos({});
     }
-  }, [fetchPendingVideos, startPollingInterval, storage, updatePolling]);
+  }, [addToast, fetchPendingVideos, startPollingInterval, storage]);
 
   useEffect(() => {
     storage.set('videos', videos ? Object.keys(videos) : []);
