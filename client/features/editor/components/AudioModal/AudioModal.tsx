@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import Modal from '../../../../components/ui/Modal/Modal';
 import ModalFullActions from '../../../../components/ui/Modal/ModalFullActions';
 import ModalAction from '../../../../components/ui/Modal/ModalAction';
@@ -10,6 +9,7 @@ import { UserContainer } from '../../../../containers/UserContainer';
 import { Plan } from '../../../../interfaces';
 import FileTooBig from './FileTooBig';
 import { ENABLE_UPGRADES } from '../../../../constants';
+import AudioClipper from '../AudioClipper/AudioClipper';
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
@@ -30,10 +30,6 @@ interface Props {
   onContinue?: (clipBuffer: Blob) => Promise<void>;
   initialAudio?: AudioState;
 }
-
-const AudioClipper = dynamic(() => import('../AudioClipper/AudioClipper'), {
-  ssr: false,
-});
 
 function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
   const { userPlanInfo, userPlan } = UserContainer.useContainer();

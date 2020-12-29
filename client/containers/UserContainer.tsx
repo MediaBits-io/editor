@@ -23,7 +23,7 @@ function useUser(initialState: InitialState) {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(async (user) => {
-      if (user) {
+      if (user && !userInfo) {
         const token = await user.getIdToken();
         cookies.set('userToken', token, { expires: 14 });
 
@@ -32,7 +32,7 @@ function useUser(initialState: InitialState) {
         );
         setUserInfo(authInfo.user);
         setUserPlan(authInfo.plan);
-      } else {
+      } else if (!user) {
         cookies.remove('userToken');
         setUserInfo(undefined);
         setUserPlan({
@@ -41,7 +41,7 @@ function useUser(initialState: InitialState) {
         });
       }
     });
-  }, []);
+  }, [userInfo]);
 
   const userPlanInfo = plans[userPlan.plan];
 
