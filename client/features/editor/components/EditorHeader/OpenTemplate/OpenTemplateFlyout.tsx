@@ -6,12 +6,10 @@ import { EditorContainer } from '../../../containers/EditorContainer/EditorConta
 import FlyoutMenuButton from '../FlyoutMenuButton';
 import { readBlobAsText } from '../../../../../utils/blob';
 import DiscardChangesModal from '../../DiscardChangesModal';
-import {
-  extractTemplateFonts,
-  loadTemplateImages,
-} from '../../../utils/template';
-import { loadFonts } from '../../../../../utils/fonts';
-import { LOADABLE_FONTS } from '../../../constants';
+import { loadTemplateFonts, loadTemplateImages } from '../../../utils/template';
+import { useToasts } from 'react-toast-notifications';
+import NotificationContent from '../../../../../components/ui/Notification/NotificationContent';
+import ExternalLink from '../../../../../components/ui/ExternalLink';
 
 interface Props {
   isOpen: boolean;
@@ -23,6 +21,7 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
   const { dispatch, hasUnsavedChanges } = EditorContainer.useContainer();
   const [isDiscardChangesVisible, setDiscardChangesVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { addToast } = useToasts();
 
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
@@ -35,18 +34,17 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
       file &&
       (file.type === 'application/json' || file.name.endsWith('.json'))
     ) {
+      let loadingTimeout: any;
+
       try {
-        const loadingTimeout = setTimeout(() => {
+        loadingTimeout = setTimeout(() => {
           dispatch({ type: 'loading_template' });
         }, 1000);
 
         const template = JSON.parse(await readBlobAsText(file));
-        const fonts = extractTemplateFonts(template);
         await Promise.all([
           loadTemplateImages(template),
-          fonts.length
-            ? loadFonts(fonts.filter((font) => LOADABLE_FONTS.includes(font)))
-            : undefined,
+          loadTemplateFonts(template),
         ]);
 
         // Do not show loader if all fonts loaded from cache
@@ -58,6 +56,23 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
         });
       } catch (e) {
         console.error(e);
+        addToast(
+          <NotificationContent title="Failed to load template">
+            Please contact support through
+            <ExternalLink
+              className="mx-1"
+              newTab
+              to="mailto:support@mediabits.io"
+            >
+              support@mediabits.io
+            </ExternalLink>
+          </NotificationContent>,
+          { appearance: 'error', autoDismiss: false }
+        );
+        if (loadingTimeout) {
+          clearTimeout(loadingTimeout);
+        }
+        dispatch({ type: 'load_template_error' });
       }
     }
   };

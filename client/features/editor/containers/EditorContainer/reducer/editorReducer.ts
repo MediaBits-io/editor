@@ -20,6 +20,7 @@ export type EditorAction =
   | { type: 'save_changes' }
   | { type: 'loading_template' }
   | { type: 'load_template'; template: Template }
+  | { type: 'load_template_error' }
   | UndoableAction;
 
 const reducer = (state: EditorState, action: EditorAction): EditorState => {
@@ -135,6 +136,11 @@ const reducer = (state: EditorState, action: EditorAction): EditorState => {
       return {
         ...state,
         loading: true,
+      };
+    case 'load_template_error':
+      return {
+        ...state,
+        loading: false,
       };
     case 'load_template':
       return {

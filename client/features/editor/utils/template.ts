@@ -1,7 +1,8 @@
 import Konva from 'konva';
 import { readBlobAsDataURL } from '../../../utils/blob';
 import { isTruthy } from '../../../utils/boolean';
-import { IMAGE_FILTERS } from '../constants';
+import { loadFonts } from '../../../utils/fonts';
+import { IMAGE_FILTERS, LOADABLE_FONTS } from '../constants';
 import { ShapeType } from '../interfaces/Shape';
 import { Template } from '../interfaces/StageConfig';
 
@@ -79,4 +80,13 @@ export async function loadTemplateImages(template: Template) {
       });
     })
   );
+}
+
+export async function loadTemplateFonts(template: Template) {
+  const fonts = extractTemplateFonts(template);
+  const fontsToLoad = fonts.filter((font) => LOADABLE_FONTS.includes(font));
+
+  if (fontsToLoad.length) {
+    await loadFonts(fontsToLoad);
+  }
 }
