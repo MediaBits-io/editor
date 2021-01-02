@@ -1,56 +1,47 @@
-import { RefObject, useCallback } from 'react';
+import { useCallback } from 'react';
+import { EditorAreaContainer } from '../containers/EditorAreaContainer';
 import { EditorContainer } from '../containers/EditorContainer/EditorContainer';
 
-interface Params {
-  editorAreaRef: RefObject<HTMLDivElement>;
-  editorMargin: number;
-}
-
-function useZoom({ editorMargin, editorAreaRef }: Params) {
+function useZoom() {
+  const { editorAreaRef, editorMargin } = EditorAreaContainer.useContainer();
   const { dispatch } = EditorContainer.useContainer();
+
+  const getScreenDimensions = useCallback(() => {
+    if (!editorAreaRef.current) {
+      throw new Error('Editor area is not initialized');
+    }
+
+    const {
+      height: clientHeight,
+      width: clientWidth,
+    } = editorAreaRef.current.getBoundingClientRect();
+
+    return {
+      height: clientHeight - editorMargin * 2,
+      width: clientWidth - editorMargin * 2,
+    };
+  }, [editorAreaRef, editorMargin]);
 
   const fitToScreen = useCallback(
     (dimensions?: { width: number; height: number }) => {
-      if (!editorAreaRef.current) {
-        return;
-      }
-
-      const {
-        height: clientHeight,
-        width: clientWidth,
-      } = editorAreaRef.current.getBoundingClientRect();
       dispatch({
         type: 'fit_to_screen',
-        screenDimensions: {
-          height: clientHeight - editorMargin * 2,
-          width: clientWidth - editorMargin * 2,
-        },
+        screenDimensions: getScreenDimensions(),
         canvasDimensions: dimensions,
       });
     },
-    [dispatch, editorAreaRef, editorMargin]
+    [dispatch, getScreenDimensions]
   );
 
   const fillScreen = useCallback(
     (dimensions?: { width: number; height: number }) => {
-      if (!editorAreaRef.current) {
-        return;
-      }
-
-      const {
-        height: clientHeight,
-        width: clientWidth,
-      } = editorAreaRef.current.getBoundingClientRect();
       dispatch({
         type: 'fill_screen',
-        screenDimensions: {
-          height: clientHeight - editorMargin * 2,
-          width: clientWidth - editorMargin * 2,
-        },
+        screenDimensions: getScreenDimensions(),
         canvasDimensions: dimensions,
       });
     },
-    [dispatch, editorAreaRef, editorMargin]
+    [dispatch, getScreenDimensions]
   );
 
   const setScale = useCallback(
@@ -67,6 +58,7 @@ function useZoom({ editorMargin, editorAreaRef }: Params) {
     setScale,
     fitToScreen,
     fillScreen,
+    getScreenDimensions,
   };
 }
 

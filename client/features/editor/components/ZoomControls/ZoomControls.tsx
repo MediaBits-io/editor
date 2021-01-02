@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import DropdownMenuAnchor from '../../../../components/ui/DropdownMenu/DropdownMenuAnchor';
 import DropdownMenu from '../../../../components/ui/DropdownMenu/DropdownMenu';
 import DropdownMenuButton from '../../../../components/ui/DropdownMenu/DropdownMenuButton';
@@ -9,17 +9,9 @@ import ClearButton from '../ui/ClearButton';
 import classNames from '../../../../utils/classNames';
 import Popover from '../../../../components/ui/Popover/Popover';
 
-interface Props {
-  editorAreaRef: RefObject<HTMLDivElement>;
-  editorMargin: number;
-}
-
-function ZoomControls({ editorMargin, editorAreaRef }: Props) {
+function ZoomControls() {
   const { state } = EditorContainer.useContainer();
-  const { fillScreen, fitToScreen, setScale } = useZoom({
-    editorAreaRef,
-    editorMargin,
-  });
+  const { fillScreen, fitToScreen, setScale } = useZoom();
   const { setTargetElement, targetElement } = useDropdown();
 
   return (

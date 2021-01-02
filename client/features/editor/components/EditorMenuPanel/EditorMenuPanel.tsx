@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import Konva from 'konva';
 import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
 import ImageToolPanel from './ImageToolPanel';
@@ -15,12 +15,7 @@ import WaveformPropertiesPanel from './WaveformPropertiesPanel/WaveformPropertie
 import ProgressBarPropertiesPanel from './ProgressBarPropertiesPanel/ProgressBarPropertiesPanel';
 import { ProgressBarConfig, WaveformConfig } from 'konva-elements';
 
-interface Props {
-  editorAreaRef: RefObject<HTMLDivElement>;
-  editorMargin: number;
-}
-
-function EditorMenuPanel({ editorAreaRef, editorMargin }: Props) {
+function EditorMenuPanel() {
   const { state } = EditorContainer.useContainer();
   const { selectedElement } = useElements();
 
@@ -59,12 +54,7 @@ function EditorMenuPanel({ editorAreaRef, editorMargin }: Props) {
 
   switch (state.activePanel) {
     case EditorPanel.Settings:
-      return (
-        <SettingsToolPanel
-          editorAreaRef={editorAreaRef}
-          editorMargin={editorMargin}
-        />
-      );
+      return <SettingsToolPanel />;
     case EditorPanel.Text:
       return <TextToolPanel />;
     case EditorPanel.Image:

@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Stage, Layer, Rect, Text, Image } from 'react-konva';
 import {
   ProgressBar,
@@ -14,16 +14,13 @@ import InteractiveKonvaElement, { MIN_WIDTH } from './InteractiveKonvaElement';
 import Konva from 'konva';
 import UniqueIdContainer from '../../../containers/UniqueIdContainer';
 import Loader from '../../../components/ui/Loader/Loader';
-
-interface Props {
-  editorAreaRef: RefObject<HTMLDivElement>;
-  editorMargin: number;
-}
+import { EditorAreaContainer } from '../containers/EditorAreaContainer';
 
 // TODO: might need to pass through props for uniqueId too
-function CanvasRenderer({ editorMargin, editorAreaRef }: Props) {
+function CanvasRenderer() {
   const editorState = EditorContainer.useContainer();
-  const { fitToScreen } = useZoom({ editorAreaRef, editorMargin });
+  const { editorMargin } = EditorAreaContainer.useContainer();
+  const { fitToScreen } = useZoom();
 
   const { state, template, dispatch } = editorState;
 

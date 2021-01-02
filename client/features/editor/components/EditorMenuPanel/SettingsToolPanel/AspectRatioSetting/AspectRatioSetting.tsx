@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import DropdownSelect from '../../../../../../components/ui/DropdownSelect/DropdownSelect';
 import DropdownSelectAnchor from '../../../../../../components/ui/DropdownSelect/DropdownSelectAnchor';
 import useDropdown from '../../../../../../components/ui/Dropdown/useDropdown';
@@ -42,16 +42,11 @@ export const options = [
   },
 ];
 
-interface Props {
-  editorAreaRef: RefObject<HTMLDivElement>;
-  editorMargin: number;
-}
-
 // TODO: select by id or unique key
-function AspectRatioSetting({ editorAreaRef, editorMargin }: Props) {
+function AspectRatioSetting() {
   const { template } = EditorContainer.useContainer();
   const { setTargetElement, targetElement } = useDropdown();
-  const { fitToScreen } = useZoom({ editorAreaRef, editorMargin });
+  const { fitToScreen } = useZoom();
 
   const selectedOption = options.find(
     ({ dimensions }) =>

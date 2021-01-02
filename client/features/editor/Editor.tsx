@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import MainArea from '../../components/layout/MainArea';
 import EditorMenu from './components/EditorMenu/EditorMenu';
 import { EditorContainer } from './containers/EditorContainer/EditorContainer';
@@ -12,14 +12,13 @@ import ZoomControls from './components/ZoomControls/ZoomControls';
 import HistoryControls from './components/HistoryControls/HistoryControls';
 import { loadFonts } from '../../utils/fonts';
 import { PRELOAD_FONTS } from './constants';
-
-const editorMargin = 8;
+import { EditorAreaContainer } from './containers/EditorAreaContainer';
 
 function Editor() {
   const { redo, undo } = useEditorHistory();
   const { selectedElement } = useElements();
   const { state, dispatch, hasUnsavedChanges } = EditorContainer.useContainer();
-  const editorAreaRef = useRef<HTMLDivElement>(null);
+  const { editorAreaRef } = EditorAreaContainer.useContainer();
 
   useEffect(() => {
     loadFonts(PRELOAD_FONTS);
@@ -56,7 +55,7 @@ function Editor() {
 
   useEffect(() => {
     editorAreaRef.current?.focus();
-  }, [selectedElement?.id]);
+  }, [editorAreaRef, selectedElement?.id]);
 
   return (
     <>
@@ -64,25 +63,16 @@ function Editor() {
       <div className="flex flex-grow overflow-hidden">
         <EditorMenu />
         <div className="flex flex-col">
-          <EditorMenuPanel
-            editorAreaRef={editorAreaRef}
-            editorMargin={editorMargin}
-          />
+          <EditorMenuPanel />
           <div className="bg-white mb-2 rounded border p-2 flex justify-between">
             <div>
-              <ZoomControls
-                editorAreaRef={editorAreaRef}
-                editorMargin={editorMargin}
-              />
+              <ZoomControls />
             </div>
             <HistoryControls />
           </div>
         </div>
         <MainArea onKeyDown={handleKeyDown} ref={editorAreaRef}>
-          <CanvasRenderer
-            editorAreaRef={editorAreaRef}
-            editorMargin={editorMargin}
-          />
+          <CanvasRenderer />
         </MainArea>
       </div>
     </>
@@ -92,7 +82,9 @@ function Editor() {
 function decorate<P>(Component: React.FunctionComponent<P>) {
   return (props: P) => (
     <EditorContainer.Provider>
-      <Component {...props} />
+      <EditorAreaContainer.Provider initialState={{ margin: 8 }}>
+        <Component {...props} />
+      </EditorAreaContainer.Provider>
     </EditorContainer.Provider>
   );
 }

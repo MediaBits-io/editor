@@ -10,6 +10,7 @@ import { loadTemplateFonts, loadTemplateImages } from '../../../utils/template';
 import { useToasts } from 'react-toast-notifications';
 import NotificationContent from '../../../../../components/ui/Notification/NotificationContent';
 import ExternalLink from '../../../../../components/ui/ExternalLink';
+import useZoom from '../../../hooks/useZoom';
 
 interface Props {
   isOpen: boolean;
@@ -22,6 +23,7 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
   const [isDiscardChangesVisible, setDiscardChangesVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { addToast } = useToasts();
+  const { getScreenDimensions } = useZoom();
 
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
@@ -53,6 +55,7 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
         dispatch({
           type: 'load_template',
           template,
+          screenDimensions: getScreenDimensions(),
         });
       } catch (e) {
         console.error(e);
