@@ -5,6 +5,7 @@ import Popover from '../../../../components/ui/Popover/Popover';
 import { Transition } from '@headlessui/react';
 import ExternalLink from '../../../../components/ui/ExternalLink';
 import GithubIcon from '../../../../components/ui/Icons/GithubIcon';
+import { openNewsletterWindow } from '../../../../utils/newsletter';
 
 function InfoPopup() {
   const [isInfoVisible, setInfoVisible] = useState(false);
@@ -78,6 +79,13 @@ function InfoPopup() {
                     support@mediabits.io
                   </ExternalLink>
                 </p>
+                <Button
+                  type="link-light"
+                  className="justify-start"
+                  onClick={openNewsletterWindow}
+                >
+                  Subscribe to out newsletter
+                </Button>
               </div>
 
               <ExternalLink

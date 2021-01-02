@@ -4,6 +4,7 @@ import { useToasts } from 'react-toast-notifications';
 import Button from '../../../../components/ui/Button';
 import NotificationContent from '../../../../components/ui/Notification/NotificationContent';
 import { VideosContainer } from '../../../../containers/VideosContainer';
+import { openNewsletterWindow } from '../../../../utils/newsletter';
 import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
 import AudioModal from '../AudioModal/AudioModal';
 
@@ -23,13 +24,32 @@ function ExportButton() {
         clipBuffer,
         blobUrl: URL.createObjectURL(clipBuffer),
       });
-      await exportPromise;
+      const { isNewRegularUser } = await exportPromise;
       addToast(
         <NotificationContent title="Video exported successfully">
           It may take a few minutes for the video to get processed
         </NotificationContent>,
         { appearance: 'success' }
       );
+      if (isNewRegularUser) {
+        addToast(
+          <NotificationContent title="Keep up to date">
+            You seem to be enjoying mediabits.io
+            <br />
+            Would you like to stay informed about latest updates and special
+            offers?
+            <br />
+            <Button
+              type="link"
+              className="justify-start"
+              onClick={openNewsletterWindow}
+            >
+              Subscribe to our newsletter
+            </Button>
+          </NotificationContent>,
+          { appearance: 'info', autoDismiss: false }
+        );
+      }
     } catch (e) {
       console.error(e);
       const errorText = e?.response?.data?.error;

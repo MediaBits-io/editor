@@ -182,13 +182,17 @@ function useVideos() {
 
     const headers = userInfo && (await getAuthHeaders());
 
-    const {
-      data: { id },
-    } = await api.post<{ id: string; duration: number }>('/export', formData, {
+    const { data } = await api.post<{
+      id: string;
+      duration: number;
+      isNewRegularUser: boolean;
+    }>('/export', formData, {
       headers,
     });
 
-    pollVideo(id);
+    pollVideo(data.id);
+
+    return data;
   };
 
   return {

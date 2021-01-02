@@ -21,7 +21,8 @@ export interface Props
     | 'accented'
     | 'danger'
     | 'custom'
-    | 'link';
+    | 'link'
+    | 'link-light';
   buttonType?: 'button' | 'submit' | 'reset';
   round?: boolean;
 }
@@ -52,13 +53,18 @@ const Button = forwardRef<HTMLButtonElement, Props>(
         onClick={loading || disabled ? undefined : onClick}
         className={classNames(
           'button-default',
-          type !== 'link' &&
+          !type.startsWith('link') &&
             type !== 'custom' &&
             'py-2 border focus:outline-none',
-          type !== 'link' && type !== 'custom' && !round && 'rounded-md px-4',
+          !type.startsWith('link') &&
+            type !== 'custom' &&
+            !round &&
+            'rounded-md px-4',
           round && 'rounded-full px-2',
           type === 'link' &&
             'text-blue-600 hover:text-blue-400 focus:outline-none focus:underline',
+          type === 'link-light' &&
+            'text-blue-400 hover:text-blue-500 focus:outline-none focus:underline',
           type === 'danger' &&
             'border-transparent bg-red-600 text-white hover:bg-red-500 focus:border-red-700 active:bg-red-700',
           type === 'primary' &&
