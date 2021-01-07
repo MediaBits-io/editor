@@ -84,7 +84,7 @@ function InfoPopup() {
                   className="justify-start"
                   onClick={openNewsletterWindow}
                 >
-                  Subscribe to out newsletter
+                  Subscribe to our newsletter
                 </Button>
               </div>
 

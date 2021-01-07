@@ -46,11 +46,29 @@ export async function clipAudio(
       : null;
 
   const samples = 2048;
+  const bitrate =
+    Math.ceil(
+      Math.round(audioFile.size / 128 / originalAudioBuffer.duration) / 16
+    ) * 16;
+
+  const quality =
+    ({
+      32: 0,
+      48: 1,
+      64: 2,
+      96: 3,
+      128: 4,
+      160: 5,
+      192: 6,
+      224: 7,
+      256: 8,
+      320: 9,
+    } as { [bitrate: number]: number })[bitrate] || 128;
 
   const encoder = new Encoder({
     sampleRate: clipAudioBuffer.sampleRate,
     numChannels: clipAudioBuffer.numberOfChannels,
-    quality: clipAudioBuffer.numberOfChannels > 1 ? 6 : 4, // When 2 channels it's probably music, for voice lower quality is fine
+    quality,
     samples,
   });
 
