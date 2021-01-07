@@ -3,7 +3,7 @@ import { readBlobAsArrayBuffer } from '../../../../utils/blob';
 import instantiate from '@etercast/mp3';
 
 // TODO: Move audio clipping to web worker to prevent blocking
-// TODO: detect audio sample rate instead of hard coding 44100 (browsers missing APIs)
+// TODO: detect audio sample rate instead of hard coding it (browsers missing APIs)
 
 /**
  * @param audioFile Blob or File to audio
@@ -17,7 +17,7 @@ export async function clipAudio(
 ) {
   const audioCtx = new (window.AudioContext ||
     (window as any).webkitAudioContext)({
-    sampleRate: 44100,
+    sampleRate: 16000,
   });
   const [Encoder, originalArrayBuffer] = await Promise.all([
     await instantiate(),
@@ -45,12 +45,13 @@ export async function clipAudio(
       ? clipAudioBuffer.getChannelData(1)
       : null;
 
-  const samples = 16384;
+  const samples = 2048;
 
   const encoder = new Encoder({
-    samples,
     sampleRate: clipAudioBuffer.sampleRate,
-    numChannels: 2,
+    numChannels: clipAudioBuffer.numberOfChannels,
+    quality: clipAudioBuffer.numberOfChannels > 1 ? 6 : 4, // When 2 channels it's probably music, for voice lower quality is fine
+    samples,
   });
 
   const numOfChunks = Math.floor(leftChannelData.length / samples) + 1;

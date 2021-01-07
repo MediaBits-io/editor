@@ -23,7 +23,7 @@
     "copy-encoder": "ncp ./node_modules/@etercast/mp3/dist/mp3.wasm ./client/public/mp3.wasm"
   },
   "dependencies": {
-    "@etercast/mp3": "1.0.1",
+    "@etercast/mp3": "github:MediaBits-io/mp3#1.0.2",
     "@headlessui/react": "0.0.0-2472521",
     "@mirco312312/react-imask": "^6.0.6",
     "@popperjs/core": "^2.5.4",

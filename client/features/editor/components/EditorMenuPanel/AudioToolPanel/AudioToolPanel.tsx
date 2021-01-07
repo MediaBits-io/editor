@@ -97,6 +97,12 @@ function AudioToolPanel() {
     }
   };
 
+  const handleDownloadAudio = () => {
+    if (audio) {
+      saveAs(audio.url, 'audio.mp3');
+    }
+  };
+
   return (
     <SideMenuPanel
       title="Audio"
@@ -105,6 +111,7 @@ function AudioToolPanel() {
           <AudioActions
             onTrimClick={openTrimModal}
             onEditClick={handleUploadAudioClick}
+            onDownloadClick={handleDownloadAudio}
           />
         ) : undefined
       }
