@@ -63,7 +63,7 @@ export async function clipAudio(
       224: 7,
       256: 8,
       320: 9,
-    } as { [bitrate: number]: number })[bitrate] || 128;
+    } as { [bitrate: number]: number })[bitrate] || 4;
 
   const encoder = new Encoder({
     sampleRate: clipAudioBuffer.sampleRate,
