@@ -2,6 +2,7 @@ import { DownloadOutline } from 'heroicons-react';
 import React, { useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import Button from '../../../../components/ui/Button';
+import ExternalLink from '../../../../components/ui/ExternalLink';
 import NotificationContent from '../../../../components/ui/Notification/NotificationContent';
 import { VideosContainer } from '../../../../containers/VideosContainer';
 import { openNewsletterWindow } from '../../../../utils/newsletter';
@@ -52,10 +53,20 @@ function ExportButton() {
       }
     } catch (e) {
       console.error(e);
-      const errorText = e?.response?.data?.error;
-      if (errorText) {
-        addToast(errorText, { appearance: 'error' });
-      }
+      const errorText = e?.response?.data?.error || "Something's wrong";
+      addToast(
+        <NotificationContent title={errorText}>
+          Please contact support through
+          <ExternalLink
+            className="mx-1"
+            newTab
+            to="mailto:support@mediabits.io"
+          >
+            support@mediabits.io
+          </ExternalLink>
+        </NotificationContent>,
+        { appearance: 'error', autoDismiss: false }
+      );
     } finally {
       setLoading(false);
     }
