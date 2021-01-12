@@ -15,6 +15,8 @@ import Konva from 'konva';
 import Loader from '../../../components/ui/Loader/Loader';
 import { EditorAreaContainer } from '../containers/EditorAreaContainer';
 
+const MIN_FONT_SIZE = 8;
+
 function CanvasRenderer() {
   const editorState = EditorContainer.useContainer();
   const { editorMargin } = EditorAreaContainer.useContainer();
@@ -32,7 +34,8 @@ function CanvasRenderer() {
 
   const transformTextFn = useCallback((node: Konva.Node): Konva.TextConfig => {
     const textNode = node as Konva.Text;
-    const fontSize = textNode.fontSize();
+    const charSize = textNode.measureSize(textNode.text()[0]);
+    const fontSize = Math.max(textNode.fontSize(), MIN_FONT_SIZE);
     const scaleY = roundDecimal(textNode.scaleY(), 5);
     const scaleX = roundDecimal(textNode.scaleX(), 5);
     const fitToFont = scaleY !== 1;
@@ -42,6 +45,7 @@ function CanvasRenderer() {
         scaleX !== 1 || scaleY !== 1
           ? textNode.width() * scaleX
           : textNode.width(),
+        charSize.width,
         MIN_WIDTH
       ),
       fontSize: fitToFont ? Math.floor(fontSize * scaleY) : fontSize,

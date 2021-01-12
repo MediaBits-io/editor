@@ -4,8 +4,8 @@ import { KonvaNodeEvents, Transformer } from 'react-konva';
 import Konva from 'konva';
 import useElements from '../hooks/useElements';
 
-export const MIN_WIDTH = 1;
-export const MIN_HEIGHT = 1;
+export const MIN_WIDTH = 5;
+export const MIN_HEIGHT = 5;
 
 interface Props {
   id: string;
