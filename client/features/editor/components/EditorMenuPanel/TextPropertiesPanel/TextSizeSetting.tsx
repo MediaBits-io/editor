@@ -27,7 +27,7 @@ function TextSizeSetting({ elementId, elementProps }: Props) {
   const [inputValue, setInputValue] = useState(elementProps.fontSize);
 
   useEffect(() => {
-    setInputValue(Math.floor(elementProps.fontSize));
+    setInputValue(elementProps.fontSize && Math.floor(elementProps.fontSize));
   }, [elementProps.fontSize]);
 
   const handleChange = (fontSize: number) => {
