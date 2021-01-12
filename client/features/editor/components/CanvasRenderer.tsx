@@ -33,12 +33,17 @@ function CanvasRenderer() {
   const transformTextFn = useCallback((node: Konva.Node): Konva.TextConfig => {
     const textNode = node as Konva.Text;
     const fontSize = textNode.fontSize();
-    const scaleY = textNode.scaleY();
-    const scaleX = textNode.scaleX();
-    const fitToFont = roundDecimal(scaleY, 5) !== 1;
+    const scaleY = roundDecimal(textNode.scaleY(), 5);
+    const scaleX = roundDecimal(textNode.scaleX(), 5);
+    const fitToFont = scaleY !== 1;
+
     return {
-      width: Math.max(textNode.width() * scaleX, MIN_WIDTH),
-      height: fitToFont ? undefined : textNode.height(),
+      width: Math.max(
+        scaleX !== 1 || scaleY !== 1
+          ? textNode.width() * scaleX
+          : textNode.width(),
+        MIN_WIDTH
+      ),
       fontSize: fitToFont ? Math.floor(fontSize * scaleY) : fontSize,
       scaleX: 1,
       scaleY: 1,

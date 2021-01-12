@@ -35,11 +35,7 @@ function TextToolPanel() {
   const { createElement } = useElements();
 
   const handleClickAddText = (font: DefaultFonts) => () => {
-    createElement<Konva.TextConfig>(
-      ShapeType.Text,
-      TEXT_PROPERTIES[font],
-      Konva.Text
-    );
+    createElement<Konva.TextConfig>(ShapeType.Text, TEXT_PROPERTIES[font]);
   };
 
   return (

@@ -90,3 +90,11 @@ export async function loadTemplateFonts(template: Template) {
     await loadFonts(fontsToLoad);
   }
 }
+
+export function autoCorrectTemplateIssues(template: Template) {
+  template.elements.forEach((element) => {
+    if (element.type === ShapeType.Text) {
+      element.props.height = undefined;
+    }
+  });
+}

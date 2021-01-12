@@ -1,5 +1,4 @@
 import React from 'react';
-import Konva from 'konva';
 import { ShapeType } from '../../interfaces/Shape';
 import SideMenuPanel from '../ui/SideMenuPanel';
 import useElements from '../../hooks/useElements';
@@ -21,11 +20,7 @@ function ImageToolPanel() {
 
     if (file) {
       const defaultProps = await changeImage(file);
-      createElement(
-        ShapeType.Image,
-        { ...defaultProps, blurRadius: 0 },
-        Konva.Image
-      );
+      createElement(ShapeType.Image, { ...defaultProps, blurRadius: 0 });
     }
   };
 

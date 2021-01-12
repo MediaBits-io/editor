@@ -8,19 +8,21 @@ export default function useElements() {
   const { dispatch, state, template } = EditorContainer.useContainer();
 
   const createElement = useCallback(
-    function <Config extends Konva.NodeConfig>(
-      type: ShapeType,
-      props: Config,
-      BoundsShape: typeof Konva.Shape | typeof Konva.Image = Konva.Shape
-    ) {
+    function <Config extends Konva.NodeConfig>(type: ShapeType, props: Config) {
       const { x, y, width, height, scaleX = 1, scaleY = 1 } = props;
-      const bounds = new BoundsShape(props as any);
-      const elWidth = width ? scaleX * width : bounds.scaleX() * bounds.width();
-      const elHeight = height
-        ? scaleY * height
-        : bounds.scaleY() * bounds.height();
-      const centeredX = template.dimensions.width / 2 - elWidth / 2;
-      const centeredY = template.dimensions.height / 2 - elHeight / 2;
+
+      const BoundsShape: typeof Konva.Shape =
+        ({
+          [ShapeType.Text]: Konva.Text,
+          [ShapeType.Rectangle]: Konva.Rect,
+          [ShapeType.Image]: Konva.Image,
+        } as any)[type] ?? Konva.Shape;
+
+      const bounds = new BoundsShape(props).getClientRect();
+      const centeredX =
+        template.dimensions.width / 2 - bounds.width / 2 - bounds.x;
+      const centeredY =
+        template.dimensions.height / 2 - bounds.height / 2 - bounds.y;
 
       dispatch({
         type: 'create_element',
@@ -32,8 +34,8 @@ export default function useElements() {
             scaleY,
             x: x ?? centeredX,
             y: y ?? centeredY,
-            width: width || bounds.width(),
-            height: height || bounds.height(),
+            width: width,
+            height: height,
           },
           type,
         },

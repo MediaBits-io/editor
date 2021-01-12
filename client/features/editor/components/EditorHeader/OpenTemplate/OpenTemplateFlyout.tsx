@@ -6,7 +6,11 @@ import { EditorContainer } from '../../../containers/EditorContainer/EditorConta
 import FlyoutMenuButton from '../FlyoutMenuButton';
 import { readBlobAsText } from '../../../../../utils/blob';
 import DiscardChangesModal from '../../DiscardChangesModal';
-import { loadTemplateFonts, loadTemplateImages } from '../../../utils/template';
+import {
+  autoCorrectTemplateIssues,
+  loadTemplateFonts,
+  loadTemplateImages,
+} from '../../../utils/template';
 import { useToasts } from 'react-toast-notifications';
 import NotificationContent from '../../../../../components/ui/Notification/NotificationContent';
 import ExternalLink from '../../../../../components/ui/ExternalLink';
@@ -48,6 +52,7 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
           loadTemplateImages(template),
           loadTemplateFonts(template),
         ]);
+        autoCorrectTemplateIssues(template);
 
         // Do not show loader if all fonts loaded from cache
         clearTimeout(loadingTimeout);
