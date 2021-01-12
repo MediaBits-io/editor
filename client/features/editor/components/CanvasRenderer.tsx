@@ -12,11 +12,9 @@ import { ShapeType } from '../interfaces/Shape';
 import useZoom from '../hooks/useZoom';
 import InteractiveKonvaElement, { MIN_WIDTH } from './InteractiveKonvaElement';
 import Konva from 'konva';
-import UniqueIdContainer from '../../../containers/UniqueIdContainer';
 import Loader from '../../../components/ui/Loader/Loader';
 import { EditorAreaContainer } from '../containers/EditorAreaContainer';
 
-// TODO: might need to pass through props for uniqueId too
 function CanvasRenderer() {
   const editorState = EditorContainer.useContainer();
   const { editorMargin } = EditorAreaContainer.useContainer();
@@ -77,83 +75,81 @@ function CanvasRenderer() {
         width={mul(template.dimensions.width, state.zoom)}
         height={mul(template.dimensions.height, state.zoom)}
       >
-        <UniqueIdContainer.Provider>
-          <EditorContainer.Provider initialState={{ override: editorState }}>
-            <Layer>
-              <Rect
-                {...template.dimensions}
-                {...template.background}
-                onClick={handleBackgroundClick}
-              />
-              {template.elements.map(({ type, id, props }) => (
-                <InteractiveKonvaElement
-                  key={id}
-                  id={id}
-                  anchors={
-                    type === ShapeType.Text
-                      ? [
-                          'middle-left',
-                          'middle-right',
-                          'top-left',
-                          'top-right',
-                          'bottom-left',
-                          'bottom-right',
-                        ]
-                      : undefined
+        <EditorContainer.Provider initialState={{ override: editorState }}>
+          <Layer>
+            <Rect
+              {...template.dimensions}
+              {...template.background}
+              onClick={handleBackgroundClick}
+            />
+            {template.elements.map(({ type, id, props }) => (
+              <InteractiveKonvaElement
+                key={id}
+                id={id}
+                anchors={
+                  type === ShapeType.Text
+                    ? [
+                        'middle-left',
+                        'middle-right',
+                        'top-left',
+                        'top-right',
+                        'bottom-left',
+                        'bottom-right',
+                      ]
+                    : undefined
+                }
+                transformerFn={
+                  type === ShapeType.Text ? transformTextFn : undefined
+                }
+              >
+                {(additionalProps) => {
+                  switch (type) {
+                    case ShapeType.Text:
+                      return (
+                        <Text
+                          {...(props as Konva.TextConfig)}
+                          {...additionalProps}
+                        />
+                      );
+                    case ShapeType.Rectangle:
+                      return (
+                        <Rect
+                          {...(props as Konva.RectConfig)}
+                          {...additionalProps}
+                        />
+                      );
+                    case ShapeType.Waveform:
+                      return (
+                        <Waveform
+                          {...(props as WaveformConfig)}
+                          {...additionalProps}
+                        />
+                      );
+                    case ShapeType.ProgressBar:
+                      return (
+                        <ProgressBar
+                          {...(props as ProgressBarConfig)}
+                          {...additionalProps}
+                        />
+                      );
+                    case ShapeType.Image:
+                      // TODO: set cache on mount, not on ref
+                      return (
+                        <Image
+                          {...(props as Konva.ImageConfig)}
+                          {...additionalProps}
+                          ref={(el) => {
+                            el?.cache();
+                            additionalProps.ref.current = el;
+                          }}
+                        />
+                      );
                   }
-                  transformerFn={
-                    type === ShapeType.Text ? transformTextFn : undefined
-                  }
-                >
-                  {(additionalProps) => {
-                    switch (type) {
-                      case ShapeType.Text:
-                        return (
-                          <Text
-                            {...(props as Konva.TextConfig)}
-                            {...additionalProps}
-                          />
-                        );
-                      case ShapeType.Rectangle:
-                        return (
-                          <Rect
-                            {...(props as Konva.RectConfig)}
-                            {...additionalProps}
-                          />
-                        );
-                      case ShapeType.Waveform:
-                        return (
-                          <Waveform
-                            {...(props as WaveformConfig)}
-                            {...additionalProps}
-                          />
-                        );
-                      case ShapeType.ProgressBar:
-                        return (
-                          <ProgressBar
-                            {...(props as ProgressBarConfig)}
-                            {...additionalProps}
-                          />
-                        );
-                      case ShapeType.Image:
-                        // TODO: set cache on mount, not on ref
-                        return (
-                          <Image
-                            {...(props as Konva.ImageConfig)}
-                            {...additionalProps}
-                            ref={(el) => {
-                              el?.cache();
-                              additionalProps.ref.current = el;
-                            }}
-                          />
-                        );
-                    }
-                  }}
-                </InteractiveKonvaElement>
-              ))}
-            </Layer>
-          </EditorContainer.Provider>
-        </UniqueIdContainer.Provider>
+                }}
+              </InteractiveKonvaElement>
+            ))}
+          </Layer>
+        </EditorContainer.Provider>
       </Stage>
     </div>
   );

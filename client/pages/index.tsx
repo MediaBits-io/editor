@@ -5,7 +5,6 @@ import { parseCookies } from 'nookies';
 import Notification from '../components/ui/Notification/Notification';
 import NotificationContainer from '../components/ui/Notification/NotificationContainer';
 import { PlansContainer } from '../containers/PlansContainer';
-import UniqueIdContainer from '../containers/UniqueIdContainer';
 import { UserContainer } from '../containers/UserContainer';
 import { VideosContainer } from '../containers/VideosContainer';
 import Editor from '../features/editor/Editor';
@@ -46,28 +45,26 @@ export default function Home({ plans, authInfo }: Props) {
         <title>Mediabits.io | Turn your audio into sharable video</title>
       </Head>
 
-      <UniqueIdContainer.Provider>
-        <ToastProvider
-          autoDismissTimeout={5000}
-          autoDismiss
-          components={{
-            Toast: Notification,
-            ToastContainer: NotificationContainer,
-          }}
-        >
-          <PlansContainer.Provider initialState={{ plans }}>
-            <UserContainer.Provider
-              initialState={{
-                authInfo: deserializeAuthInfoDTO(authInfo),
-              }}
-            >
-              <VideosContainer.Provider>
-                <Editor />
-              </VideosContainer.Provider>
-            </UserContainer.Provider>
-          </PlansContainer.Provider>
-        </ToastProvider>
-      </UniqueIdContainer.Provider>
+      <ToastProvider
+        autoDismissTimeout={5000}
+        autoDismiss
+        components={{
+          Toast: Notification,
+          ToastContainer: NotificationContainer,
+        }}
+      >
+        <PlansContainer.Provider initialState={{ plans }}>
+          <UserContainer.Provider
+            initialState={{
+              authInfo: deserializeAuthInfoDTO(authInfo),
+            }}
+          >
+            <VideosContainer.Provider>
+              <Editor />
+            </VideosContainer.Provider>
+          </UserContainer.Provider>
+        </PlansContainer.Provider>
+      </ToastProvider>
     </div>
   );
 }

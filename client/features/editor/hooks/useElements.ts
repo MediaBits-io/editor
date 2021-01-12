@@ -1,12 +1,11 @@
 import Konva from 'konva';
 import { useCallback, useMemo } from 'react';
-import UniqueIdContainer from '../../../containers/UniqueIdContainer';
+import { uuid } from '../../../utils/uuid';
 import { EditorContainer } from '../containers/EditorContainer/EditorContainer';
 import { ShapeType } from '../interfaces/Shape';
 
 export default function useElements() {
   const { dispatch, state, template } = EditorContainer.useContainer();
-  const { getUniqueId } = UniqueIdContainer.useContainer();
 
   const createElement = useCallback(
     function <Config extends Konva.NodeConfig>(
@@ -26,7 +25,7 @@ export default function useElements() {
       dispatch({
         type: 'create_element',
         element: {
-          id: getUniqueId(`${type}-element`),
+          id: uuid(type),
           props: {
             ...props,
             scaleX,
@@ -40,7 +39,7 @@ export default function useElements() {
         },
       });
     },
-    [dispatch, getUniqueId, template]
+    [dispatch, template]
   );
 
   const selectedElement = useMemo(

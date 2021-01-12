@@ -55,6 +55,7 @@
     "react-toast-notifications": "^2.4.0",
     "tinycolor2": "^1.4.2",
     "unstated-next": "^1.1.0",
+    "uuid": "^8.3.2",
     "wavesurfer.js": "^4.2.0",
     "webfontloader": "^1.6.28"
   },
@@ -73,6 +74,7 @@
     "@types/react-portal": "^4.0.2",
     "@types/react-toast-notifications": "^2.4.0",
     "@types/tinycolor2": "^1.4.2",
+    "@types/uuid": "^8.3.0",
     "@types/wavesurfer.js": "^3.3.1",
     "@types/webfontloader": "^1.6.32",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
