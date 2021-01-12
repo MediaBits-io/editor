@@ -33,19 +33,21 @@ function EditorHeader() {
           <OpenTemplateButton />
           <SaveTemplateButton />
           <VideosButton />
+        </div>
+
+        <div className="flex items-center space-x-2">
           {ENABLE_UPGRADES && (
             <Button
               onClick={handleClickUpgrade}
               type="custom"
               icon={SparklesOutline}
-              className="py-1.5 px-2.5 rounded-md font-semibold bg-yellow-50 hover:bg-yellow-100 focus:bg-yellow-100 transition duration-150 border border-transparent text-yellow-600 focus:text-yellow-700 hover:text-yellow-700 focus:ring-yellow-300 focus:outline-none focus:ring-2"
+              className="py-2 px-4 rounded-md font-semibold bg-yellow-50 hover:bg-yellow-100 focus:bg-yellow-100 transition duration-150 border border-transparent text-yellow-600 focus:text-yellow-700 hover:text-yellow-700 focus:ring-yellow-300 focus:outline-none focus:ring-2"
             >
               {isPro ? 'Professional' : 'Upgrade'}
             </Button>
           )}
+          <ExportButton />
         </div>
-
-        <ExportButton />
       </div>
     </div>
   );
