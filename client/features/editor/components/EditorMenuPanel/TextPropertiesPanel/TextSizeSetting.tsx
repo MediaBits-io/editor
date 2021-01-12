@@ -27,7 +27,7 @@ function TextSizeSetting({ elementId, elementProps }: Props) {
   const [inputValue, setInputValue] = useState(elementProps.fontSize);
 
   useEffect(() => {
-    setInputValue(elementProps.fontSize);
+    setInputValue(Math.floor(elementProps.fontSize));
   }, [elementProps.fontSize]);
 
   const handleChange = (fontSize: number) => {
@@ -42,7 +42,10 @@ function TextSizeSetting({ elementId, elementProps }: Props) {
     const newValue = parseInt(value);
     setInputValue(newValue);
 
-    if (newValue >= 12 && newValue !== elementProps.fontSize) {
+    if (
+      newValue >= 12 &&
+      (!elementProps.fontSize || newValue !== Math.floor(elementProps.fontSize))
+    ) {
       handleChange(newValue);
     }
   };

@@ -7,7 +7,7 @@ import {
   WaveformConfig,
 } from 'konva-elements';
 import { EditorContainer } from '../containers/EditorContainer/EditorContainer';
-import { mul, roundDecimal } from '../../../utils/number';
+import { mul } from '../../../utils/number';
 import { ShapeType } from '../interfaces/Shape';
 import useZoom from '../hooks/useZoom';
 import InteractiveKonvaElement, { MIN_WIDTH } from './InteractiveKonvaElement';
@@ -32,23 +32,18 @@ function CanvasRenderer() {
     dispatch({ type: 'clear_selection' });
   };
 
-  const transformTextFn = useCallback((node: Konva.Node): Konva.TextConfig => {
+  const transformText = useCallback((node: Konva.Node): Konva.TextConfig => {
     const textNode = node as Konva.Text;
-    const charSize = textNode.measureSize(textNode.text()[0]);
-    const fontSize = Math.max(textNode.fontSize(), MIN_FONT_SIZE);
-    const scaleY = roundDecimal(textNode.scaleY(), 5);
-    const scaleX = roundDecimal(textNode.scaleX(), 5);
-    const fitToFont = scaleY !== 1;
-
     return {
       width: Math.max(
-        scaleX !== 1 || scaleY !== 1
-          ? textNode.width() * scaleX
-          : textNode.width(),
-        charSize.width,
+        textNode.width() * textNode.scaleX(),
+        textNode.measureSize(textNode.text()[0]).width,
         MIN_WIDTH
       ),
-      fontSize: fitToFont ? Math.floor(fontSize * scaleY) : fontSize,
+      fontSize: Math.max(
+        textNode.fontSize() * textNode.scaleY(),
+        MIN_FONT_SIZE
+      ),
       scaleX: 1,
       scaleY: 1,
     };
@@ -108,7 +103,7 @@ function CanvasRenderer() {
                     : undefined
                 }
                 transformerFn={
-                  type === ShapeType.Text ? transformTextFn : undefined
+                  type === ShapeType.Text ? transformText : undefined
                 }
               >
                 {(additionalProps) => {
