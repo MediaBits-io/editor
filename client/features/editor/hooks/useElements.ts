@@ -9,7 +9,7 @@ export default function useElements() {
 
   const createElement = useCallback(
     function <Config extends Konva.NodeConfig>(type: ShapeType, props: Config) {
-      const { x, y, width, height, scaleX = 1, scaleY = 1 } = props;
+      const { x, y, scaleX = 1, scaleY = 1 } = props;
 
       const BoundsShape: typeof Konva.Shape =
         ({
@@ -34,8 +34,6 @@ export default function useElements() {
             scaleY,
             x: x ?? centeredX,
             y: y ?? centeredY,
-            width: width,
-            height: height,
           },
           type,
         },

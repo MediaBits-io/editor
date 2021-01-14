@@ -9,12 +9,12 @@ interface Props {
   onChange?: (value: number) => void;
 }
 
-function Slider({ min = 0, max, onChange, value, step }: Props) {
+function Slider({ min = 0, max = 100, onChange, value, step }: Props) {
   return (
     <Range
       step={step}
       min={0}
-      max={100}
+      max={max}
       values={[value]}
       onChange={([value]) => onChange?.(value)}
       renderTrack={({ props, children }) => (

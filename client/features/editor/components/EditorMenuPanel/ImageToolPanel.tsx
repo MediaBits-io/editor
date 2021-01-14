@@ -20,7 +20,10 @@ function ImageToolPanel() {
 
     if (file) {
       const defaultProps = await changeImage(file);
-      createElement(ShapeType.Image, { ...defaultProps, blurRadius: 0 });
+      createElement(ShapeType.Image, {
+        ...defaultProps,
+        blurRadius: 0,
+      });
     }
   };
 

@@ -96,5 +96,10 @@ export function autoCorrectTemplateIssues(template: Template) {
     if (element.type === ShapeType.Text) {
       element.props.height = undefined;
     }
+
+    if (element.type === ShapeType.Image) {
+      element.props.blurRadius =
+        element.props.blurRadius && Math.min(element.props.blurRadius, 20);
+    }
   });
 }

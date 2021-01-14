@@ -3,7 +3,7 @@ import MainArea from '../../components/layout/MainArea';
 import EditorMenu from './components/EditorMenu/EditorMenu';
 import { EditorContainer } from './containers/EditorContainer/EditorContainer';
 import EditorMenuPanel from './components/EditorMenuPanel/EditorMenuPanel';
-import CanvasRenderer from './components/CanvasRenderer';
+import CanvasRenderer from './components/EditorMenuPanel/CanvasRenderer/CanvasRenderer';
 import EditorHeader from './components/EditorHeader/EditorHeader';
 import useEditorKeyCommand from './hooks/useEditorKeyCommand';
 import useEditorHistory from './hooks/useEditorHistory';

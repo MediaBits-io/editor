@@ -3,6 +3,7 @@ import { EditorContainer } from '../containers/EditorContainer/EditorContainer';
 import { KonvaNodeEvents, Transformer } from 'react-konva';
 import Konva from 'konva';
 import useElements from '../hooks/useElements';
+import { KonvaEventObject } from 'konva/types/Node';
 
 export const MIN_WIDTH = 5;
 export const MIN_HEIGHT = 5;
@@ -10,7 +11,14 @@ export const MIN_HEIGHT = 5;
 interface Props {
   id: string;
   children: (props: Konva.ShapeConfig & KonvaNodeEvents) => React.ReactNode;
-  transformerFn?: (node: Konva.Shape) => Konva.ShapeConfig;
+  transform?: (
+    evt: KonvaEventObject<Event>,
+    transformer: Konva.Transformer
+  ) => Konva.ShapeConfig;
+  transformEnd?: (
+    evt: KonvaEventObject<Event>,
+    transformer: Konva.Transformer
+  ) => Konva.ShapeConfig;
   anchors?: string[];
 }
 
@@ -18,7 +26,8 @@ const InteractiveKonvaElement = ({
   id,
   anchors,
   children,
-  transformerFn,
+  transform,
+  transformEnd,
 }: Props) => {
   const shapeRef = useRef<Konva.Shape>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
@@ -38,9 +47,12 @@ const InteractiveKonvaElement = ({
     dispatch({ type: 'select_element', id });
   };
 
-  const handleChange = (props: Konva.ShapeConfig) => {
-    dispatch({ type: 'update_element', id, props });
-  };
+  const handleChange = useCallback(
+    (props: Konva.ShapeConfig) => {
+      dispatch({ type: 'update_element', id, props });
+    },
+    [dispatch, id]
+  );
 
   const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {
     handleChange({
@@ -49,23 +61,34 @@ const InteractiveKonvaElement = ({
     });
   };
 
-  const handleTransform = useCallback(() => {
-    const node = shapeRef.current;
-    if (node && transformerFn) {
-      node.setAttrs(transformerFn(node));
-    }
-  }, [transformerFn]);
+  const handleTransform = useCallback(
+    (evt: KonvaEventObject<Event>) => {
+      const node = shapeRef.current;
+      if (node && transformerRef.current && transform) {
+        node.setAttrs(transform(evt, transformerRef.current));
+      }
+    },
+    [transform]
+  );
 
-  const handleTransformEnd = () => {
-    const node = shapeRef.current;
+  const handleTransformEnd = useCallback(
+    (evt: KonvaEventObject<Event>) => {
+      const node = shapeRef.current;
 
-    if (node) {
-      handleTransform();
+      if (!node) {
+        return;
+      }
+
+      if (node && transformerRef.current && transformEnd) {
+        node.setAttrs(transformEnd(evt, transformerRef.current));
+      }
+
       handleChange({
         ...node.getAttrs(),
       });
-    }
-  };
+    },
+    [handleChange, transformEnd]
+  );
 
   return (
     <>

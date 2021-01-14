@@ -37,7 +37,7 @@ function ImageBlurSetting({ elementId, elementProps }: Props) {
       <SideMenuSetting label="Blur">
         <div className="panel-item py-3 flex w-full items-center">
           <Slider
-            max={100}
+            max={20}
             value={elementProps.blurRadius}
             step={1}
             onChange={handleChangeBlur}
