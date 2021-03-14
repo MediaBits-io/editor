@@ -5,11 +5,12 @@ import ModalAction from '../../../../components/ui/Modal/ModalAction';
 import ModalContent from '../../../../components/ui/Modal/ModalContent';
 import useAudioClipper from '../AudioClipper/useAudioClipper';
 import Alert from '../../../../components/ui/Alert';
-import { UserContainer } from '../../../../containers/UserContainer';
 import { Plan } from '../../../../interfaces';
 import FileTooBig from './FileTooBig';
 import { ENABLE_UPGRADES } from '../../../../constants';
 import AudioClipper from '../AudioClipper/AudioClipper';
+import { useRecoilValue } from 'recoil';
+import { userPlanInfoSelector, userPlanState } from '../../../../state/user';
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
@@ -32,7 +33,8 @@ interface Props {
 }
 
 function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
-  const { userPlanInfo, userPlan } = UserContainer.useContainer();
+  const userPlan = useRecoilValue(userPlanState);
+  const userPlanInfo = useRecoilValue(userPlanInfoSelector);
   const [loading, setLoading] = useState(false);
   const [bounds, setBounds] = useState<ClipBounds>();
   const [audio, setAudio] = useState(initialAudio);

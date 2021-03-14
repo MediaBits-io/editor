@@ -1,9 +1,10 @@
 import React from 'react';
 import Popover from '../../../../components/ui/Popover/Popover';
 import { Plan } from '../../../../interfaces';
-import { UserContainer } from '../../../../containers/UserContainer';
 import classNames from '../../../../utils/classNames';
 import { ENABLE_UPGRADES } from '../../../../constants';
+import { useRecoilValue } from 'recoil';
+import { userPlanState } from '../../../../state/user';
 
 interface Props {
   onClick: () => void;
@@ -20,7 +21,7 @@ function FlyoutMenuButton({
   description,
   onlyPro,
 }: Props) {
-  const { userPlan } = UserContainer.useContainer();
+  const userPlan = useRecoilValue(userPlanState);
 
   const isPro = userPlan.plan === Plan.Professional;
   const isDisabledPro = onlyPro && !isPro;

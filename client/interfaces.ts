@@ -14,20 +14,22 @@ export type Plans = {
   [plan in Plan]: PlanConfig;
 };
 
+export interface UserPlanDTO {
+  expiresAt?: string;
+  createdAt: string;
+  plan: string;
+}
+
 export interface AuthInfoDTO {
   user: {
     uid: string;
     email?: string;
   };
-  plan: {
-    expiresAt?: string;
-    createdAt: string;
-    plan: string;
-  } | null;
+  plan: UserPlanDTO | null;
 }
 
 export interface AuthInfo {
-  user?: UserInfo;
+  user: UserInfo | null;
   plan: UserPlan;
 }
 
@@ -42,20 +44,10 @@ export interface UserInfo {
   email?: string;
 }
 
-export function deserializeAuthInfoDTO(dto: AuthInfoDTO | null): AuthInfo {
+export function deserializeUserPlanDTO(dto: UserPlanDTO): UserPlan {
   return {
-    user: dto ? dto.user : undefined,
-    plan: dto?.plan
-      ? {
-          plan: dto.plan.plan as Plan,
-          createdAt: new Date(dto.plan.createdAt),
-          expiresAt: dto.plan.expiresAt
-            ? new Date(dto.plan.createdAt)
-            : undefined,
-        }
-      : {
-          plan: Plan.Free,
-          createdAt: new Date(),
-        },
+    plan: dto.plan as Plan,
+    createdAt: new Date(dto.createdAt),
+    expiresAt: dto.expiresAt ? new Date(dto.createdAt) : undefined,
   };
 }

@@ -1,8 +1,9 @@
 import { UploadOutline } from 'heroicons-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import Button from '../../../../../components/ui/Button';
 import { Plan } from '../../../../../interfaces';
-import { UserContainer } from '../../../../../containers/UserContainer';
+import { userPlanInfoSelector, userPlanState } from '../../../../../state/user';
 import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
 import AudioModal, { AudioState } from '../../AudioModal/AudioModal';
 import SideMenuPanel from '../../ui/SideMenuPanel';
@@ -10,7 +11,8 @@ import AudioActions from './AudioActions';
 
 function AudioToolPanel() {
   const { state, dispatch } = EditorContainer.useContainer();
-  const { userPlan, userPlanInfo } = UserContainer.useContainer();
+  const userPlan = useRecoilValue(userPlanState);
+  const userPlanInfo = useRecoilValue(userPlanInfoSelector);
   const [isTrimModalVisible, setTrimModalVisible] = useState(false);
   const [audio, setAudio] = useState<AudioState>();
   const audioRef = useRef<HTMLAudioElement>(null);

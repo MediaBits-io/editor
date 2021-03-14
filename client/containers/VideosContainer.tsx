@@ -8,7 +8,8 @@ import NotificationContent from '../components/ui/Notification/NotificationConte
 import ExternalLink from '../components/ui/ExternalLink';
 import { isTruthy } from '../utils/boolean';
 import useLocalStorage from '../utils/hooks/useLocalStorage';
-import { UserContainer } from './UserContainer';
+import { useRecoilValue } from 'recoil';
+import { userInfoState } from '../state/user';
 
 export interface VideoDTO {
   createdAt: string;
@@ -45,7 +46,7 @@ const deserializeResponse = (videos: VideosDTO): Videos =>
   }, {});
 
 function useVideos() {
-  const { userInfo } = UserContainer.useContainer();
+  const userInfo = useRecoilValue(userInfoState);
   const pollingIdsRef = useRef<string[]>([]);
   const pollingIntervalRef = useRef<any>();
   const [videos, setVideos] = useState<Videos>();
