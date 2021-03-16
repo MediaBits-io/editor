@@ -4,15 +4,16 @@ import { ToastProvider } from 'react-toast-notifications';
 import { parseCookies } from 'nookies';
 import Notification from '../components/ui/Notification/Notification';
 import NotificationContainer from '../components/ui/Notification/NotificationContainer';
-import { VideosContainer } from '../containers/VideosContainer';
 import Editor from '../features/editor/Editor';
-import { AuthInfoDTO, deserializeUserPlanDTO, Plans } from '../interfaces';
+import { AuthInfoDTO, deserializeUserPlanDTO } from '../interfaces/user';
 import { api } from '../utils/api/api';
 import { fetchAuthInfo } from '../utils/api/auth';
 import { RecoilRoot } from 'recoil';
 import { userInfoState, userPlanState } from '../state/user';
 import { plansState } from '../state/plans';
-import Auth from '../components/Auth';
+import AuthController from '../components/AuthController';
+import { Plans } from '../interfaces/plans';
+import VideosController from '../components/VideosController';
 
 interface Props {
   plans: Plans;
@@ -60,7 +61,6 @@ export default function Home({ plans, authInfo }: Props) {
           }
         }}
       >
-        <Auth />
         <ToastProvider
           autoDismissTimeout={5000}
           autoDismiss
@@ -69,9 +69,9 @@ export default function Home({ plans, authInfo }: Props) {
             ToastContainer: NotificationContainer,
           }}
         >
-          <VideosContainer.Provider>
-            <Editor />
-          </VideosContainer.Provider>
+          <AuthController />
+          <VideosController />
+          <Editor />
         </ToastProvider>
       </RecoilRoot>
     </div>

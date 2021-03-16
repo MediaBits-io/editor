@@ -1,8 +1,8 @@
 import useAuth from '../hooks/useAuth';
 
-function Auth() {
+function AuthController() {
   useAuth({ bindAuthListener: true });
   return null;
 }
 
-export default Auth;
+export default AuthController;

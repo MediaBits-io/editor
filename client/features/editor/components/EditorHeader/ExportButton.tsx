@@ -4,14 +4,14 @@ import { useToasts } from 'react-toast-notifications';
 import Button from '../../../../components/ui/Button';
 import ExternalLink from '../../../../components/ui/ExternalLink';
 import NotificationContent from '../../../../components/ui/Notification/NotificationContent';
-import { VideosContainer } from '../../../../containers/VideosContainer';
+import useVideos from '../../../../hooks/useVideos';
 import { openNewsletterWindow } from '../../../../utils/newsletter';
 import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
 import AudioModal from '../AudioModal/AudioModal';
 
 function ExportButton() {
   const { template, state, dispatch } = EditorContainer.useContainer();
-  const { exportVideo } = VideosContainer.useContainer();
+  const { exportVideo } = useVideos();
   const { addToast } = useToasts();
   const [loading, setLoading] = useState(false);
   const [isAudioSelectVisible, setAudioSelectVisible] = useState(false);

@@ -1,35 +1,24 @@
-import React, { useMemo } from 'react';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
 import Alert from '../../../../../components/ui/Alert';
-import { Videos } from '../../../../../containers/VideosContainer';
+import { sortedVideoIdsSelector } from '../../../../../state/videos';
 import classNames from '../../../../../utils/classNames';
 import Video from './Video';
 
-const sortMostRecentTemplateFirst = (videos: Videos) => {
-  return Object.entries(videos)
-    .filter(([, { url }]) => url)
-    .sort(([, a], [, b]) => b.createdAt.getTime() - a.createdAt.getTime());
-};
+function VideosGrid() {
+  const sortedVideoIds = useRecoilValue(sortedVideoIdsSelector);
 
-interface Props {
-  videos: Videos;
-}
-
-function VideosGrid({ videos }: Props) {
-  const sortedVideos = useMemo(() => sortMostRecentTemplateFirst(videos), [
-    videos,
-  ]);
-
-  return sortedVideos.length ? (
+  return sortedVideoIds.length ? (
     <div
       className={classNames(
         'p-2 grid gap-2 grid-flow-row-dense overflow-y-auto',
-        sortedVideos.length === 1
+        sortedVideoIds.length === 1
           ? 'grid-cols-1 max-h-72'
           : 'grid-cols-2 max-h-52'
       )}
     >
-      {sortedVideos.map(([id, { url }]) => (
-        <Video key={id} url={url!} />
+      {sortedVideoIds.map((id) => (
+        <Video key={id} id={id} />
       ))}
     </div>
   ) : (

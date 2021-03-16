@@ -2,7 +2,7 @@ import { UploadOutline } from 'heroicons-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import Button from '../../../../../components/ui/Button';
-import { Plan } from '../../../../../interfaces';
+import { Plan } from '../../../../../interfaces/plans';
 import { userPlanInfoSelector, userPlanState } from '../../../../../state/user';
 import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
 import AudioModal, { AudioState } from '../../AudioModal/AudioModal';

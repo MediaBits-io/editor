@@ -1,12 +1,12 @@
 import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/auth';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import cookies from 'js-cookie';
 import { fetchAuthInfo } from '../utils/api/auth';
 import { useRecoilCallback } from 'recoil';
 import { userInfoState, userPlanState } from '../state/user';
-import { deserializeUserPlanDTO } from '../interfaces';
+import { deserializeUserPlanDTO } from '../interfaces/user';
 
 interface Params {
   bindAuthListener?: boolean;
@@ -52,10 +52,13 @@ function useAuth({ bindAuthListener = false }: Params = {}) {
     }
   }, [authChangeCallback, bindAuthListener]);
 
-  return {
-    signIn,
-    signOut,
-  };
+  return useMemo(
+    () => ({
+      signIn,
+      signOut,
+    }),
+    [signIn, signOut]
+  );
 }
 
 export default useAuth;

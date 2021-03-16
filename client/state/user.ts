@@ -1,5 +1,6 @@
 import { atom, selector } from 'recoil';
-import { Plan, PlanConfig, UserInfo, UserPlan } from '../interfaces';
+import { Plan, PlanConfig } from '../interfaces/plans';
+import { UserInfo, UserPlan } from '../interfaces/user';
 import { plansState } from './plans';
 
 export const userInfoState = atom<UserInfo | null>({

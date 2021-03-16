@@ -3,7 +3,6 @@ import Button from '../../../../components/ui/Button';
 import Logo from '../../../../components/ui/Logo/Logo';
 import { SparklesOutline } from 'heroicons-react';
 import ExportButton from './ExportButton';
-import { Plan } from '../../../../interfaces';
 import OpenTemplateButton from './OpenTemplate/OpenTemplateButton';
 import SaveTemplateButton from './SaveTemplate/SaveTemplateButton';
 import VideosButton from './Videos/VideosButton';
@@ -11,6 +10,7 @@ import LoginModal from '../LoginModal';
 import { ENABLE_UPGRADES } from '../../../../constants';
 import { userPlanState } from '../../../../state/user';
 import { useRecoilValue } from 'recoil';
+import { Plan } from '../../../../interfaces/plans';
 
 function EditorHeader() {
   const [loginVisible, setLoginVisible] = useState(false);

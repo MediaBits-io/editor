@@ -1,10 +1,10 @@
 import React from 'react';
 import Popover from '../../../../components/ui/Popover/Popover';
-import { Plan } from '../../../../interfaces';
 import classNames from '../../../../utils/classNames';
 import { ENABLE_UPGRADES } from '../../../../constants';
 import { useRecoilValue } from 'recoil';
 import { userPlanState } from '../../../../state/user';
+import { Plan } from '../../../../interfaces/plans';
 
 interface Props {
   onClick: () => void;
