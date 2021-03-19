@@ -9,8 +9,9 @@ import FileTooBig from './FileTooBig';
 import { ENABLE_UPGRADES } from '../../../../constants';
 import AudioClipper from '../AudioClipper/AudioClipper';
 import { useRecoilValue } from 'recoil';
-import { userPlanInfoSelector, userPlanState } from '../../../../state/user';
+import { userPlanState } from '../../../../state/atoms/user';
 import { Plan } from '../../../../interfaces/plans';
+import { userPlanInfoSelector } from '../../../../state/selectors/user';
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 

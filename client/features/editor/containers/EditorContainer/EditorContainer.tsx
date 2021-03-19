@@ -1,8 +1,7 @@
 import { useMemo, useReducer } from 'react';
 import { createContainer } from 'unstated-next';
-import { EditorPanel } from '../../interfaces/Editor';
+import { EditorPanel, EditorState } from '../../interfaces/Editor';
 import { Template } from '../../interfaces/StageConfig';
-import { EditorState } from '../../interfaces';
 import reducer from './reducer';
 
 const initialTemplate: Template = {

@@ -82,7 +82,7 @@ function Editor() {
 function decorate<P>(Component: React.FunctionComponent<P>) {
   return (props: P) => (
     <EditorContainer.Provider>
-      <EditorAreaContainer.Provider initialState={{ margin: 8 }}>
+      <EditorAreaContainer.Provider>
         <Component {...props} />
       </EditorAreaContainer.Provider>
     </EditorContainer.Provider>

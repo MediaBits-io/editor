@@ -8,7 +8,7 @@ import SaveTemplateButton from './SaveTemplate/SaveTemplateButton';
 import VideosButton from './Videos/VideosButton';
 import LoginModal from '../LoginModal';
 import { ENABLE_UPGRADES } from '../../../../constants';
-import { userPlanState } from '../../../../state/user';
+import { userPlanState } from '../../../../state/atoms/user';
 import { useRecoilValue } from 'recoil';
 import { Plan } from '../../../../interfaces/plans';
 

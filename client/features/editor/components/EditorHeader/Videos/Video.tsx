@@ -5,7 +5,7 @@ import AspectRatio from 'react-aspect-ratio';
 import { saveAs } from 'file-saver';
 import Button from '../../../../../components/ui/Button';
 import { useRecoilValue } from 'recoil';
-import { videoSelector } from '../../../../../state/videos';
+import { videoSelector } from '../../../../../state/selectors/videos';
 
 interface Props {
   id: string;

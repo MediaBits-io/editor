@@ -1,9 +1,10 @@
 import { useCallback } from 'react';
+import { EDITOR_MARGIN } from '../constants';
 import { EditorAreaContainer } from '../containers/EditorAreaContainer';
 import { EditorContainer } from '../containers/EditorContainer/EditorContainer';
 
 function useZoom() {
-  const { editorAreaRef, editorMargin } = EditorAreaContainer.useContainer();
+  const { editorAreaRef } = EditorAreaContainer.useContainer();
   const { dispatch } = EditorContainer.useContainer();
 
   const getScreenDimensions = useCallback(() => {
@@ -17,10 +18,10 @@ function useZoom() {
     } = editorAreaRef.current.getBoundingClientRect();
 
     return {
-      height: clientHeight - editorMargin * 2,
-      width: clientWidth - editorMargin * 2,
+      height: clientHeight - EDITOR_MARGIN * 2,
+      width: clientWidth - EDITOR_MARGIN * 2,
     };
-  }, [editorAreaRef, editorMargin]);
+  }, [editorAreaRef]);
 
   const fitToScreen = useCallback(
     (dimensions?: { width: number; height: number }) => {

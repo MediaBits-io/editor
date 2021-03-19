@@ -6,14 +6,13 @@ import { mul } from '../../../../../utils/number';
 import { ShapeType } from '../../../interfaces/Shape';
 import useZoom from '../../../hooks/useZoom';
 import Loader from '../../../../../components/ui/Loader/Loader';
-import { EditorAreaContainer } from '../../../containers/EditorAreaContainer';
 import GenericRenderer from './GenericRenderer';
 import TextRenderer from './TextRenderer';
 import ImageRenderer from './ImageRenderer';
+import { EDITOR_MARGIN } from '../../../constants';
 
 function CanvasRenderer() {
   const editorState = EditorContainer.useContainer();
-  const { editorMargin } = EditorAreaContainer.useContainer();
   const { fitToScreen } = useZoom();
 
   const { state, template, dispatch } = editorState;
@@ -50,7 +49,7 @@ function CanvasRenderer() {
 
       <Stage
         className="flex flex-grow"
-        style={{ margin: editorMargin }}
+        style={{ margin: EDITOR_MARGIN }}
         scaleX={state.zoom}
         scaleY={state.zoom}
         width={mul(template.dimensions.width, state.zoom)}

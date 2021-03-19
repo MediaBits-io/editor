@@ -5,7 +5,7 @@ import ModalAction from '../../../components/ui/Modal/ModalAction';
 import ModalContent from '../../../components/ui/Modal/ModalContent';
 import ModalFullActions from '../../../components/ui/Modal/ModalFullActions';
 import useAuth from '../../../hooks/useAuth';
-import { userInfoState } from '../../../state/user';
+import { userInfoState } from '../../../state/atoms/user';
 
 interface Props {
   visible: boolean;

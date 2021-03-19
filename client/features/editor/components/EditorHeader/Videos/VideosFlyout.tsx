@@ -4,11 +4,11 @@ import { useRecoilValue } from 'recoil';
 import Flyout from '../../../../../components/ui/Flyout';
 import Loader from '../../../../../components/ui/Loader/Loader';
 import Popover from '../../../../../components/ui/Popover/Popover';
+import { areVideosLoadedState } from '../../../../../state/atoms/videos';
 import {
   generatedVideoIdsSelector,
   pollingVideoIdsSelector,
-  areVideosLoadedState,
-} from '../../../../../state/videos';
+} from '../../../../../state/selectors/videos';
 import classNames from '../../../../../utils/classNames';
 import VideosGrid from './VideosGrid';
 

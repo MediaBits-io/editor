@@ -1,3 +1,7 @@
+import { Undoable } from '../containers/EditorContainer/reducer/undoable';
+import { TemplateState } from '../containers/EditorContainer/reducer/templateReducer';
+import { AudioState } from '../components/AudioModal/AudioModal';
+
 export enum EditorPanel {
   Settings = 'settings-panel',
   Text = 'text-panel',
@@ -10,3 +14,12 @@ export enum EditorPanel {
   WaveformProperties = 'waveform-properties-panel',
   RectangleProperties = 'rectangle-properties-panel',
 }
+export type EditorState = {
+  template: Undoable<TemplateState>;
+  lastSaved: TemplateState;
+  selectedId?: string;
+  activePanel: EditorPanel;
+  audio?: AudioState;
+  zoom: number;
+  loading: boolean;
+};

@@ -3,7 +3,7 @@ import Popover from '../../../../components/ui/Popover/Popover';
 import classNames from '../../../../utils/classNames';
 import { ENABLE_UPGRADES } from '../../../../constants';
 import { useRecoilValue } from 'recoil';
-import { userPlanState } from '../../../../state/user';
+import { userPlanState } from '../../../../state/atoms/user';
 import { Plan } from '../../../../interfaces/plans';
 
 interface Props {

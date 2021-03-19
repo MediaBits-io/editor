@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import Alert from '../../../../../components/ui/Alert';
-import { sortedVideoIdsSelector } from '../../../../../state/videos';
+import { sortedVideoIdsSelector } from '../../../../../state/selectors/videos';
 import classNames from '../../../../../utils/classNames';
 import Video from './Video';
 

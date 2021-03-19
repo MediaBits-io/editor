@@ -1,8 +1,7 @@
 import { last } from 'ramda';
 import { SHAPE_PROPERTIES_PANEL, SHAPE_TOOL_PANEL } from '../../../constants';
-import { EditorPanel } from '../../../interfaces/Editor';
+import { EditorPanel, EditorState } from '../../../interfaces/Editor';
 import { CanvasElement, Template } from '../../../interfaces/StageConfig';
-import { EditorState } from '../../../interfaces';
 import { Action as UndoableAction } from './undoable';
 
 export type EditorAction =

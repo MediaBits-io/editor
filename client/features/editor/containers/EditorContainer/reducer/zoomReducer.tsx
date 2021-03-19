@@ -1,4 +1,4 @@
-import { EditorState } from '../../../interfaces';
+import { EditorState } from '../../../interfaces/Editor';
 import { Template } from '../../../interfaces/StageConfig';
 
 export type ZoomAction =

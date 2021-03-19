@@ -9,11 +9,11 @@ import { AuthInfoDTO, deserializeUserPlanDTO } from '../interfaces/user';
 import { api } from '../utils/api/api';
 import { fetchAuthInfo } from '../utils/api/auth';
 import { RecoilRoot } from 'recoil';
-import { userInfoState, userPlanState } from '../state/user';
-import { plansState } from '../state/plans';
-import AuthController from '../components/AuthController';
+import { userInfoState, userPlanState } from '../state/atoms/user';
+import { plansState } from '../state/atoms/plans';
+import AuthController from '../controllers/AuthController';
 import { Plans } from '../interfaces/plans';
-import VideosController from '../components/VideosController';
+import VideosController from '../controllers/VideosController';
 
 interface Props {
   plans: Plans;
