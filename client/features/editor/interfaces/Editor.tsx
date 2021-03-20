@@ -1,6 +1,5 @@
 import { Undoable } from '../containers/EditorContainer/reducer/undoable';
 import { TemplateState } from '../containers/EditorContainer/reducer/templateReducer';
-import { AudioState } from '../components/AudioModal/AudioModal';
 
 export enum EditorPanel {
   Settings = 'settings-panel',
@@ -19,7 +18,4 @@ export type EditorState = {
   lastSaved: TemplateState;
   selectedId?: string;
   activePanel: EditorPanel;
-  audio?: AudioState;
-  zoom: number;
-  loading: boolean;
 };

@@ -1,35 +1,28 @@
-import React, { useCallback } from 'react';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import React from 'react';
 import SideMenuSetting from '../../ui/SideMenuSetting';
 import PanelColorPicker from '../../ui/PanelColorPicker';
 import { RGBColor } from 'react-color';
 import { fromRgba, toRgba } from '../../../../../utils/color';
+import useTemplateDispatcher from '../../../state/dispatchers/template';
+import { useRecoilValue } from 'recoil';
+import { backgroundState } from '../../../state/atoms/template';
 
 function BackgroundColorSetting() {
-  const { template, dispatch } = EditorContainer.useContainer();
+  const { updateBackground } = useTemplateDispatcher();
+  const background = useRecoilValue(backgroundState);
 
-  const changeColor = useCallback(
-    (color: RGBColor) => {
-      dispatch({
-        type: 'update_stage',
-        config: {
-          background: { ...template.background, fill: toRgba(color) },
-        },
-      });
-    },
-    [dispatch, template.background]
-  );
+  const handleChangeColor = (color: RGBColor) => {
+    updateBackground({
+      fill: toRgba(color),
+    });
+  };
 
   return (
     <SideMenuSetting label="Background" htmlFor="input-background-color">
       <PanelColorPicker
-        rgba={
-          template.background.fill
-            ? fromRgba(template.background.fill)
-            : undefined
-        }
+        rgba={background.fill ? fromRgba(background.fill) : undefined}
         id="input-background-color"
-        onChange={changeColor}
+        onChange={handleChangeColor}
         disableAlpha
       />
     </SideMenuSetting>

@@ -1,4 +1,4 @@
-import { useMemo, useReducer } from 'react';
+import { useReducer } from 'react';
 import { createContainer } from 'unstated-next';
 import { EditorPanel, EditorState } from '../../interfaces/Editor';
 import { Template } from '../../interfaces/StageConfig';
@@ -23,8 +23,6 @@ const initialState: EditorState = {
   },
   lastSaved: initialTemplate,
   activePanel: EditorPanel.Settings,
-  zoom: 1,
-  loading: false,
 };
 
 interface OverridableProps {
@@ -37,16 +35,10 @@ function useEditorState(initialValue: { override?: OverridableProps } = {}) {
 
   const template = state.template.present;
 
-  const hasUnsavedChanges = useMemo(() => state.lastSaved !== template, [
-    state.lastSaved,
-    template,
-  ]);
-
   return {
     state,
     template,
     dispatch,
-    hasUnsavedChanges,
     ...initialValue.override,
   };
 }

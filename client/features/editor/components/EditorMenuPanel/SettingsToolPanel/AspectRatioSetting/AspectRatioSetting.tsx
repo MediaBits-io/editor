@@ -3,11 +3,14 @@ import DropdownSelect from '../../../../../../components/ui/DropdownSelect/Dropd
 import DropdownSelectAnchor from '../../../../../../components/ui/DropdownSelect/DropdownSelectAnchor';
 import useDropdown from '../../../../../../components/ui/Dropdown/useDropdown';
 import classNames from '../../../../../../utils/classNames';
-import { EditorContainer } from '../../../../containers/EditorContainer/EditorContainer';
-import useZoom from '../../../../hooks/useZoom';
 import SideMenuSetting from '../../../ui/SideMenuSetting';
 import AspectRatioOption from './AspectRatioOption';
 import Popover from '../../../../../../components/ui/Popover/Popover';
+import useEditorDispatcher from '../../../../state/dispatchers/editor';
+import { EditorAreaContainer } from '../../../../containers/EditorAreaContainer';
+import { useRecoilValue } from 'recoil';
+import { dimensionsState } from '../../../../state/atoms/template';
+import { equals } from 'ramda';
 
 export const options = [
   {
@@ -44,19 +47,18 @@ export const options = [
 
 // TODO: select by id or unique key
 function AspectRatioSetting() {
-  const { template } = EditorContainer.useContainer();
+  const { getScreenDimensions } = EditorAreaContainer.useContainer();
   const { setTargetElement, targetElement } = useDropdown();
-  const { fitToScreen } = useZoom();
+  const dimensions = useRecoilValue(dimensionsState);
+  const { setCanvasDimensions } = useEditorDispatcher();
 
-  const selectedOption = options.find(
-    ({ dimensions }) =>
-      dimensions.height === template.dimensions.height &&
-      dimensions.width === template.dimensions.width
+  const selectedOption = options.find((option) =>
+    equals(dimensions, option.dimensions)
   )!;
 
   const handleChangeOption = (value: string) => {
     const { dimensions } = options.find(({ ratio }) => ratio === value)!;
-    fitToScreen(dimensions);
+    setCanvasDimensions(dimensions, getScreenDimensions());
   };
 
   return (

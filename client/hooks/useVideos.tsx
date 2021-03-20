@@ -19,6 +19,8 @@ import { isTruthy } from '../utils/boolean';
 import { useToasts } from 'react-toast-notifications';
 import NotificationContent from '../components/ui/Notification/NotificationContent';
 import ExternalLink from '../components/ui/ExternalLink';
+import { templateSelector } from '../features/editor/state/selectors/template';
+import { audioSelector } from '../features/editor/state/selectors/audio';
 
 function useVideos() {
   const { setVideosLoaded } = useVideosDispatcher();
@@ -71,14 +73,27 @@ function useVideos() {
   );
 
   const exportVideo = useRecoilCallback(
-    ({ set }) => async (audioBuffer: Blob, template: Template) => {
-      const [headers, templateJSON] = await Promise.all([
+    ({ set, snapshot }) => async (audioBuffer?: Blob, template?: Template) => {
+      const [templateJSON, currentAudio, headers] = await Promise.all([
+        toTemplateJSON(
+          template ?? (await snapshot.getPromise(templateSelector))
+        ),
+        audioBuffer ??
+          (await snapshot
+            .getPromise(audioSelector)
+            .then((audio) => audio!.data)),
         getAuthHeaders(),
-        toTemplateJSON(template),
       ]);
 
+      if (audioBuffer) {
+        set(audioSelector, {
+          url: URL.createObjectURL(audioBuffer),
+          data: audioBuffer,
+        });
+      }
+
       const formData = new FormData();
-      formData.set('audio', audioBuffer);
+      formData.set('audio', currentAudio);
       formData.set(
         'template',
         new Blob([templateJSON], {

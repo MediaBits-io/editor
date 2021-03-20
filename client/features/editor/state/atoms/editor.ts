@@ -1,14 +1,11 @@
 import { atom } from 'recoil';
 import { EditorPanel } from '../../interfaces/Editor';
+import { Template } from '../../interfaces/StageConfig';
+import { templateSelector } from '../selectors/template';
 
 export const zoomState = atom({
   key: 'zoomState',
   default: 1,
-});
-
-export const hasUnsavedChangesState = atom({
-  key: 'hasUnsavedChangesState',
-  default: false,
 });
 
 export const activePanelState = atom({
@@ -16,7 +13,12 @@ export const activePanelState = atom({
   default: EditorPanel.Settings,
 });
 
-export const loadingState = atom({
-  key: 'loadingState',
+export const isLoadingState = atom({
+  key: 'isLoadingState',
   default: false,
+});
+
+export const lastSavedTemplateState = atom<Template | undefined>({
+  key: 'lastSavedTemplate',
+  default: templateSelector,
 });

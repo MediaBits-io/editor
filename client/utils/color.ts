@@ -2,14 +2,7 @@ import { RGBColor } from 'react-color';
 import tinycolor from 'tinycolor2';
 
 export const isValidHex = (hex: string) => {
-  if (hex === 'transparent') {
-    return true;
-  }
-  // disable hex4 and hex8
-  const lh = String(hex).charAt(0) === '#' ? 1 : 0;
-  return (
-    hex.length !== 4 + lh && hex.length < 7 + lh && tinycolor(hex).isValid()
-  );
+  return hex.length >= 6 && tinycolor(hex, { format: 'hex' }).isValid();
 };
 
 export function toRgba(color: RGBColor) {
@@ -35,7 +28,7 @@ export function fromRgba(rgba: string): RGBColor {
 }
 
 export function fromHex(hex: string, a = 1): RGBColor {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
         r: parseInt(result[1], 16),

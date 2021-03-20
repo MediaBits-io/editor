@@ -8,35 +8,13 @@ export type TemplateAction =
   | { type: 'create_element'; element: CanvasElement }
   | { type: 'delete_element'; id: string }
   | { type: 'reorder_element'; id: string; inc: number }
-  | { type: 'update_element'; id: string; props: Konva.ShapeConfig }
-  | {
-      type: 'fit_to_screen';
-      canvasDimensions?: { width: number; height: number };
-    }
-  | {
-      type: 'fill_screen';
-      canvasDimensions?: { width: number; height: number };
-    };
+  | { type: 'update_element'; id: string; props: Konva.ShapeConfig };
 
 export default function templateReducer(
   state: TemplateState,
   action: TemplateAction
 ): TemplateState {
   switch (action.type) {
-    case 'fill_screen':
-    case 'fit_to_screen':
-      if (action.canvasDimensions) {
-        const canvasHeight = action.canvasDimensions.height;
-        const canvasWidth = action.canvasDimensions.width;
-        return {
-          ...state,
-          dimensions: {
-            height: canvasHeight,
-            width: canvasWidth,
-          },
-        };
-      }
-      return state;
     case 'update_stage':
       return {
         ...state,

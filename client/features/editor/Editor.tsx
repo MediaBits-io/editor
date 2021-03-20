@@ -13,12 +13,15 @@ import HistoryControls from './components/HistoryControls/HistoryControls';
 import { loadFonts } from '../../utils/fonts';
 import { PRELOAD_FONTS } from './constants';
 import { EditorAreaContainer } from './containers/EditorAreaContainer';
+import { useRecoilValue } from 'recoil';
+import { hasUnsavedChangesSelector } from './state/selectors/editor';
 
 function Editor() {
   const { redo, undo } = useEditorHistory();
   const { selectedElement } = useElements();
-  const { state, dispatch, hasUnsavedChanges } = EditorContainer.useContainer();
+  const { state, dispatch } = EditorContainer.useContainer();
   const { editorAreaRef } = EditorAreaContainer.useContainer();
+  const hasUnsavedChanges = useRecoilValue(hasUnsavedChangesSelector);
 
   useEffect(() => {
     loadFonts(PRELOAD_FONTS);

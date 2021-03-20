@@ -3,16 +3,11 @@ import { EditorState } from '../../../interfaces/Editor';
 import editorReducer, { EditorAction } from './editorReducer';
 import templateReducer, { TemplateAction } from './templateReducer';
 import undoable, { Action as UndoableAction } from './undoable';
-import zoomReducer, { ZoomAction } from './zoomReducer';
 
-export type Action =
-  | UndoableAction
-  | TemplateAction
-  | ZoomAction
-  | EditorAction;
+export type Action = UndoableAction | TemplateAction | EditorAction;
 
 const reducer = (prevState: EditorState, action: Action): EditorState => {
-  const state = mergeReducers<EditorState, Action>(zoomReducer, editorReducer)(
+  const state = mergeReducers<EditorState, Action>(editorReducer)(
     prevState,
     action
   );

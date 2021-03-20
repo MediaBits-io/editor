@@ -1,25 +1,15 @@
 import { last } from 'ramda';
 import { SHAPE_PROPERTIES_PANEL, SHAPE_TOOL_PANEL } from '../../../constants';
 import { EditorPanel, EditorState } from '../../../interfaces/Editor';
-import { CanvasElement, Template } from '../../../interfaces/StageConfig';
+import { CanvasElement } from '../../../interfaces/StageConfig';
 import { Action as UndoableAction } from './undoable';
 
 export type EditorAction =
-  | {
-      type: 'add_audio';
-      clipBuffer: Blob;
-      blobUrl: string;
-    }
-  | { type: 'remove_audio' }
   | { type: 'create_element'; element: CanvasElement }
   | { type: 'select_element'; id: string }
   | { type: 'clear_selection' }
   | { type: 'open_editor_panel'; panel: EditorPanel }
   | { type: 'delete_element'; id: string }
-  | { type: 'save_changes' }
-  | { type: 'loading_template' }
-  | { type: 'load_template'; template: Template }
-  | { type: 'load_template_error' }
   | UndoableAction;
 
 const reducer = (state: EditorState, action: EditorAction): EditorState => {
@@ -79,28 +69,6 @@ const reducer = (state: EditorState, action: EditorAction): EditorState => {
         ...state,
         activePanel: action.panel,
       };
-    case 'add_audio':
-      if (state.audio && state.audio.url !== action.blobUrl) {
-        URL.revokeObjectURL(state.audio.url);
-      }
-
-      return {
-        ...state,
-        audio: {
-          data: action.clipBuffer,
-          url: action.blobUrl,
-        },
-      };
-    case 'remove_audio':
-      return {
-        ...state,
-        audio: undefined,
-      };
-    case 'save_changes':
-      return {
-        ...state,
-        lastSaved: state.template.present,
-      };
     case 'undo': {
       const elementBeforeUndo = state.template.present.elements.find(
         ({ id }) => id === state.selectedId
@@ -131,28 +99,6 @@ const reducer = (state: EditorState, action: EditorAction): EditorState => {
             selectedId: undefined,
           };
     }
-    case 'loading_template':
-      return {
-        ...state,
-        loading: true,
-      };
-    case 'load_template_error':
-      return {
-        ...state,
-        loading: false,
-      };
-    case 'load_template':
-      return {
-        ...state,
-        loading: false,
-        activePanel: EditorPanel.Settings,
-        lastSaved: action.template,
-        template: {
-          past: [],
-          future: [],
-          present: action.template,
-        },
-      };
     default:
       return state;
   }

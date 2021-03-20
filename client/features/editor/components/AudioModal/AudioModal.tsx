@@ -12,13 +12,9 @@ import { useRecoilValue } from 'recoil';
 import { userPlanState } from '../../../../state/atoms/user';
 import { Plan } from '../../../../interfaces/plans';
 import { userPlanInfoSelector } from '../../../../state/selectors/user';
+import { AudioState } from '../../interfaces/Audio';
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
-
-export interface AudioState {
-  url: string;
-  data: Blob;
-}
 
 interface ClipBounds {
   startPart: number;
@@ -29,7 +25,7 @@ interface ClipBounds {
 interface Props {
   visible: boolean;
   close: () => void;
-  onContinue?: (clipBuffer: Blob) => Promise<void>;
+  onContinue?: (clipBuffer: Blob) => Promise<void> | void;
   initialAudio?: AudioState;
 }
 

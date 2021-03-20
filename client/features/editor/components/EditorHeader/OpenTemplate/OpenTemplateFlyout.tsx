@@ -2,7 +2,6 @@ import { CloudDownload } from 'heroicons-react';
 import React, { useRef, useState } from 'react';
 import Flyout from '../../../../../components/ui/Flyout';
 import UploadToDiskIcon from '../../../../../components/ui/Icons/UploadToDiskIcon';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
 import FlyoutMenuButton from '../FlyoutMenuButton';
 import { readBlobAsText } from '../../../../../utils/blob';
 import DiscardChangesModal from '../../DiscardChangesModal';
@@ -14,7 +13,12 @@ import {
 import { useToasts } from 'react-toast-notifications';
 import NotificationContent from '../../../../../components/ui/Notification/NotificationContent';
 import ExternalLink from '../../../../../components/ui/ExternalLink';
-import useZoom from '../../../hooks/useZoom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isLoadingState } from '../../../state/atoms/editor';
+import { Template } from '../../../interfaces/StageConfig';
+import useTemplateDispatcher from '../../../state/dispatchers/template';
+import { EditorAreaContainer } from '../../../containers/EditorAreaContainer';
+import { hasUnsavedChangesSelector } from '../../../state/selectors/editor';
 
 interface Props {
   isOpen: boolean;
@@ -23,11 +27,13 @@ interface Props {
 }
 
 function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
-  const { dispatch, hasUnsavedChanges } = EditorContainer.useContainer();
+  const { getScreenDimensions } = EditorAreaContainer.useContainer();
+  const hasUnsavedChanges = useRecoilValue(hasUnsavedChangesSelector);
+  const setIsLoading = useSetRecoilState(isLoadingState);
+  const { setLoadedTemplate } = useTemplateDispatcher();
   const [isDiscardChangesVisible, setDiscardChangesVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { addToast } = useToasts();
-  const { getScreenDimensions } = useZoom();
 
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.currentTarget.files?.[0];
@@ -44,10 +50,10 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
 
       try {
         loadingTimeout = setTimeout(() => {
-          dispatch({ type: 'loading_template' });
+          setIsLoading(true);
         }, 1000);
 
-        const template = JSON.parse(await readBlobAsText(file));
+        const template: Template = JSON.parse(await readBlobAsText(file));
         await Promise.all([
           loadTemplateImages(template),
           loadTemplateFonts(template),
@@ -57,11 +63,7 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
         // Do not show loader if all fonts loaded from cache
         clearTimeout(loadingTimeout);
 
-        dispatch({
-          type: 'load_template',
-          template,
-          screenDimensions: getScreenDimensions(),
-        });
+        setLoadedTemplate(template, getScreenDimensions());
       } catch (e) {
         console.error(e);
         addToast(
@@ -80,7 +82,7 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
         if (loadingTimeout) {
           clearTimeout(loadingTimeout);
         }
-        dispatch({ type: 'load_template_error' });
+        setIsLoading(false);
       }
     }
   };

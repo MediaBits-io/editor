@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import { ShapeType } from './Shape';
 
-export type CanvasDimensions = { width: number; height: number };
+export type Dimensions = { width: number; height: number };
 
 export interface CanvasElement {
   id: string;
@@ -10,7 +10,7 @@ export interface CanvasElement {
 }
 
 export interface Template {
-  dimensions: CanvasDimensions;
+  dimensions: Dimensions;
   background: Konva.ShapeConfig;
   elements: CanvasElement[];
 }
