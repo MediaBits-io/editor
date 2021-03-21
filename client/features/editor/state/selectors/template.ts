@@ -1,30 +1,7 @@
 import { DefaultValue, selector } from 'recoil';
-import { CanvasElement, Template } from '../../interfaces/StageConfig';
-import {
-  elementState,
-  elementIdsState,
-  backgroundState,
-  dimensionsState,
-} from '../atoms/template';
-
-export const elementsSelector = selector<CanvasElement[]>({
-  key: 'elementsSelector',
-  get: ({ get }) => get(elementIdsState).map((id) => get(elementState(id))!),
-  set: ({ reset, get, set }, elements) => {
-    if (elements instanceof DefaultValue) {
-      get(elementIdsState).map((id) => reset(elementState(id)));
-      reset(elementIdsState);
-    } else {
-      set(
-        elementIdsState,
-        elements.map((element) => {
-          set(elementState(element.id), element);
-          return element.id;
-        })
-      );
-    }
-  },
-});
+import { Template } from '../../interfaces/StageConfig';
+import { backgroundState, dimensionsState } from '../atoms/template';
+import { elementsSelector } from './elements';
 
 export const templateSelector = selector<Template>({
   key: 'templateSelector',

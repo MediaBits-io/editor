@@ -1,16 +1,17 @@
 import React from 'react';
 import SideMenuButton from '../../ui/SideMenuButton';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
 import { AdjustmentsOutline } from 'heroicons-react';
 import { EditorPanel } from '../../../interfaces/Editor';
 import { useEditorMenuButton } from '../useEditorMenuButton';
+import { useSetRecoilState } from 'recoil';
+import { activePanelState } from '../../../state/atoms/editor';
 
 function SettingsToolButton() {
-  const { dispatch } = EditorContainer.useContainer();
+  const setActivePanel = useSetRecoilState(activePanelState);
   const { selected } = useEditorMenuButton([EditorPanel.Settings]);
 
   const handleClick = () => {
-    dispatch({ type: 'open_editor_panel', panel: EditorPanel.Settings });
+    setActivePanel(EditorPanel.Settings);
   };
 
   return (

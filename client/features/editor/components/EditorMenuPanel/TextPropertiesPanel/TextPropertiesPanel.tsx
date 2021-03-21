@@ -1,8 +1,7 @@
-import Konva from 'konva';
 import React from 'react';
 import { EditorPanel } from '../../../interfaces/Editor';
 import SideMenuPanel from '../../ui/SideMenuPanel';
-import ShapeActions from '../ShapeActions';
+import ShapeActions from '../ShapeActions/ShapeActions';
 import FontFamilySetting from './FontFamilySetting/FontFamilySetting';
 import FontStyleSetting from './FontStyleSetting';
 import TextAlignmentSetting from './TextAlignementSetting';
@@ -12,24 +11,23 @@ import TextSizeSetting from './TextSizeSetting';
 
 interface Props {
   elementId: string;
-  elementProps: Konva.TextConfig;
 }
 
-function TextPropertiesPanel({ elementId, elementProps }: Props) {
+function TextPropertiesPanel({ elementId }: Props) {
   return (
     <SideMenuPanel
       title="Text"
       previous={EditorPanel.Text}
       actions={<ShapeActions elementId={elementId} />}
     >
-      <TextContentsSetting elementId={elementId} elementProps={elementProps} />
-      <TextFillSetting elementId={elementId} elementProps={elementProps} />
-      <FontFamilySetting elementId={elementId} elementProps={elementProps} />
+      <TextContentsSetting elementId={elementId} />
+      <TextFillSetting elementId={elementId} />
+      <FontFamilySetting elementId={elementId} />
       <div className="flex space-x-2">
-        <FontStyleSetting elementId={elementId} elementProps={elementProps} />
-        <TextSizeSetting elementId={elementId} elementProps={elementProps} />
+        <FontStyleSetting elementId={elementId} />
+        <TextSizeSetting elementId={elementId} />
       </div>
-      <TextAlignmentSetting elementId={elementId} elementProps={elementProps} />
+      <TextAlignmentSetting elementId={elementId} />
     </SideMenuPanel>
   );
 }

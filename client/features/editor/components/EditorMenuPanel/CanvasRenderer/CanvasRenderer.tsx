@@ -1,49 +1,49 @@
 import React, { useEffect } from 'react';
-import { Stage, Layer, Rect } from 'react-konva';
-import { ProgressBar, Waveform } from 'konva-elements';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
-import { mul } from '../../../../../utils/number';
-import { ShapeType } from '../../../interfaces/Shape';
-import useZoomControls from '../../../hooks/useZoomControls';
+import { Layer, Rect, Stage } from 'react-konva';
+import {
+  useRecoilBridgeAcrossReactRoots_UNSTABLE,
+  useRecoilValue,
+  useResetRecoilState,
+} from 'recoil';
 import Loader from '../../../../../components/ui/Loader/Loader';
-import GenericRenderer from './GenericRenderer';
-import TextRenderer from './TextRenderer';
-import ImageRenderer from './ImageRenderer';
+import { mul } from '../../../../../utils/number';
 import { EDITOR_MARGIN } from '../../../constants';
-import { useRecoilValue } from 'recoil';
+import useZoomControls from '../../../hooks/useZoomControls';
 import { isLoadingState, zoomState } from '../../../state/atoms/editor';
 import {
   backgroundState,
   dimensionsState,
+  elementIdsState,
 } from '../../../state/atoms/template';
+import { selectedElementIdSelector } from '../../../state/selectors/editor';
+import ElementRenderer from './ElementRenderer';
+
+// TODO: move bounds component out of shape and render based on selected state
 
 function CanvasRenderer() {
-  const editorState = EditorContainer.useContainer();
   const zoom = useRecoilValue(zoomState);
   const dimensions = useRecoilValue(dimensionsState);
   const background = useRecoilValue(backgroundState);
   const isLoading = useRecoilValue(isLoadingState);
+  const elementIds = useRecoilValue(elementIdsState);
+  const resetSelectedElementId = useResetRecoilState(selectedElementIdSelector);
+  const RecoilBridge = useRecoilBridgeAcrossReactRoots_UNSTABLE();
   const { fitToScreen } = useZoomControls();
-
-  const { template, dispatch } = editorState;
 
   useEffect(() => {
     fitToScreen();
   }, [fitToScreen]);
 
-  const handleBackgroundClick = () => {
-    dispatch({ type: 'clear_selection' });
+  const handleBackgroundClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if ('tagName' in e.target && (e.target as any).tagName !== 'CANVAS') {
+      resetSelectedElementId();
+    }
   };
 
   return (
-    <div
-      className="relative flex flex-grow"
-      onClick={(e) => {
-        if ('tagName' in e.target && (e.target as any).tagName !== 'CANVAS') {
-          handleBackgroundClick();
-        }
-      }}
-    >
+    <div className="relative flex flex-grow" onClick={handleBackgroundClick}>
       {isLoading && (
         <>
           <div
@@ -65,52 +65,18 @@ function CanvasRenderer() {
         width={mul(dimensions.width, zoom)}
         height={mul(dimensions.height, zoom)}
       >
-        <EditorContainer.Provider initialState={{ override: editorState }}>
+        <RecoilBridge>
           <Layer>
             <Rect
               {...dimensions}
               {...background}
-              onClick={handleBackgroundClick}
+              onClick={resetSelectedElementId}
             />
-            {template.elements.map(({ type, id, props }) => {
-              switch (type) {
-                case ShapeType.Text:
-                  return <TextRenderer id={id} key={id} props={props} />;
-                case ShapeType.Rectangle:
-                  return (
-                    <GenericRenderer
-                      id={id}
-                      key={id}
-                      props={props}
-                      component={Rect}
-                    />
-                  );
-                case ShapeType.Waveform:
-                  return (
-                    <GenericRenderer
-                      id={id}
-                      key={id}
-                      props={props}
-                      component={Waveform}
-                    />
-                  );
-                case ShapeType.ProgressBar:
-                  return (
-                    <GenericRenderer
-                      id={id}
-                      key={id}
-                      props={props}
-                      component={ProgressBar}
-                    />
-                  );
-                case ShapeType.Image:
-                  return <ImageRenderer key={id} id={id} props={props} />;
-                default:
-                  throw new Error(`Unsupported element ${type}`);
-              }
-            })}
+            {elementIds.map((id) => (
+              <ElementRenderer key={id} id={id} />
+            ))}
           </Layer>
-        </EditorContainer.Provider>
+        </RecoilBridge>
       </Stage>
     </div>
   );

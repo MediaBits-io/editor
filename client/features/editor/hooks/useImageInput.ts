@@ -1,41 +1,47 @@
 import { useRef } from 'react';
 import Konva from 'konva';
-import { EditorContainer } from '../containers/EditorContainer/EditorContainer';
+import { useRecoilCallback } from 'recoil';
+import { dimensionsState } from '../state/atoms/template';
 
 function useImageInput() {
-  const { template } = EditorContainer.useContainer();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const changeImage = async (
-    file: File,
-    scaleTo?: {
-      width: number;
-      height: number;
-    }
-  ) => {
-    return new Promise<Konva.ImageConfig>((resolve, reject) => {
-      const image = new Image();
+  const changeImage = useRecoilCallback(
+    ({ snapshot }) => async (
+      file: File,
+      scaleTo?: {
+        width: number;
+        height: number;
+      }
+    ) => {
+      const dimensions = await snapshot.getPromise(dimensionsState);
+      return new Promise<Konva.ImageConfig>((resolve) => {
+        const image = new Image();
 
-      image.src = URL.createObjectURL(file);
+        image.src = URL.createObjectURL(file);
 
-      const onLoad = () => {
-        const { width, height } = image;
+        const onLoad = () => {
+          const { width, height } = image;
 
-        const scale = Math.min(
-          1,
-          template.dimensions.width / width,
-          template.dimensions.height / height,
-          scaleTo ? Math.max(scaleTo.width / width, scaleTo.height / height) : 1
-        );
+          const scale = Math.min(
+            1,
+            dimensions.width / width,
+            dimensions.height / height,
+            scaleTo
+              ? Math.max(scaleTo.width / width, scaleTo.height / height)
+              : 1
+          );
 
-        resolve({ image, scaleX: scale, scaleY: scale });
+          resolve({ image, scaleX: scale, scaleY: scale });
 
-        image.removeEventListener('load', onLoad);
-      };
+          image.removeEventListener('load', onLoad);
+        };
 
-      image.addEventListener('load', onLoad);
-    });
-  };
+        image.addEventListener('load', onLoad);
+      });
+    },
+    []
+  );
 
   return {
     inputRef,

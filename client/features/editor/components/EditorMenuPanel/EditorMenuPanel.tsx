@@ -1,58 +1,37 @@
 import React from 'react';
-import Konva from 'konva';
-import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
-import ImageToolPanel from './ImageToolPanel';
-import TextToolPanel from './TextToolPanel';
-import SettingsToolPanel from './SettingsToolPanel/SettingsToolPanel';
-import ElementToolPanel from './ElementToolPanel';
-import AudioToolPanel from './AudioToolPanel/AudioToolPanel';
-import ImagePropertiesPanel from './ImagePropertiesPanel/ImagePropertiesPanel';
+import { useRecoilValue } from 'recoil';
 import { EditorPanel } from '../../interfaces/Editor';
-import useElements from '../../hooks/useElements';
+import { activePanelState } from '../../state/atoms/editor';
+import { selectedElementIdSelector } from '../../state/selectors/editor';
 import SideMenuPanel from '../ui/SideMenuPanel';
-import TextPropertiesPanel from './TextPropertiesPanel/TextPropertiesPanel';
-import WaveformPropertiesPanel from './WaveformPropertiesPanel/WaveformPropertiesPanel';
+import AudioToolPanel from './AudioToolPanel/AudioToolPanel';
+import ElementToolPanel from './ElementToolPanel';
+import ImagePropertiesPanel from './ImagePropertiesPanel/ImagePropertiesPanel';
+import ImageToolPanel from './ImageToolPanel';
 import ProgressBarPropertiesPanel from './ProgressBarPropertiesPanel/ProgressBarPropertiesPanel';
-import { ProgressBarConfig, WaveformConfig } from 'konva-elements';
+import SettingsToolPanel from './SettingsToolPanel/SettingsToolPanel';
+import TextPropertiesPanel from './TextPropertiesPanel/TextPropertiesPanel';
+import TextToolPanel from './TextToolPanel';
+import WaveformPropertiesPanel from './WaveformPropertiesPanel/WaveformPropertiesPanel';
 
 function EditorMenuPanel() {
-  const { state } = EditorContainer.useContainer();
-  const { selectedElement } = useElements();
+  const activePanel = useRecoilValue(activePanelState);
+  const selectedElementId = useRecoilValue(selectedElementIdSelector);
 
-  if (selectedElement) {
-    switch (state.activePanel) {
+  if (selectedElementId) {
+    switch (activePanel) {
       case EditorPanel.ImageProperties:
-        return (
-          <ImagePropertiesPanel
-            elementId={selectedElement.id}
-            elementProps={selectedElement.props as Konva.ImageConfig}
-          />
-        );
+        return <ImagePropertiesPanel elementId={selectedElementId} />;
       case EditorPanel.TextProperties:
-        return (
-          <TextPropertiesPanel
-            elementId={selectedElement.id}
-            elementProps={selectedElement.props as Konva.TextConfig}
-          />
-        );
+        return <TextPropertiesPanel elementId={selectedElementId} />;
       case EditorPanel.WaveformProperties:
-        return (
-          <WaveformPropertiesPanel
-            elementId={selectedElement.id}
-            elementProps={selectedElement.props as WaveformConfig}
-          />
-        );
+        return <WaveformPropertiesPanel elementId={selectedElementId} />;
       case EditorPanel.ProgressBarProperties:
-        return (
-          <ProgressBarPropertiesPanel
-            elementId={selectedElement.id}
-            elementProps={selectedElement.props as ProgressBarConfig}
-          />
-        );
+        return <ProgressBarPropertiesPanel elementId={selectedElementId} />;
     }
   }
 
-  switch (state.activePanel) {
+  switch (activePanel) {
     case EditorPanel.Settings:
       return <SettingsToolPanel />;
     case EditorPanel.Text:
@@ -64,7 +43,7 @@ function EditorMenuPanel() {
     case EditorPanel.Elements:
       return <ElementToolPanel />;
     default:
-      console.error(`Panel ${state.activePanel} does not exist`);
+      console.error(`Panel ${activePanel} does not exist`);
       return <SideMenuPanel />;
   }
 }

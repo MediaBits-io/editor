@@ -20,7 +20,8 @@
     "prestart": "npm run copy-encoder",
     "prebuild": "npm run copy-encoder",
     "deploy": "cross-env NODE_ENV=production firebase deploy --only functions,hosting",
-    "copy-encoder": "ncp ./node_modules/@etercast/mp3/dist/mp3.wasm ./client/public/mp3.wasm"
+    "copy-encoder": "ncp ./node_modules/@etercast/mp3/dist/mp3.wasm ./client/public/mp3.wasm",
+    "check-types": "npm run tsc"
   },
   "dependencies": {
     "@etercast/mp3": "github:MediaBits-io/mp3#1.0.3",

@@ -1,29 +1,27 @@
-import React, { useCallback } from 'react';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import React from 'react';
 import SideMenuSetting from '../../ui/SideMenuSetting';
 import PanelColorPicker from '../../ui/PanelColorPicker';
 import { fromRgba, toRgba } from '../../../../../utils/color';
 import { RGBColor } from 'react-color';
 import Konva from 'konva';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
+import { useRecoilValue } from 'recoil';
+import { elementPropsSelector } from '../../../state/selectors/elements';
 
 interface Props {
   elementId: string;
-  elementProps: Konva.TextConfig;
 }
 
-function TextFillSetting({ elementId, elementProps }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
-
-  const changeColor = useCallback(
-    (color: RGBColor) => {
-      dispatch({
-        type: 'update_element',
-        id: elementId,
-        props: { fill: toRgba(color) } as Partial<Konva.TextConfig>,
-      });
-    },
-    [dispatch, elementId]
+function TextFillSetting({ elementId }: Props) {
+  const elementProps = useRecoilValue(
+    elementPropsSelector<Konva.TextConfig>(elementId)
   );
+
+  const { updateElementProps } = useElementsDispatcher();
+
+  const changeColor = (color: RGBColor) => {
+    updateElementProps<Konva.TextConfig>(elementId, { fill: toRgba(color) });
+  };
 
   return (
     <SideMenuSetting label="Fill" htmlFor="input-fill-color">

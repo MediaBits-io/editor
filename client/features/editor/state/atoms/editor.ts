@@ -1,7 +1,6 @@
 import { atom } from 'recoil';
 import { EditorPanel } from '../../interfaces/Editor';
 import { Template } from '../../interfaces/StageConfig';
-import { templateSelector } from '../selectors/template';
 
 export const zoomState = atom({
   key: 'zoomState',
@@ -19,6 +18,11 @@ export const isLoadingState = atom({
 });
 
 export const lastSavedTemplateState = atom<Template | undefined>({
-  key: 'lastSavedTemplate',
-  default: templateSelector,
+  key: 'lastSavedTemplateState',
+  default: undefined,
+});
+
+export const selectedElementIdState = atom<string | undefined>({
+  key: 'selectedElementIdState',
+  default: undefined,
 });

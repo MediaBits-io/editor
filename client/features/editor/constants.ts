@@ -64,7 +64,6 @@ export const ALL_FONTS = [
   'Times',
   'Titan One',
   'Work Sans',
-  'Young Serif',
   'ZCOOL KuaiLe',
   'Zilla Slab Highlight',
 ].sort();

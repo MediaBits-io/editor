@@ -1,22 +1,27 @@
 import { ChevronDown } from 'heroicons-react';
-import React, { useEffect, useState } from 'react';
 import Konva from 'konva';
+import React, { useEffect, useState } from 'react';
 import { IMaskInput } from 'react-imask';
+import { useRecoilValue } from 'recoil';
 import Button from '../../../../../components/ui/Button';
+import Dropdown from '../../../../../components/ui/Dropdown/Dropdown';
+import DropdownButton from '../../../../../components/ui/Dropdown/DropdownButton';
 import useDropdown from '../../../../../components/ui/Dropdown/useDropdown';
 import classNames from '../../../../../utils/classNames';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
+import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
-import DropdownButton from '../../../../../components/ui/Dropdown/DropdownButton';
-import Dropdown from '../../../../../components/ui/Dropdown/Dropdown';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
 
 interface Props {
   elementId: string;
-  elementProps: Konva.TextConfig;
 }
 
-function TextSizeSetting({ elementId, elementProps }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+function TextSizeSetting({ elementId }: Props) {
+  const { updateElementProps } = useElementsDispatcher();
+  const elementProps = useRecoilValue(
+    elementPropsSelector<Konva.TextConfig>(elementId)
+  );
+
   const {
     setTargetElement,
     targetElement,
@@ -31,11 +36,7 @@ function TextSizeSetting({ elementId, elementProps }: Props) {
   }, [elementProps.fontSize]);
 
   const handleChange = (fontSize: number) => {
-    dispatch({
-      type: 'update_element',
-      id: elementId,
-      props: { fontSize } as Konva.TextConfig,
-    });
+    updateElementProps<Konva.TextConfig>(elementId, { fontSize });
   };
 
   const handleChangeInput = (value: string) => {

@@ -1,14 +1,14 @@
 import React from 'react';
 import { ShapeType } from '../../interfaces/Shape';
 import SideMenuPanel from '../ui/SideMenuPanel';
-import useElements from '../../hooks/useElements';
 import useImageInput from '../../hooks/useImageInput';
 import Button from '../../../../components/ui/Button';
 import { UploadOutline } from 'heroicons-react';
+import useElementsDispatcher from '../../state/dispatchers/elements';
 
 // TODO: clear images at some point (when leaving editor?)
 function ImageToolPanel() {
-  const { createElement } = useElements();
+  const { createElement } = useElementsDispatcher();
   const { changeImage, inputRef } = useImageInput();
 
   const handleClickAddImage = () => {

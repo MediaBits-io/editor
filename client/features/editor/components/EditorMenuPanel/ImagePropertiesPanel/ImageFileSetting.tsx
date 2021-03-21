@@ -1,18 +1,22 @@
-import React from 'react';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
 import Konva from 'konva';
+import React from 'react';
 import AspectRatio from 'react-aspect-ratio';
-import useImageInput from '../../../hooks/useImageInput';
+import { useRecoilValue } from 'recoil';
 import Popover from '../../../../../components/ui/Popover/Popover';
+import useImageInput from '../../../hooks/useImageInput';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
+import { elementPropsSelector } from '../../../state/selectors/elements';
 
 interface Props {
   elementId: string;
-  elementProps: Konva.ImageConfig;
 }
 
-function ImageFileSetting({ elementId, elementProps }: Props) {
+function ImageFileSetting({ elementId }: Props) {
   const { changeImage, inputRef } = useImageInput();
-  const { dispatch } = EditorContainer.useContainer();
+  const elementProps = useRecoilValue(
+    elementPropsSelector<Konva.ImageConfig>(elementId)
+  );
+  const { updateElementProps } = useElementsDispatcher();
 
   const image = elementProps.image as HTMLImageElement;
 
@@ -28,14 +32,13 @@ function ImageFileSetting({ elementId, elementProps }: Props) {
       const scaleX = elementProps.scaleX ?? 1;
       const scaleY = elementProps.scaleY ?? 1;
 
-      dispatch({
-        type: 'update_element',
-        id: elementId,
-        props: await changeImage(file, {
+      updateElementProps<Konva.ImageConfig>(
+        elementId,
+        await changeImage(file, {
           width: image.width * scaleX,
           height: image.height * scaleY,
-        }),
-      });
+        })
+      );
     }
   };
 

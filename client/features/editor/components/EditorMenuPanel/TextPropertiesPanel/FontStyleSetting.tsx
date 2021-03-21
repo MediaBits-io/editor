@@ -1,20 +1,25 @@
 import Konva from 'konva';
 import React, { useMemo } from 'react';
+import { useRecoilValue } from 'recoil';
 import Button from '../../../../../components/ui/Button';
 import BoldTextIcon from '../../../../../components/ui/Icons/BoldTextIcon';
 import ItalicTextIcon from '../../../../../components/ui/Icons/ItalicTextIcon';
 import UnderlineTextIcon from '../../../../../components/ui/Icons/UnderlineTextIcon';
 import classNames from '../../../../../utils/classNames';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
+import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
 
 interface Props {
   elementId: string;
-  elementProps: Konva.TextConfig;
 }
 
-function FontStyleSetting({ elementId, elementProps }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+function FontStyleSetting({ elementId }: Props) {
+  const { updateElementProps } = useElementsDispatcher();
+  const elementProps = useRecoilValue(
+    elementPropsSelector<Konva.TextConfig>(elementId)
+  );
+
   const styles = useMemo(() => elementProps.fontStyle?.split(' '), [
     elementProps.fontStyle,
   ]);
@@ -23,36 +28,24 @@ function FontStyleSetting({ elementId, elementProps }: Props) {
   const isUnderline = elementProps?.textDecoration === 'underline';
 
   const onToggleBold = () => {
-    dispatch({
-      type: 'update_element',
-      id: elementId,
-      props: {
-        fontStyle: isBold
-          ? styles?.filter((style) => style !== 'bold').join(' ')
-          : classNames(...(styles ?? []), 'bold'),
-      } as Konva.TextConfig,
+    updateElementProps<Konva.TextConfig>(elementId, {
+      fontStyle: isBold
+        ? styles?.filter((style) => style !== 'bold').join(' ')
+        : classNames(...(styles ?? []), 'bold'),
     });
   };
 
   const onToggleItalic = () => {
-    dispatch({
-      type: 'update_element',
-      id: elementId,
-      props: {
-        fontStyle: isItalic
-          ? styles?.filter((style) => style !== 'italic').join(' ')
-          : classNames(...(styles ?? []), 'italic'),
-      } as Konva.TextConfig,
+    updateElementProps<Konva.TextConfig>(elementId, {
+      fontStyle: isItalic
+        ? styles?.filter((style) => style !== 'italic').join(' ')
+        : classNames(...(styles ?? []), 'italic'),
     });
   };
 
   const onToggleUnderline = () => {
-    dispatch({
-      type: 'update_element',
-      id: elementId,
-      props: {
-        textDecoration: isUnderline ? undefined : 'underline',
-      } as Konva.TextConfig,
+    updateElementProps<Konva.TextConfig>(elementId, {
+      textDecoration: isUnderline ? undefined : 'underline',
     });
   };
 

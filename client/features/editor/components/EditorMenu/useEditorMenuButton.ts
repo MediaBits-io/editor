@@ -1,9 +1,10 @@
-import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
+import { useRecoilValue } from 'recoil';
 import { EditorPanel } from '../../interfaces/Editor';
+import { activePanelState } from '../../state/atoms/editor';
 
 export const useEditorMenuButton = (activeForPanels: EditorPanel[]) => {
-  const { state } = EditorContainer.useContainer();
+  const activePanel = useRecoilValue(activePanelState);
   return {
-    selected: activeForPanels.includes(state.activePanel),
+    selected: activeForPanels.includes(activePanel),
   };
 };

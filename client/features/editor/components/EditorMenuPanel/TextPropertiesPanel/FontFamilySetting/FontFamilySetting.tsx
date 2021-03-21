@@ -1,24 +1,29 @@
 import Konva from 'konva';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import useDropdown from '../../../../../../components/ui/Dropdown/useDropdown';
 import DropdownSelect from '../../../../../../components/ui/DropdownSelect/DropdownSelect';
 import DropdownSelectOption from '../../../../../../components/ui/DropdownSelect/DropdownSelectOption';
-import useDropdown from '../../../../../../components/ui/Dropdown/useDropdown';
 import { ALL_FONTS } from '../../../../constants';
-import { EditorContainer } from '../../../../containers/EditorContainer/EditorContainer';
+import useElementsDispatcher from '../../../../state/dispatchers/elements';
+import { elementPropsSelector } from '../../../../state/selectors/elements';
 import SideMenuSetting from '../../../ui/SideMenuSetting';
 import FontFamilySelectAnchor from './FontFamilySelectAnchor';
 
 interface Props {
   elementId: string;
-  elementProps: Konva.TextConfig;
 }
 
-function FontFamilySetting({ elementId, elementProps }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+function FontFamilySetting({ elementId }: Props) {
+  const { updateElementProps } = useElementsDispatcher();
+  const elementProps = useRecoilValue(
+    elementPropsSelector<Konva.TextConfig>(elementId)
+  );
+
   const { setTargetElement, targetElement } = useDropdown();
 
   const handleChangeOption = (fontFamily?: string) => {
-    dispatch({ type: 'update_element', id: elementId, props: { fontFamily } });
+    updateElementProps(elementId, { fontFamily });
   };
 
   return (

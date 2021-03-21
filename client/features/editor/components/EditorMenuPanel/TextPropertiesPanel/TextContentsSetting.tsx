@@ -1,24 +1,22 @@
 import Konva from 'konva';
 import React from 'react';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import { useRecoilValue } from 'recoil';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
+import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
 
 interface Props {
   elementId: string;
-  elementProps: Konva.TextConfig;
 }
 
-function TextContentsSetting({ elementId, elementProps }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+function TextContentsSetting({ elementId }: Props) {
+  const elementProps = useRecoilValue(
+    elementPropsSelector<Konva.TextConfig>(elementId)
+  );
+  const { updateElementProps } = useElementsDispatcher();
 
   const handleChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch({
-      type: 'update_element',
-      id: elementId,
-      props: {
-        text: e.target.value,
-      } as Konva.TextConfig,
-    });
+    updateElementProps<Konva.TextConfig>(elementId, { text: e.target.value });
   };
 
   return (
