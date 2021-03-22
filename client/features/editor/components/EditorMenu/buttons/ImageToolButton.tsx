@@ -1,17 +1,19 @@
-import React from 'react';
-import SideMenuButton from '../../ui/SideMenuButton';
 import { PhotographOutline } from 'heroicons-react';
+import React from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { EditorPanel } from '../../../interfaces/Editor';
-import { useEditorMenuButton } from '../useEditorMenuButton';
-import { useSetRecoilState } from 'recoil';
 import { activePanelState } from '../../../state/atoms/editor';
+import { isEitherPanelActiveSelector } from '../../../state/selectors/editor';
+import SideMenuButton from '../../ui/SideMenuButton';
 
 function ImageToolButton() {
   const setActivePanel = useSetRecoilState(activePanelState);
-  const { selected } = useEditorMenuButton([
-    EditorPanel.Image,
-    EditorPanel.ImageProperties,
-  ]);
+  const selected = useRecoilValue(
+    isEitherPanelActiveSelector([
+      EditorPanel.Image,
+      EditorPanel.ImageProperties,
+    ])
+  );
 
   const handleClick = () => {
     setActivePanel(EditorPanel.Image);

@@ -1,17 +1,16 @@
 import React from 'react';
-import SideMenuButton from '../../ui/SideMenuButton';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import TextIcon from '../../../../../components/ui/Icons/TextIcon';
 import { EditorPanel } from '../../../interfaces/Editor';
-import { useEditorMenuButton } from '../useEditorMenuButton';
-import { useSetRecoilState } from 'recoil';
 import { activePanelState } from '../../../state/atoms/editor';
+import { isEitherPanelActiveSelector } from '../../../state/selectors/editor';
+import SideMenuButton from '../../ui/SideMenuButton';
 
 function TextToolButton() {
   const setActivePanel = useSetRecoilState(activePanelState);
-  const { selected } = useEditorMenuButton([
-    EditorPanel.Text,
-    EditorPanel.TextProperties,
-  ]);
+  const selected = useRecoilValue(
+    isEitherPanelActiveSelector([EditorPanel.Text, EditorPanel.TextProperties])
+  );
 
   const handleClick = () => {
     setActivePanel(EditorPanel.Text);

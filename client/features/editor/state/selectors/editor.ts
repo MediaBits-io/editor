@@ -1,6 +1,6 @@
 import { equals } from 'ramda';
-import { DefaultValue, selector } from 'recoil';
-import { SHAPE_PROPERTIES_PANEL, SHAPE_TOOL_PANEL } from '../../constants';
+import { selector, selectorFamily } from 'recoil';
+import { EditorPanel } from '../../interfaces/Editor';
 import {
   activePanelState,
   lastSavedTemplateState,
@@ -22,29 +22,8 @@ export const selectedElementSelector = selector({
   },
 });
 
-export const selectedElementIdSelector = selector<string | undefined>({
-  key: 'selectedElementIdSelector',
-  get: ({ get }) => get(selectedElementIdState),
-  set: ({ set, get, reset }, selectedElementId) => {
-    if (selectedElementId instanceof DefaultValue) {
-      const selectedElement = get(selectedElementSelector);
-      if (selectedElement) {
-        set(
-          activePanelState,
-          SHAPE_TOOL_PANEL[selectedElement.type] || get(activePanelState)
-        );
-      }
-      reset(selectedElementIdState);
-      return;
-    }
-
-    const element = selectedElementId && get(elementState(selectedElementId));
-    if (element) {
-      set(selectedElementIdState, selectedElementId);
-      set(
-        activePanelState,
-        SHAPE_PROPERTIES_PANEL[element.type] || get(activePanelState)
-      );
-    }
-  },
+export const isEitherPanelActiveSelector = selectorFamily({
+  key: 'isEitherPanelActiveSelector',
+  get: (panels: EditorPanel[]) => ({ get }) =>
+    panels.includes(get(activePanelState)),
 });

@@ -3,29 +3,98 @@ import { ShapeConfig } from 'konva/types/Shape';
 import { move } from 'ramda';
 import { useRecoilCallback } from 'recoil';
 import { uuid } from '../../../../utils/uuid';
+import { SHAPE_PROPERTIES_PANEL, SHAPE_TOOL_PANEL } from '../../constants';
 import { ShapeType } from '../../interfaces/Shape';
+import { CanvasElement } from '../../interfaces/StageConfig';
+import { activePanelState, selectedElementIdState } from '../atoms/editor';
 import { dimensionsState, elementIdsState } from '../atoms/template';
-import { selectedElementIdSelector } from '../selectors/editor';
-import { elementPropsSelector, elementSelector } from '../selectors/elements';
+import { selectedElementSelector } from '../selectors/editor';
+import {
+  elementPropsSelector,
+  elementSelector,
+  isSelectedElementSelector,
+} from '../selectors/elements';
 
 function useElementsDispatcher() {
-  const deleteElement = useRecoilCallback(
-    ({ reset }) => (id: string) => {
-      reset(elementSelector(id));
+  const updateElementProps = useRecoilCallback(
+    ({ set }) => <T extends ShapeConfig>(
+      id: string,
+      properties: Partial<T>
+    ) => {
+      set(elementPropsSelector(id), (props) => ({
+        ...props,
+        ...properties,
+      }));
+    }
+  );
+
+  const reorderElement = useRecoilCallback(
+    ({ snapshot, set }) => async (id: string, inc: number) => {
+      const elementIds = await snapshot.getPromise(elementIdsState);
+      const index = elementIds.findIndex((elementId) => id === elementId);
+      set(elementIdsState, move(index, index + inc, elementIds));
     },
     []
   );
 
-  const deleteSelectedElement = useRecoilCallback(
-    ({ snapshot, reset }) => async () => {
-      const selectedElementId = await snapshot.getPromise(
-        selectedElementIdSelector
-      );
-      if (selectedElementId) {
-        reset(elementSelector(selectedElementId));
+  const selectElement = useRecoilCallback(
+    ({ snapshot, set }) => async (element: string | CanvasElement) => {
+      const canvasElement =
+        typeof element === 'string'
+          ? await snapshot.getPromise(elementSelector(element))
+          : element;
+      if (!canvasElement) {
+        return;
+      }
+
+      set(selectedElementIdState, canvasElement.id);
+      const elementPanel = SHAPE_PROPERTIES_PANEL[canvasElement.type];
+      if (elementPanel) {
+        set(activePanelState, elementPanel);
       }
     },
     []
+  );
+
+  const clearSelection = useRecoilCallback(
+    ({ snapshot, reset, set }) => async () => {
+      const element = await snapshot.getPromise(selectedElementSelector);
+      if (!element) {
+        return;
+      }
+
+      const elementPanel = SHAPE_TOOL_PANEL[element.type];
+      if (elementPanel) {
+        set(activePanelState, elementPanel);
+      } else {
+        reset(activePanelState);
+      }
+
+      reset(selectedElementIdState);
+    },
+    []
+  );
+
+  const deleteElement = useRecoilCallback(
+    ({ reset, snapshot }) => async (id: string) => {
+      if (await snapshot.getPromise(isSelectedElementSelector(id))) {
+        await clearSelection();
+      }
+      reset(elementSelector(id));
+    },
+    [clearSelection]
+  );
+
+  const deleteSelectedElement = useRecoilCallback(
+    ({ snapshot }) => async () => {
+      const selectedElementId = await snapshot.getPromise(
+        selectedElementIdState
+      );
+      if (selectedElementId) {
+        await deleteElement(selectedElementId);
+      }
+    },
+    [deleteElement]
   );
 
   const createElement = useRecoilCallback(
@@ -59,16 +128,16 @@ function useElementsDispatcher() {
       };
 
       set(elementSelector(element.id), element);
-      set(selectedElementIdSelector, element.id);
+      await selectElement(element);
     },
-    []
+    [selectElement]
   );
 
   const duplicateElement = useRecoilCallback(
     ({ snapshot }) => async (id: string) => {
       const element = await snapshot.getPromise(elementSelector(id));
       if (element) {
-        createElement(element.type, {
+        await createElement(element.type, {
           ...element.props,
           x: undefined,
           y: undefined,
@@ -78,27 +147,6 @@ function useElementsDispatcher() {
     [createElement]
   );
 
-  const updateElementProps = useRecoilCallback(
-    ({ set }) => <T extends ShapeConfig>(
-      id: string,
-      properties: Partial<T>
-    ) => {
-      set(elementPropsSelector(id), (props) => ({
-        ...props,
-        ...properties,
-      }));
-    }
-  );
-
-  const reorderElement = useRecoilCallback(
-    ({ snapshot, set }) => async (id: string, inc: number) => {
-      const elementIds = await snapshot.getPromise(elementIdsState);
-      const index = elementIds.findIndex((elementId) => id === elementId);
-      set(elementIdsState, move(index, index + inc, elementIds));
-    },
-    []
-  );
-
   return {
     deleteElement,
     createElement,
@@ -106,6 +154,8 @@ function useElementsDispatcher() {
     updateElementProps,
     deleteSelectedElement,
     reorderElement,
+    selectElement,
+    clearSelection,
   };
 }
 

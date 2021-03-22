@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { EditorAreaContainer } from '../containers/EditorAreaContainer';
-import { selectedElementIdSelector } from '../state/selectors/editor';
+import { selectedElementIdState } from '../state/atoms/editor';
 
 function EditorFocusController() {
   const { editorAreaRef } = EditorAreaContainer.useContainer();
-  const selectedElementId = useRecoilValue(selectedElementIdSelector);
+  const selectedElementId = useRecoilValue(selectedElementIdState);
 
   useEffect(() => {
     editorAreaRef.current?.focus();

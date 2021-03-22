@@ -1,19 +1,21 @@
-import React from 'react';
-import SideMenuButton from '../../ui/SideMenuButton';
 import { PuzzleOutline } from 'heroicons-react';
+import React from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { EditorPanel } from '../../../interfaces/Editor';
-import { useEditorMenuButton } from '../useEditorMenuButton';
-import { useSetRecoilState } from 'recoil';
 import { activePanelState } from '../../../state/atoms/editor';
+import { isEitherPanelActiveSelector } from '../../../state/selectors/editor';
+import SideMenuButton from '../../ui/SideMenuButton';
 
 function ElementsToolButton() {
   const setActivePanel = useSetRecoilState(activePanelState);
-  const { selected } = useEditorMenuButton([
-    EditorPanel.Elements,
-    EditorPanel.ProgressBarProperties,
-    EditorPanel.RectangleProperties,
-    EditorPanel.WaveformProperties,
-  ]);
+  const selected = useRecoilValue(
+    isEitherPanelActiveSelector([
+      EditorPanel.Elements,
+      EditorPanel.ProgressBarProperties,
+      EditorPanel.RectangleProperties,
+      EditorPanel.WaveformProperties,
+    ])
+  );
 
   const handleClick = () => {
     setActivePanel(EditorPanel.Elements);

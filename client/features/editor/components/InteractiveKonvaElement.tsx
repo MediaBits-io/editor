@@ -1,9 +1,9 @@
-import React, { useRef, useEffect, useCallback } from 'react';
-import { KonvaNodeEvents, Transformer } from 'react-konva';
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/types/Node';
-import { useRecoilState } from 'recoil';
-import { selectedElementIdSelector } from '../state/selectors/editor';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { KonvaNodeEvents, Transformer } from 'react-konva';
+import { useRecoilValue } from 'recoil';
+import { selectedElementIdState } from '../state/atoms/editor';
 import useElementsDispatcher from '../state/dispatchers/elements';
 
 export const MIN_WIDTH = 5;
@@ -32,10 +32,8 @@ const InteractiveKonvaElement = ({
 }: Props) => {
   const shapeRef = useRef<Konva.Shape>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
-  const { updateElementProps } = useElementsDispatcher();
-  const [selectedElementId, setSelectedElementId] = useRecoilState(
-    selectedElementIdSelector
-  );
+  const { updateElementProps, selectElement } = useElementsDispatcher();
+  const selectedElementId = useRecoilValue(selectedElementIdState);
 
   const isSelected = selectedElementId === id;
 
@@ -47,7 +45,7 @@ const InteractiveKonvaElement = ({
   }, [isSelected]);
 
   const handleSelect = () => {
-    setSelectedElementId(id);
+    selectElement(id);
   };
 
   const handleChange = useCallback(

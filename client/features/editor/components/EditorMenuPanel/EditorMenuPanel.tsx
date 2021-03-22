@@ -1,8 +1,10 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { EditorPanel } from '../../interfaces/Editor';
-import { activePanelState } from '../../state/atoms/editor';
-import { selectedElementIdSelector } from '../../state/selectors/editor';
+import {
+  activePanelState,
+  selectedElementIdState,
+} from '../../state/atoms/editor';
 import SideMenuPanel from '../ui/SideMenuPanel';
 import AudioToolPanel from './AudioToolPanel/AudioToolPanel';
 import ElementToolPanel from './ElementToolPanel';
@@ -16,7 +18,7 @@ import WaveformPropertiesPanel from './WaveformPropertiesPanel/WaveformPropertie
 
 function EditorMenuPanel() {
   const activePanel = useRecoilValue(activePanelState);
-  const selectedElementId = useRecoilValue(selectedElementIdSelector);
+  const selectedElementId = useRecoilValue(selectedElementIdState);
 
   if (selectedElementId) {
     switch (activePanel) {

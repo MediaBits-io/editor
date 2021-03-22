@@ -2,8 +2,8 @@ import { ShapeConfig } from 'konva/types/Shape';
 import { without } from 'ramda';
 import { DefaultValue, selector, selectorFamily } from 'recoil';
 import { CanvasElement } from '../../interfaces/StageConfig';
+import { selectedElementIdState } from '../atoms/editor';
 import { elementState, elementIdsState } from '../atoms/template';
-import { selectedElementIdSelector } from './editor';
 
 export const elementsSelector = selector<CanvasElement[]>({
   key: 'elementsSelector',
@@ -32,10 +32,6 @@ export const elementSelector = selectorFamily<
   get: (id) => ({ get }) => get(elementState(id)),
   set: (id) => ({ set, get, reset }, element) => {
     if (element instanceof DefaultValue) {
-      const selectedElementId = get(selectedElementIdSelector);
-      if (selectedElementId === id) {
-        reset(selectedElementIdSelector);
-      }
       reset(elementState(id));
       set(elementIdsState, (elementIds) => without([id], elementIds));
     } else {
@@ -67,16 +63,7 @@ export const elementPropsSelector = selectorFamily({
   },
 });
 
-// export const elementPropSelector = selectorFamily({
-//   key: 'elementPropSelector',
-//   get: <T extends ShapeConfig, P extends keyof T>({
-//     id,
-//     path: propPath,
-//   }: {
-//     id: string;
-//     path: P;
-//   }) => ({ get }): T[P] => {
-//     const props = get(elementPropsSelector(id))!;
-//     return prop<P, T>(propPath, props as T);
-//   },
-// });
+export const isSelectedElementSelector = selectorFamily({
+  key: 'isSelectedElementSelector',
+  get: (id: string) => ({ get }) => get(selectedElementIdState) === id,
+});
