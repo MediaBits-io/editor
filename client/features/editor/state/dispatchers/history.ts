@@ -3,17 +3,15 @@ import { historyControlsState } from '../atoms/history';
 
 function useHistoryDispatcher() {
   const undo = useRecoilCallback(
-    ({ snapshot, set }) => async () => {
-      const history = await snapshot.getPromise(historyControlsState);
-      history.undo();
+    ({ snapshot }) => () => {
+      snapshot.getLoadable(historyControlsState).getValue().undo();
     },
     []
   );
 
   const redo = useRecoilCallback(
-    ({ snapshot }) => async () => {
-      const history = await snapshot.getPromise(historyControlsState);
-      history.redo();
+    ({ snapshot }) => () => {
+      snapshot.getLoadable(historyControlsState).getValue().redo();
     },
     []
   );

@@ -1,6 +1,7 @@
 import { atom } from 'recoil';
 import { EditorPanel } from '../../interfaces/Editor';
 import { Template } from '../../interfaces/StageConfig';
+import { untrackedHistoryEffect } from '../effects/HistoryController';
 
 export const zoomState = atom({
   key: 'zoomState',
@@ -10,6 +11,7 @@ export const zoomState = atom({
 export const activePanelState = atom({
   key: 'activePanelState',
   default: EditorPanel.Settings,
+  effects_UNSTABLE: [untrackedHistoryEffect],
 });
 
 export const isLoadingState = atom({
@@ -25,4 +27,5 @@ export const lastSavedTemplateState = atom<Template | undefined>({
 export const selectedElementIdState = atom<string | undefined>({
   key: 'selectedElementIdState',
   default: undefined,
+  effects_UNSTABLE: [untrackedHistoryEffect],
 });
