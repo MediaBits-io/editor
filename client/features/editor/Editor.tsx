@@ -10,13 +10,14 @@ import ZoomControls from './components/ZoomControls/ZoomControls';
 import { PRELOAD_FONTS } from './constants';
 import { EditorAreaContainer } from './containers/EditorAreaContainer';
 import EditorFocusController from './controllers/EditorFocusController';
+import HistoryController from './controllers/HistoryController';
 import UnsavedChangesController from './controllers/UnsavedChangesController';
-import useEditorHistory from './hooks/useEditorHistory';
 import useEditorKeyCommand from './hooks/useEditorKeyCommand';
 import useElementsDispatcher from './state/dispatchers/elements';
+import useHistoryDispatcher from './state/dispatchers/history';
 
 function Editor() {
-  const { redo, undo } = useEditorHistory();
+  const { redo, undo } = useHistoryDispatcher();
   const { editorAreaRef } = EditorAreaContainer.useContainer();
   const { deleteSelectedElement } = useElementsDispatcher();
 
@@ -56,6 +57,7 @@ function decorate<P>(Component: React.FunctionComponent<P>) {
     <EditorAreaContainer.Provider>
       <UnsavedChangesController />
       <EditorFocusController />
+      <HistoryController />
       <Component {...props} />
     </EditorAreaContainer.Provider>
   );
