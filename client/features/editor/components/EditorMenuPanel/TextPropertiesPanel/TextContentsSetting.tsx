@@ -13,7 +13,6 @@ function TextContentsSetting({ elementId }: Props) {
   const elementProps = useRecoilValue(
     elementPropsSelector<Konva.TextConfig>(elementId)
   );
-  console.log('RR', elementId, elementProps);
   const { updateElementProps } = useElementsDispatcher();
 
   const handleChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

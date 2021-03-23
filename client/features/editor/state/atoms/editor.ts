@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 import { EditorPanel } from '../../interfaces/Editor';
 import { Template } from '../../interfaces/StageConfig';
-import { untrackedHistoryEffect } from '../effects/HistoryController';
+import { untrackedHistoryEffect } from '../effects/history';
 
 export const zoomState = atom({
   key: 'zoomState',

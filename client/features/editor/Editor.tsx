@@ -10,11 +10,11 @@ import ZoomControls from './components/ZoomControls/ZoomControls';
 import { PRELOAD_FONTS } from './constants';
 import { EditorAreaContainer } from './containers/EditorAreaContainer';
 import EditorFocusController from './controllers/EditorFocusController';
+import HistoryController from './controllers/HistoryController';
 import UnsavedChangesController from './controllers/UnsavedChangesController';
 import useEditorKeyCommand from './hooks/useEditorKeyCommand';
 import useElementsDispatcher from './state/dispatchers/elements';
 import useHistoryDispatcher from './state/dispatchers/history';
-import HistoryController from './state/effects/HistoryController';
 
 function Editor() {
   const { redo, undo } = useHistoryDispatcher();

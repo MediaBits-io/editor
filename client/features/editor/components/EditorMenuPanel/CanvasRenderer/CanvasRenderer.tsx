@@ -12,10 +12,9 @@ import { isLoadingState, zoomState } from '../../../state/atoms/editor';
 import {
   backgroundState,
   dimensionsState,
-  elementIdsState,
 } from '../../../state/atoms/template';
 import useElementsDispatcher from '../../../state/dispatchers/elements';
-import ElementRenderer from './ElementRenderer';
+import Elements from './Elements';
 
 // TODO: move bounds component out of shape and render based on selected state
 
@@ -24,7 +23,6 @@ function CanvasRenderer() {
   const dimensions = useRecoilValue(dimensionsState);
   const background = useRecoilValue(backgroundState);
   const isLoading = useRecoilValue(isLoadingState);
-  const elementIds = useRecoilValue(elementIdsState);
   const RecoilBridge = useRecoilBridgeAcrossReactRoots_UNSTABLE();
   const { fitToScreen } = useZoomControls();
   const { clearSelection } = useElementsDispatcher();
@@ -67,9 +65,7 @@ function CanvasRenderer() {
         <RecoilBridge>
           <Layer>
             <Rect {...dimensions} {...background} onClick={clearSelection} />
-            {elementIds.map((id) => (
-              <ElementRenderer key={id} id={id} />
-            ))}
+            <Elements />
           </Layer>
         </RecoilBridge>
       </Stage>

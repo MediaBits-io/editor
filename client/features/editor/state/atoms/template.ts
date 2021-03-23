@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import { atom, atomFamily } from 'recoil';
 import { Dimensions, CanvasElement } from '../../interfaces/StageConfig';
-import { historyEffect } from '../effects/HistoryController';
+import { historyEffect } from '../effects/history';
 
 export const dimensionsState = atom<Dimensions>({
   key: 'templateDimensionsState',
