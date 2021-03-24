@@ -16,7 +16,7 @@ import {
 import useElementsDispatcher from '../../../state/dispatchers/elements';
 import Elements from './Elements';
 
-// TODO: move bounds component out of shape and render based on selected state
+// TODO: move bounds component out of shape and render based on selected state (need refs in state)
 
 function CanvasRenderer() {
   const zoom = useRecoilValue(zoomState);
