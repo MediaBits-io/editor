@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import Konva from 'konva';
 import { Image } from 'react-konva';
 import InteractiveKonvaElement from '../InteractiveKonvaElement';
