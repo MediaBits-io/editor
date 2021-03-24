@@ -1,28 +1,28 @@
-import React, { useCallback } from 'react';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
-import SideMenuSetting from '../../ui/SideMenuSetting';
-import PanelColorPicker from '../../ui/PanelColorPicker';
 import { ProgressBarConfig } from 'konva-elements';
-import { fromRgba, toRgba } from '../../../../../utils/color';
+import React, { useCallback } from 'react';
 import { RGBColor } from 'react-color';
+import { useRecoilValue } from 'recoil';
+import { fromRgba, toRgba } from '../../../../../utils/color';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
+import { elementPropsSelector } from '../../../state/selectors/elements';
+import PanelColorPicker from '../../ui/PanelColorPicker';
+import SideMenuSetting from '../../ui/SideMenuSetting';
 
 interface Props {
   elementId: string;
-  elementProps: ProgressBarConfig;
 }
 
-function ProgressBarFillSetting({ elementId, elementProps }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+function ProgressBarFillSetting({ elementId }: Props) {
+  const elementProps = useRecoilValue(
+    elementPropsSelector<ProgressBarConfig>(elementId)
+  );
+  const { updateElementProps } = useElementsDispatcher();
 
   const changeColor = useCallback(
     (color: RGBColor) => {
-      dispatch({
-        type: 'update_element',
-        id: elementId,
-        props: { fill: toRgba(color) } as Partial<ProgressBarConfig>,
-      });
+      updateElementProps<ProgressBarConfig>(elementId, { fill: toRgba(color) });
     },
-    [dispatch, elementId]
+    [elementId, updateElementProps]
   );
 
   return (

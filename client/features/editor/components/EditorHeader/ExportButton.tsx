@@ -1,31 +1,26 @@
 import { DownloadOutline } from 'heroicons-react';
 import React, { useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
+import { useRecoilValue } from 'recoil';
 import Button from '../../../../components/ui/Button';
 import ExternalLink from '../../../../components/ui/ExternalLink';
 import NotificationContent from '../../../../components/ui/Notification/NotificationContent';
-import { VideosContainer } from '../../../../containers/VideosContainer';
+import useVideos from '../../../../hooks/useVideos';
 import { openNewsletterWindow } from '../../../../utils/newsletter';
-import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
+import { audioSelector } from '../../state/selectors/audio';
 import AudioModal from '../AudioModal/AudioModal';
 
 function ExportButton() {
-  const { template, state, dispatch } = EditorContainer.useContainer();
-  const { exportVideo } = VideosContainer.useContainer();
+  const audio = useRecoilValue(audioSelector);
+  const { exportVideo } = useVideos();
   const { addToast } = useToasts();
   const [loading, setLoading] = useState(false);
   const [isAudioSelectVisible, setAudioSelectVisible] = useState(false);
 
-  const saveAndExportVideo = async (clipBuffer: Blob) => {
+  const saveAndExportVideo = async (data: Blob) => {
     try {
       setLoading(true);
-      const exportPromise = exportVideo(clipBuffer, template);
-      dispatch({
-        type: 'add_audio',
-        clipBuffer,
-        blobUrl: URL.createObjectURL(clipBuffer),
-      });
-      const { isNewRegularUser } = await exportPromise;
+      const { isNewRegularUser } = await exportVideo(data);
       addToast(
         <NotificationContent title="Video exported successfully">
           It may take a few minutes for the video to get processed
@@ -73,10 +68,10 @@ function ExportButton() {
   };
 
   const handleClickExport = () => {
-    if (!state.audio) {
+    if (!audio) {
       setAudioSelectVisible(true);
     } else {
-      saveAndExportVideo(state.audio.data);
+      saveAndExportVideo(audio.data);
     }
   };
 
@@ -87,7 +82,7 @@ function ExportButton() {
   return (
     <>
       <AudioModal
-        initialAudio={state.audio}
+        initialAudio={audio}
         onContinue={saveAndExportVideo}
         visible={isAudioSelectVisible}
         close={closeExport}

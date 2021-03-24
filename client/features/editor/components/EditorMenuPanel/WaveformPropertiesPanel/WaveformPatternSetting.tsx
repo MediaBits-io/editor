@@ -1,11 +1,13 @@
 import { PatternType, WaveformConfig } from 'konva-elements';
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useRecoilValue } from 'recoil';
+import useDropdown from '../../../../../components/ui/Dropdown/useDropdown';
 import DropdownSelect from '../../../../../components/ui/DropdownSelect/DropdownSelect';
 import DropdownSelectAnchor from '../../../../../components/ui/DropdownSelect/DropdownSelectAnchor';
 import DropdownSelectOption from '../../../../../components/ui/DropdownSelect/DropdownSelectOption';
-import useDropdown from '../../../../../components/ui/Dropdown/useDropdown';
 import classNames from '../../../../../utils/classNames';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
+import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
 
 export const options: { label: string; value: PatternType }[] = [
@@ -37,19 +39,22 @@ export const options: { label: string; value: PatternType }[] = [
 
 interface Props {
   elementId: string;
-  elementProps: WaveformConfig;
 }
 
-function WaveformPatternSetting({ elementId, elementProps }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+function WaveformPatternSetting({ elementId }: Props) {
+  const { updateElementProps } = useElementsDispatcher();
+  const elementProps = useRecoilValue(
+    elementPropsSelector<WaveformConfig>(elementId)
+  );
   const { setTargetElement, targetElement } = useDropdown();
 
-  const selectedPattern = options.find(
-    ({ value }) => value === elementProps.pattern
-  )!;
+  const selectedPattern = useMemo(
+    () => options.find(({ value }) => value === elementProps.pattern)!,
+    [elementProps.pattern]
+  );
 
   const handleChangeOption = (pattern: PatternType) => {
-    dispatch({ type: 'update_element', id: elementId, props: { pattern } });
+    updateElementProps<WaveformConfig>(elementId, { pattern });
   };
 
   return (

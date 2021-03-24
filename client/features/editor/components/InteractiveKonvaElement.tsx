@@ -1,9 +1,10 @@
-import React, { useRef, useEffect, useCallback } from 'react';
-import { EditorContainer } from '../containers/EditorContainer/EditorContainer';
-import { KonvaNodeEvents, Transformer } from 'react-konva';
 import Konva from 'konva';
-import useElements from '../hooks/useElements';
 import { KonvaEventObject } from 'konva/types/Node';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { KonvaNodeEvents, Transformer } from 'react-konva';
+import { useRecoilValue } from 'recoil';
+import { selectedElementIdState } from '../state/atoms/editor';
+import useElementsDispatcher from '../state/dispatchers/elements';
 
 export const MIN_WIDTH = 5;
 export const MIN_HEIGHT = 5;
@@ -31,27 +32,27 @@ const InteractiveKonvaElement = ({
 }: Props) => {
   const shapeRef = useRef<Konva.Shape>(null);
   const transformerRef = useRef<Konva.Transformer>(null);
-  const { selectedElement } = useElements();
-  const { dispatch } = EditorContainer.useContainer();
+  const { updateElementProps, selectElement } = useElementsDispatcher();
+  const selectedElementId = useRecoilValue(selectedElementIdState);
 
-  const isSelected = selectedElement?.id === id;
+  const isSelected = selectedElementId === id;
 
   useEffect(() => {
     if (isSelected && shapeRef.current && transformerRef.current) {
       transformerRef.current.nodes([shapeRef.current]);
       transformerRef.current.getLayer()?.batchDraw();
     }
-  }, [isSelected, selectedElement]);
+  }, [isSelected]);
 
   const handleSelect = () => {
-    dispatch({ type: 'select_element', id });
+    selectElement(id);
   };
 
   const handleChange = useCallback(
     (props: Konva.ShapeConfig) => {
-      dispatch({ type: 'update_element', id, props });
+      updateElementProps(id, props);
     },
-    [dispatch, id]
+    [id, updateElementProps]
   );
 
   const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {

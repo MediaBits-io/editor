@@ -5,8 +5,9 @@ import {
   TrashOutline,
 } from 'heroicons-react';
 import React from 'react';
+import { useResetRecoilState } from 'recoil';
 import Popover from '../../../../../components/ui/Popover/Popover';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import { audioSelector } from '../../../state/selectors/audio';
 import PanelActionButton from '../../ui/PanelActionButton';
 
 interface Props {
@@ -16,11 +17,7 @@ interface Props {
 }
 
 function AudioActions({ onEditClick, onTrimClick, onDownloadClick }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
-
-  const handleDeleteClick = () => {
-    dispatch({ type: 'remove_audio' });
-  };
+  const resetAudio = useResetRecoilState(audioSelector);
 
   return (
     <>
@@ -34,7 +31,7 @@ function AudioActions({ onEditClick, onTrimClick, onDownloadClick }: Props) {
         <PanelActionButton icon={DownloadOutline} onClick={onDownloadClick} />
       </Popover>
       <Popover content="Remove" placement="top" className="flex">
-        <PanelActionButton icon={TrashOutline} onClick={handleDeleteClick} />
+        <PanelActionButton icon={TrashOutline} onClick={resetAudio} />
       </Popover>
     </>
   );

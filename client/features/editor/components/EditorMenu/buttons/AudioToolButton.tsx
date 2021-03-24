@@ -1,16 +1,21 @@
-import React from 'react';
-import SideMenuButton from '../../ui/SideMenuButton';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
 import { MusicNoteOutline } from 'heroicons-react';
+import React from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { EditorPanel } from '../../../interfaces/Editor';
-import { useEditorMenuButton } from '../useEditorMenuButton';
+import { activePanelState } from '../../../state/atoms/editor';
+import { audioSelector } from '../../../state/selectors/audio';
+import { isEitherPanelActiveSelector } from '../../../state/selectors/editor';
+import SideMenuButton from '../../ui/SideMenuButton';
 
 function AudioToolButton() {
-  const { state, dispatch } = EditorContainer.useContainer();
-  const { selected } = useEditorMenuButton([EditorPanel.Audio]);
+  const setActivePanel = useSetRecoilState(activePanelState);
+  const selected = useRecoilValue(
+    isEitherPanelActiveSelector([EditorPanel.Audio])
+  );
+  const audio = useRecoilValue(audioSelector);
 
   const handleClick = () => {
-    dispatch({ type: 'open_editor_panel', panel: EditorPanel.Audio });
+    setActivePanel(EditorPanel.Audio);
   };
 
   return (
@@ -18,7 +23,7 @@ function AudioToolButton() {
       onClick={handleClick}
       selected={selected}
       icon={MusicNoteOutline}
-      toggled={!!state.audio}
+      toggled={!!audio}
     >
       Audio
     </SideMenuButton>

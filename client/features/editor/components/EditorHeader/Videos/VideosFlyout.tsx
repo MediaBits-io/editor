@@ -1,9 +1,14 @@
 import { ClockOutline, VideoCameraOutline } from 'heroicons-react';
-import React, { useMemo } from 'react';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
 import Flyout from '../../../../../components/ui/Flyout';
 import Loader from '../../../../../components/ui/Loader/Loader';
 import Popover from '../../../../../components/ui/Popover/Popover';
-import { VideosContainer } from '../../../../../containers/VideosContainer';
+import { areVideosLoadedState } from '../../../../../state/atoms/videos';
+import {
+  generatedVideoIdsSelector,
+  pollingVideoIdsSelector,
+} from '../../../../../state/selectors/videos';
 import classNames from '../../../../../utils/classNames';
 import VideosGrid from './VideosGrid';
 
@@ -13,18 +18,13 @@ interface Props {
   targetElement: HTMLElement | null;
 }
 
+// TODO: add loading on video Ids
 function VideosFlyout({ close, isOpen, targetElement }: Props) {
-  const { videos } = VideosContainer.useContainer();
-
-  const videosArr = useMemo(() => Object.values(videos ?? []), [videos]);
-  const generatedVideos = useMemo(() => videosArr.filter(({ url }) => url), [
-    videosArr,
-  ]);
-  const pendingCount = useMemo(
-    () => videosArr.reduce((sum, video) => (video.url ? sum : sum + 1), 0),
-    [videosArr]
-  );
-  const generatedCount = generatedVideos.length;
+  const pendingVideoIds = useRecoilValue(pollingVideoIdsSelector);
+  const generatedVideoIds = useRecoilValue(generatedVideoIdsSelector);
+  const areVideosLoaded = useRecoilValue(areVideosLoadedState);
+  const pendingCount = pendingVideoIds.length;
+  const generatedCount = generatedVideoIds.length;
 
   return (
     <Flyout
@@ -32,7 +32,7 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
       className="p-3 space-y-2"
       wrapperClass={classNames(
         'w-full',
-        generatedVideos.length <= 1 ? 'max-w-xs' : 'max-w-md'
+        generatedCount <= 1 ? 'max-w-xs' : 'max-w-md'
       )}
       targetElement={targetElement}
       isOpen={isOpen}
@@ -63,8 +63,8 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
           )}
         </div>
       </div>
-      {videos ? (
-        <VideosGrid videos={videos} />
+      {areVideosLoaded ? (
+        <VideosGrid />
       ) : (
         <Loader className="my-6 text-gray-400" />
       )}

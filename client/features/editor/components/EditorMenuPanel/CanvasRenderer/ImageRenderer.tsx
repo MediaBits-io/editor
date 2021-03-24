@@ -10,6 +10,7 @@ interface Props {
 }
 
 // TODO: transformer with crop
+// TODO: save ref into state to be able to cache ONCE after blur changes
 function ImageRenderer({ id, props }: Props) {
   const imageRef = useRef<Konva.Image | null>(null);
 

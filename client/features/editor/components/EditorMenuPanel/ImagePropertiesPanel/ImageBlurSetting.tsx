@@ -1,16 +1,20 @@
 import Konva from 'konva';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import Slider from '../../../../../components/ui/Slider';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
+import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
 
 interface Props {
   elementId: string;
-  elementProps: Konva.ImageConfig;
 }
 
-function ImageBlurSetting({ elementId, elementProps }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+function ImageBlurSetting({ elementId }: Props) {
+  const { updateElementProps } = useElementsDispatcher();
+  const elementProps = useRecoilValue(
+    elementPropsSelector<Konva.ImageConfig>(elementId)
+  );
 
   // TODO: maybe save filter as string in template and let renderer handle conversion
   const handleChangeBlur = async (value: number) => {
@@ -22,13 +26,9 @@ function ImageBlurSetting({ elementId, elementProps }: Props) {
       filters = filters?.filter((filter) => filter !== Konva.Filters.Blur);
     }
 
-    dispatch({
-      type: 'update_element',
-      id: elementId,
-      props: {
-        blurRadius: value,
-        filters,
-      },
+    updateElementProps<Konva.ImageConfig>(elementId, {
+      blurRadius: value,
+      filters,
     });
   };
 

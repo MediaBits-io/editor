@@ -1,4 +1,4 @@
-import { AuthInfoDTO } from '../../interfaces';
+import { AuthInfoDTO } from '../../interfaces/user';
 import { api, getAuthHeaders } from './api';
 
 export async function fetchAuthInfo(token: string) {

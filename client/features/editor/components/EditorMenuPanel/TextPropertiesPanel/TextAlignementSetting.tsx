@@ -1,27 +1,27 @@
 import Konva from 'konva';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import Button from '../../../../../components/ui/Button';
 import AlignCenterIcon from '../../../../../components/ui/Icons/AlignCenterIcon';
 import AlignLeftIcon from '../../../../../components/ui/Icons/AlignLeftIcon';
 import AlignRightIcon from '../../../../../components/ui/Icons/AlignRightIcon';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
+import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
 
 interface Props {
   elementId: string;
-  elementProps: Konva.TextConfig;
 }
 
-function TextAlignmentSetting({ elementId, elementProps }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+function TextAlignmentSetting({ elementId }: Props) {
+  const { updateElementProps } = useElementsDispatcher();
+  const elementProps = useRecoilValue(
+    elementPropsSelector<Konva.TextConfig>(elementId)
+  );
 
   const onChangeAlign = (align: string) => () => {
-    dispatch({
-      type: 'update_element',
-      id: elementId,
-      props: {
-        align,
-      } as Konva.TextConfig,
+    updateElementProps<Konva.TextConfig>(elementId, {
+      align,
     });
   };
 

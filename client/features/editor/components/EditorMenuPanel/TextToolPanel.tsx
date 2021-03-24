@@ -2,8 +2,8 @@ import Konva from 'konva';
 import React from 'react';
 import Button from '../../../../components/ui/Button';
 import { DefaultFonts } from '../../constants';
-import useElements from '../../hooks/useElements';
 import { ShapeType } from '../../interfaces/Shape';
+import useElementsDispatcher from '../../state/dispatchers/elements';
 import SideMenuPanel from '../ui/SideMenuPanel';
 
 const TEXT_PROPERTIES: { [key in DefaultFonts]: Konva.TextConfig } = {
@@ -32,7 +32,7 @@ const TEXT_PROPERTIES: { [key in DefaultFonts]: Konva.TextConfig } = {
 };
 
 function TextToolPanel() {
-  const { createElement } = useElements();
+  const { createElement } = useElementsDispatcher();
 
   const handleClickAddText = (font: DefaultFonts) => () => {
     createElement<Konva.TextConfig>(ShapeType.Text, TEXT_PROPERTIES[font]);

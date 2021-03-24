@@ -1,38 +1,44 @@
-import React, { useCallback } from 'react';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import React, { useCallback, useMemo } from 'react';
 import SideMenuSetting from '../../ui/SideMenuSetting';
 import PanelColorPicker from '../../ui/PanelColorPicker';
 import { ProgressBarConfig } from 'konva-elements';
 import { fromRgba, toRgba } from '../../../../../utils/color';
 import { RGBColor } from 'react-color';
+import { useRecoilValue } from 'recoil';
+import { elementPropsSelector } from '../../../state/selectors/elements';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
 
 interface Props {
   elementId: string;
-  elementProps: ProgressBarConfig;
 }
 
-function ProgressBarBackgroundSetting({ elementId, elementProps }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+function ProgressBarBackgroundSetting({ elementId }: Props) {
+  const { updateElementProps } = useElementsDispatcher();
+  const elementProps = useRecoilValue(
+    elementPropsSelector<ProgressBarConfig>(elementId)
+  );
+
+  const backgroundColorRGBA = useMemo(
+    () =>
+      elementProps.backgroundColor
+        ? fromRgba(elementProps.backgroundColor)
+        : undefined,
+    [elementProps.backgroundColor]
+  );
 
   const changeColor = useCallback(
     (color: RGBColor) => {
-      dispatch({
-        type: 'update_element',
-        id: elementId,
-        props: { backgroundColor: toRgba(color) } as Partial<ProgressBarConfig>,
+      updateElementProps<ProgressBarConfig>(elementId, {
+        backgroundColor: toRgba(color),
       });
     },
-    [dispatch, elementId]
+    [elementId, updateElementProps]
   );
 
   return (
     <SideMenuSetting label="Background" htmlFor="input-background-color">
       <PanelColorPicker
-        rgba={
-          elementProps.backgroundColor
-            ? fromRgba(elementProps.backgroundColor)
-            : undefined
-        }
+        rgba={backgroundColorRGBA}
         id="input-background-color"
         onChange={changeColor}
       />

@@ -1,18 +1,22 @@
 import { UploadOutline } from 'heroicons-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import Button from '../../../../../components/ui/Button';
-import { Plan } from '../../../../../interfaces';
-import { UserContainer } from '../../../../../containers/UserContainer';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
-import AudioModal, { AudioState } from '../../AudioModal/AudioModal';
+import { Plan } from '../../../../../interfaces/plans';
+import { userPlanState } from '../../../../../state/atoms/user';
+import { userPlanInfoSelector } from '../../../../../state/selectors/user';
+import { AudioState } from '../../../interfaces/Audio';
+import { audioSelector } from '../../../state/selectors/audio';
+import AudioModal from '../../AudioModal/AudioModal';
 import SideMenuPanel from '../../ui/SideMenuPanel';
 import AudioActions from './AudioActions';
 
 function AudioToolPanel() {
-  const { state, dispatch } = EditorContainer.useContainer();
-  const { userPlan, userPlanInfo } = UserContainer.useContainer();
+  const userPlan = useRecoilValue(userPlanState);
+  const userPlanInfo = useRecoilValue(userPlanInfoSelector);
+  const [audio, setAudio] = useRecoilState(audioSelector);
   const [isTrimModalVisible, setTrimModalVisible] = useState(false);
-  const [audio, setAudio] = useState<AudioState>();
+  const [currentAudio, setCurrentAudio] = useState<AudioState>();
   const audioRef = useRef<HTMLAudioElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -20,26 +24,26 @@ function AudioToolPanel() {
 
   useEffect(() => {
     if (!isTrimModalVisible) {
-      setAudio((audio) => {
-        if (audio?.url === state.audio?.url) {
-          return audio;
+      setCurrentAudio((currentAudio) => {
+        if (currentAudio?.url === audio?.url) {
+          return currentAudio;
         }
 
         // Sync audio from state if changed and remove local blob urls
-        if (audio) {
-          URL.revokeObjectURL(audio.url);
+        if (currentAudio) {
+          URL.revokeObjectURL(currentAudio.url);
         }
 
-        return state.audio;
+        return audio;
       });
     }
-  }, [isTrimModalVisible, state.audio]);
+  }, [audio, isTrimModalVisible]);
 
   useEffect(() => {
-    if (audioRef.current && audio) {
+    if (audioRef.current && currentAudio) {
       audioRef.current.load();
     }
-  }, [audio]);
+  }, [currentAudio]);
 
   const openTrimModal = () => {
     setTrimModalVisible(true);
@@ -54,7 +58,7 @@ function AudioToolPanel() {
   };
 
   const changeAudioFile = (file?: Blob) => {
-    setAudio(
+    setCurrentAudio(
       file
         ? {
             data: file,
@@ -71,11 +75,10 @@ function AudioToolPanel() {
     changeAudioFile(e.target.files?.[0]);
   };
 
-  const handleChangeAudio = async (clipBuffer: Blob) => {
-    dispatch({
-      type: 'add_audio',
-      clipBuffer,
-      blobUrl: URL.createObjectURL(clipBuffer),
+  const handleChangeAudio = (data: Blob) => {
+    setAudio({
+      url: URL.createObjectURL(data),
+      data,
     });
   };
 
@@ -84,22 +87,21 @@ function AudioToolPanel() {
   ) => {
     // Automatically open clipping when audio is too long
     if (
-      audio &&
+      currentAudio &&
       Math.round(e.currentTarget.duration) > userPlanInfo.durationLimit
     ) {
       openTrimModal();
-    } else if (audio && audio.url !== state.audio?.url) {
-      dispatch({
-        type: 'add_audio',
-        clipBuffer: audio.data,
-        blobUrl: audio.url,
+    } else if (currentAudio && currentAudio.url !== audio?.url) {
+      setAudio({
+        url: currentAudio.url,
+        data: currentAudio.data,
       });
     }
   };
 
   const handleDownloadAudio = () => {
-    if (audio) {
-      saveAs(audio.url, 'audio.mp3');
+    if (currentAudio) {
+      saveAs(currentAudio.url, 'audio.mp3');
     }
   };
 
@@ -107,7 +109,7 @@ function AudioToolPanel() {
     <SideMenuPanel
       title="Audio"
       actions={
-        state.audio ? (
+        audio ? (
           <AudioActions
             onTrimClick={openTrimModal}
             onEditClick={handleUploadAudioClick}
@@ -117,7 +119,7 @@ function AudioToolPanel() {
       }
     >
       <AudioModal
-        initialAudio={audio}
+        initialAudio={currentAudio}
         onContinue={handleChangeAudio}
         visible={isTrimModalVisible}
         close={closeTrimModal}
@@ -129,14 +131,14 @@ function AudioToolPanel() {
         className="hidden"
         accept="audio/*"
       />
-      {audio ? (
+      {currentAudio ? (
         <audio
           ref={audioRef}
           controls
           className="w-full mb-4 focus:outline-none"
           onLoadedMetadata={handleAudioMetadataLoaded}
         >
-          <source src={audio.url} type="audio/mp3" />
+          <source src={currentAudio.url} type="audio/mp3" />
         </audio>
       ) : (
         <>

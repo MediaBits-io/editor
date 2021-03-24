@@ -4,13 +4,16 @@ import { ToastProvider } from 'react-toast-notifications';
 import { parseCookies } from 'nookies';
 import Notification from '../components/ui/Notification/Notification';
 import NotificationContainer from '../components/ui/Notification/NotificationContainer';
-import { PlansContainer } from '../containers/PlansContainer';
-import { UserContainer } from '../containers/UserContainer';
-import { VideosContainer } from '../containers/VideosContainer';
 import Editor from '../features/editor/Editor';
-import { AuthInfoDTO, deserializeAuthInfoDTO, Plans } from '../interfaces';
+import { AuthInfoDTO, deserializeUserPlanDTO } from '../interfaces/user';
 import { api } from '../utils/api/api';
 import { fetchAuthInfo } from '../utils/api/auth';
+import { RecoilRoot } from 'recoil';
+import { userInfoState, userPlanState } from '../state/atoms/user';
+import { plansState } from '../state/atoms/plans';
+import AuthController from '../controllers/AuthController';
+import { Plans } from '../interfaces/plans';
+import VideosController from '../controllers/VideosController';
 
 interface Props {
   plans: Plans;
@@ -45,26 +48,32 @@ export default function Home({ plans, authInfo }: Props) {
         <title>Mediabits.io | Turn your audio into sharable video</title>
       </Head>
 
-      <ToastProvider
-        autoDismissTimeout={5000}
-        autoDismiss
-        components={{
-          Toast: Notification,
-          ToastContainer: NotificationContainer,
+      <RecoilRoot
+        initializeState={({ set }) => {
+          set(plansState, plans);
+
+          if (authInfo) {
+            set(userInfoState, authInfo.user);
+
+            if (authInfo.plan) {
+              set(userPlanState, deserializeUserPlanDTO(authInfo.plan));
+            }
+          }
         }}
       >
-        <PlansContainer.Provider initialState={{ plans }}>
-          <UserContainer.Provider
-            initialState={{
-              authInfo: deserializeAuthInfoDTO(authInfo),
-            }}
-          >
-            <VideosContainer.Provider>
-              <Editor />
-            </VideosContainer.Provider>
-          </UserContainer.Provider>
-        </PlansContainer.Provider>
-      </ToastProvider>
+        <ToastProvider
+          autoDismissTimeout={5000}
+          autoDismiss
+          components={{
+            Toast: Notification,
+            ToastContainer: NotificationContainer,
+          }}
+        >
+          <AuthController />
+          <VideosController />
+          <Editor />
+        </ToastProvider>
+      </RecoilRoot>
     </div>
   );
 }

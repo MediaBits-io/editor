@@ -3,15 +3,16 @@ import DropdownMenuAnchor from '../../../../components/ui/DropdownMenu/DropdownM
 import DropdownMenu from '../../../../components/ui/DropdownMenu/DropdownMenu';
 import DropdownMenuButton from '../../../../components/ui/DropdownMenu/DropdownMenuButton';
 import useDropdown from '../../../../components/ui/Dropdown/useDropdown';
-import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
-import useZoom from '../../hooks/useZoom';
+import useZOomControls from '../../hooks/useZoomControls';
 import ClearButton from '../ui/ClearButton';
 import classNames from '../../../../utils/classNames';
 import Popover from '../../../../components/ui/Popover/Popover';
+import { useRecoilState } from 'recoil';
+import { zoomState } from '../../state/atoms/editor';
 
 function ZoomControls() {
-  const { state } = EditorContainer.useContainer();
-  const { fillScreen, fitToScreen, setScale } = useZoom();
+  const [zoom, setZoom] = useRecoilState(zoomState);
+  const { fillToScreen, fitToScreen } = useZOomControls();
   const { setTargetElement, targetElement } = useDropdown();
 
   return (
@@ -33,7 +34,7 @@ function ZoomControls() {
                 open && 'bg-gray-100 ring-gray-300 ring-2'
               )}
             >
-              {Math.floor(state.zoom * 100)}%
+              {Math.floor(zoom * 100)}%
             </DropdownMenuAnchor>
           </Popover>
         </div>
@@ -42,18 +43,14 @@ function ZoomControls() {
       <div className="overflow-y-auto divide-y divide-gray-100">
         <div>
           {[3, 2, 1.25, 1, 0.75, 0.5, 0.25, 0.1].map((scale) => (
-            <DropdownMenuButton onClick={() => setScale(scale)} key={scale}>
+            <DropdownMenuButton onClick={() => setZoom(scale)} key={scale}>
               {scale * 100}%
             </DropdownMenuButton>
           ))}
         </div>
         <div>
-          <DropdownMenuButton onClick={() => fitToScreen()}>
-            Fit
-          </DropdownMenuButton>
-          <DropdownMenuButton onClick={() => fillScreen()}>
-            Fill
-          </DropdownMenuButton>
+          <DropdownMenuButton onClick={fitToScreen}>Fit</DropdownMenuButton>
+          <DropdownMenuButton onClick={fillToScreen}>Fill</DropdownMenuButton>
         </div>
       </div>
     </DropdownMenu>

@@ -3,10 +3,10 @@ import React from 'react';
 import { saveAs } from 'file-saver';
 import Flyout from '../../../../../components/ui/Flyout';
 import DownloadToDiskIcon from '../../../../../components/ui/Icons/DownloadToDiskIcon';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
 import { toTemplateJSON } from '../../../utils/template';
 import { useToasts } from 'react-toast-notifications';
 import FlyoutMenuButton from '../FlyoutMenuButton';
+import useTemplateDispatcher from '../../../state/dispatchers/template';
 
 interface Props {
   isOpen: boolean;
@@ -15,15 +15,15 @@ interface Props {
 }
 
 function SaveTemplateFlyout({ close, isOpen, targetElement }: Props) {
-  const { template, dispatch } = EditorContainer.useContainer();
+  const { setCurrentTemplateSaved } = useTemplateDispatcher();
   const { addToast } = useToasts();
   const downloadTemplate = async () => {
+    const template = await setCurrentTemplateSaved();
     saveAs(
       new Blob([await toTemplateJSON(template)], {
         type: 'application/json',
       })
     );
-    dispatch({ type: 'save_changes' });
     addToast('Template saved successfully', { appearance: 'success' });
     close();
   };

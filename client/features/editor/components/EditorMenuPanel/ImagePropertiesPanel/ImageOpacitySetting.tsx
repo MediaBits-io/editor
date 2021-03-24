@@ -1,25 +1,25 @@
 import Konva from 'konva';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import Slider from '../../../../../components/ui/Slider';
-import { EditorContainer } from '../../../containers/EditorContainer/EditorContainer';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
+import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
 
 interface Props {
   elementId: string;
-  elementProps: Konva.ShapeConfig;
 }
 
-function ImageOpacitySetting({ elementId, elementProps }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+function ImageOpacitySetting({ elementId }: Props) {
+  const elementProps = useRecoilValue(
+    elementPropsSelector<Konva.ImageConfig>(elementId)
+  );
+  const { updateElementProps } = useElementsDispatcher();
   const percentageOpacity = Math.floor(+(elementProps.opacity ?? 1) * 100);
 
-  const handleChangeOpacity = async (value: number) => {
-    dispatch({
-      type: 'update_element',
-      id: elementId,
-      props: {
-        opacity: value / 100,
-      },
+  const handleChangeOpacity = (value: number) => {
+    updateElementProps(elementId, {
+      opacity: value / 100,
     });
   };
 

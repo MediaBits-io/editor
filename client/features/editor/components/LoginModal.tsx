@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import Modal from '../../../components/ui/Modal/Modal';
 import ModalAction from '../../../components/ui/Modal/ModalAction';
 import ModalContent from '../../../components/ui/Modal/ModalContent';
 import ModalFullActions from '../../../components/ui/Modal/ModalFullActions';
-import { UserContainer } from '../../../containers/UserContainer';
+import useAuth from '../../../hooks/useAuth';
+import { userInfoState } from '../../../state/atoms/user';
 
 interface Props {
   visible: boolean;
@@ -12,10 +14,11 @@ interface Props {
 
 // TODO: rework into flyout, this is temporary
 function LoginModal({ visible, close }: Props) {
-  const { signIn, userInfo } = UserContainer.useContainer();
+  const userInfo = useRecoilValue(userInfoState);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const { signIn } = useAuth();
 
   useEffect(() => {
     setLoading(false);

@@ -1,8 +1,9 @@
 import { ArrowLeftOutline } from 'heroicons-react';
 import React from 'react';
+import { useSetRecoilState } from 'recoil';
 import classNames from '../../../../utils/classNames';
-import { EditorContainer } from '../../containers/EditorContainer/EditorContainer';
 import { EditorPanel } from '../../interfaces/Editor';
+import { activePanelState } from '../../state/atoms/editor';
 import ClearButton from './ClearButton';
 
 interface Props {
@@ -20,11 +21,11 @@ function SideMenuPanel({
   actions,
   previous,
 }: Props) {
-  const { dispatch } = EditorContainer.useContainer();
+  const setActivePanel = useSetRecoilState(activePanelState);
 
   const handleClickBack = () => {
     if (previous) {
-      dispatch({ type: 'open_editor_panel', panel: previous });
+      setActivePanel(previous);
     }
   };
 

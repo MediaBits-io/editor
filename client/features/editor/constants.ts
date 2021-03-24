@@ -4,6 +4,8 @@ import { uniq } from 'ramda';
 import { EditorPanel } from './interfaces/Editor';
 import { ShapeType } from './interfaces/Shape';
 
+export const EDITOR_MARGIN = 8;
+
 export const IMAGE_FILTERS: { [filter: string]: Filter } = {
   blur: Konva.Filters.Blur,
 };
@@ -62,7 +64,6 @@ export const ALL_FONTS = [
   'Times',
   'Titan One',
   'Work Sans',
-  'Young Serif',
   'ZCOOL KuaiLe',
   'Zilla Slab Highlight',
 ].sort();
