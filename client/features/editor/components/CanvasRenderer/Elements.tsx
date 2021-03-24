@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { elementIdsState } from '../../../state/atoms/template';
+import { elementIdsState } from '../../state/atoms/template';
 import ElementRenderer from './ElementRenderer';
 
 function Elements() {

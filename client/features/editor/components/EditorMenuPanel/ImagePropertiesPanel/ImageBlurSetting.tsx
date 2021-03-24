@@ -1,4 +1,5 @@
 import Konva from 'konva';
+import { Filter } from 'konva/types/Node';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import Slider from '../../../../../components/ui/Slider';
@@ -17,20 +18,31 @@ function ImageBlurSetting({ elementId }: Props) {
   );
 
   // TODO: maybe save filter as string in template and let renderer handle conversion
-  const handleChangeBlur = async (value: number) => {
-    let filters = elementProps.filters;
+  const handleChangeBlur = async (blurRadius: number) => {
+    let filters: Filter[] | undefined = undefined;
 
-    if (value > 0 && !filters?.includes(Konva.Filters.Blur)) {
+    const hasBlurFilter = elementProps.filters?.includes(Konva.Filters.Blur);
+
+    if (blurRadius > 0 && !hasBlurFilter) {
       filters = [...(elementProps.filters ?? []), Konva.Filters.Blur];
-    } else if (!value) {
-      filters = filters?.filter((filter) => filter !== Konva.Filters.Blur);
+    } else if (!blurRadius && hasBlurFilter) {
+      filters = elementProps.filters?.filter(
+        (filter) => filter !== Konva.Filters.Blur
+      );
     }
 
-    updateElementProps<Konva.ImageConfig>(elementId, {
-      blurRadius: value,
-      filters,
-    });
+    updateElementProps<Konva.ImageConfig>(
+      elementId,
+      filters
+        ? {
+            blurRadius,
+            filters,
+          }
+        : { blurRadius }
+    );
   };
+
+  const blurRadius = elementProps.blurRadius;
 
   return (
     <>
@@ -38,12 +50,12 @@ function ImageBlurSetting({ elementId }: Props) {
         <div className="panel-item py-3 flex w-full items-center">
           <Slider
             max={20}
-            value={elementProps.blurRadius}
+            value={blurRadius}
             step={1}
             onChange={handleChangeBlur}
           />
           <span className="text-xs w-20 ml-1 text-right leading-3">
-            {elementProps.blurRadius}px
+            {blurRadius}px
           </span>
         </div>
       </SideMenuSetting>

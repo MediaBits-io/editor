@@ -1,29 +1,28 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import Konva from 'konva';
 import { Image } from 'react-konva';
-import { ShapeConfig } from 'konva/types/Shape';
-import InteractiveKonvaElement from '../../InteractiveKonvaElement';
+import InteractiveKonvaElement from '../InteractiveKonvaElement';
 
 interface Props {
   id: string;
-  props: ShapeConfig;
+  props: Konva.ImageConfig;
 }
 
 // TODO: transformer with crop
-// TODO: save ref into state to be able to cache ONCE after blur changes
 function ImageRenderer({ id, props }: Props) {
   const imageRef = useRef<Konva.Image | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Cache for ability to blur background
     imageRef.current?.cache();
-  }, [props.filters]);
+    imageRef.current?.getLayer()?.batchDraw();
+  }, [props.filters, props.image]);
 
   return (
     <InteractiveKonvaElement id={id}>
       {(additionalProps) => (
         <Image
-          {...(props as Konva.ImageConfig)}
+          {...props}
           {...additionalProps}
           ref={(el) => {
             additionalProps.ref.current = el;

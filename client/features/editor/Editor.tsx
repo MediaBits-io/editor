@@ -3,7 +3,7 @@ import MainArea from '../../components/layout/MainArea';
 import { loadFonts } from '../../utils/fonts';
 import EditorHeader from './components/EditorHeader/EditorHeader';
 import EditorMenu from './components/EditorMenu/EditorMenu';
-import CanvasRenderer from './components/EditorMenuPanel/CanvasRenderer/CanvasRenderer';
+import CanvasRenderer from './components/CanvasRenderer/CanvasRenderer';
 import EditorMenuPanel from './components/EditorMenuPanel/EditorMenuPanel';
 import HistoryControls from './components/HistoryControls/HistoryControls';
 import ZoomControls from './components/ZoomControls/ZoomControls';

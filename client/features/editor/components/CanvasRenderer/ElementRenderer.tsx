@@ -1,9 +1,10 @@
+import Konva from 'konva';
 import { ProgressBar, Waveform } from 'konva-elements';
 import React from 'react';
 import { Rect } from 'react-konva';
 import { useRecoilValue } from 'recoil';
-import { ShapeType } from '../../../interfaces/Shape';
-import { elementSelector } from '../../../state/selectors/elements';
+import { ShapeType } from '../../interfaces/Shape';
+import { elementSelector } from '../../state/selectors/elements';
 import GenericRenderer from './GenericRenderer';
 import ImageRenderer from './ImageRenderer';
 import TextRenderer from './TextRenderer';
@@ -22,7 +23,9 @@ function ElementRenderer({ id }: Props) {
 
   switch (type) {
     case ShapeType.Text:
-      return <TextRenderer id={id} key={id} props={props} />;
+      return (
+        <TextRenderer id={id} key={id} props={props as Konva.TextConfig} />
+      );
     case ShapeType.Rectangle:
       return (
         <GenericRenderer id={id} key={id} props={props} component={Rect} />
@@ -41,7 +44,9 @@ function ElementRenderer({ id }: Props) {
         />
       );
     case ShapeType.Image:
-      return <ImageRenderer key={id} id={id} props={props} />;
+      return (
+        <ImageRenderer key={id} id={id} props={props as Konva.ImageConfig} />
+      );
     default:
       throw new Error(`Unsupported element ${type}`);
   }

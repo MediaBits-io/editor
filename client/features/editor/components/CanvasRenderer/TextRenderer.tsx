@@ -1,17 +1,14 @@
 import React, { useCallback } from 'react';
-import InteractiveKonvaElement, {
-  MIN_WIDTH,
-} from '../../InteractiveKonvaElement';
+import InteractiveKonvaElement, { MIN_WIDTH } from '../InteractiveKonvaElement';
 import { KonvaEventObject } from 'konva/types/Node';
 import Konva from 'konva';
 import { Text } from 'react-konva';
-import { ShapeConfig } from 'konva/types/Shape';
 
 const MIN_FONT_SIZE = 8;
 
 interface Props {
   id: string;
-  props: ShapeConfig;
+  props: Konva.TextConfig;
 }
 
 function TextRenderer({ id, props }: Props) {

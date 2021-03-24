@@ -4,16 +4,13 @@ import {
   useRecoilBridgeAcrossReactRoots_UNSTABLE,
   useRecoilValue,
 } from 'recoil';
-import Loader from '../../../../../components/ui/Loader/Loader';
-import { mul } from '../../../../../utils/number';
-import { EDITOR_MARGIN } from '../../../constants';
-import useZoomControls from '../../../hooks/useZoomControls';
-import { isLoadingState, zoomState } from '../../../state/atoms/editor';
-import {
-  backgroundState,
-  dimensionsState,
-} from '../../../state/atoms/template';
-import useElementsDispatcher from '../../../state/dispatchers/elements';
+import Loader from '../../../../components/ui/Loader/Loader';
+import { mul } from '../../../../utils/number';
+import { EDITOR_MARGIN } from '../../constants';
+import useZoomControls from '../../hooks/useZoomControls';
+import { isLoadingState, zoomState } from '../../state/atoms/editor';
+import { backgroundState, dimensionsState } from '../../state/atoms/template';
+import useElementsDispatcher from '../../state/dispatchers/elements';
 import Elements from './Elements';
 
 // TODO: move bounds component out of shape and render based on selected state (need refs in state)
