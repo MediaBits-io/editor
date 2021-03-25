@@ -21,6 +21,7 @@ import NotificationContent from '../components/ui/Notification/NotificationConte
 import ExternalLink from '../components/ui/ExternalLink';
 import { templateSelector } from '../features/editor/state/selectors/template';
 import { audioSelector } from '../features/editor/state/selectors/audio';
+import { isLoggedInSelector } from '../state/selectors/user';
 
 function useVideos() {
   const { setVideosLoaded } = useVideosDispatcher();
@@ -74,6 +75,7 @@ function useVideos() {
 
   const exportVideo = useRecoilCallback(
     ({ set, snapshot }) => async (audioBuffer?: Blob, template?: Template) => {
+      const isLoggedIn = snapshot.getLoadable(isLoggedInSelector).getValue();
       const [templateJSON, currentAudio, headers] = await Promise.all([
         toTemplateJSON(
           template ?? (await snapshot.getPromise(templateSelector))
@@ -82,7 +84,7 @@ function useVideos() {
           (await snapshot
             .getPromise(audioSelector)
             .then((audio) => audio!.data)),
-        getAuthHeaders(),
+        isLoggedIn ? getAuthHeaders() : undefined,
       ]);
 
       if (audioBuffer) {
