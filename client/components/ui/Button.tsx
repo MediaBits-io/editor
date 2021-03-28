@@ -62,7 +62,9 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             'rounded-md px-4',
           round && 'rounded-full px-2',
           type === 'link' &&
-            'text-blue-600 hover:text-blue-400 focus:outline-none focus:underline',
+            (disabled
+              ? 'text-gray-400'
+              : 'text-blue-600 hover:text-blue-400 focus:outline-none focus:underline'),
           type === 'link-light' &&
             'text-blue-400 hover:text-blue-500 focus:outline-none focus:underline',
           type === 'danger' &&

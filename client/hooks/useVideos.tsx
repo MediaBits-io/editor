@@ -1,27 +1,27 @@
 import { useCallback } from 'react';
-import { api, getAuthHeaders } from '../utils/api/api';
-import { Template } from '../features/editor/interfaces/StageConfig';
-import { toTemplateJSON } from '../features/editor/utils/template';
+import { useToasts } from 'react-toast-notifications';
 import { useRecoilCallback } from 'recoil';
+import ExternalLink from '../components/ui/ExternalLink';
+import NotificationContent from '../components/ui/Notification/NotificationContent';
+import { Template } from '../features/editor/interfaces/StageConfig';
+import { progressModalState } from '../features/editor/state/atoms/ui';
+import { audioSelector } from '../features/editor/state/selectors/audio';
+import { templateSelector } from '../features/editor/state/selectors/template';
+import { toTemplateJSON } from '../features/editor/utils/template';
 import {
   deserializeVideoDTO,
   deserializeVideosDTO,
   ExportVideoDTO,
   VideosDTO,
 } from '../interfaces/videos';
+import { videoIdsState } from '../state/atoms/videos';
+import useVideosDispatcher from '../state/dispatchers/videos';
+import { isLoggedInSelector } from '../state/selectors/user';
 import {
   pollingVideoIdsSelector,
   videoSelector,
 } from '../state/selectors/videos';
-import useVideosDispatcher from '../state/dispatchers/videos';
-import { videoIdsState } from '../state/atoms/videos';
-import { isTruthy } from '../utils/boolean';
-import { useToasts } from 'react-toast-notifications';
-import NotificationContent from '../components/ui/Notification/NotificationContent';
-import ExternalLink from '../components/ui/ExternalLink';
-import { templateSelector } from '../features/editor/state/selectors/template';
-import { audioSelector } from '../features/editor/state/selectors/audio';
-import { isLoggedInSelector } from '../state/selectors/user';
+import { api, getAuthHeaders } from '../utils/api/api';
 
 function useVideos() {
   const { setVideosLoaded } = useVideosDispatcher();
@@ -53,20 +53,24 @@ function useVideos() {
         .getPromise(pollingVideoIdsSelector)
         .then(fetchVideosByIds);
 
-      const exportedVideos = Object.values(videos)
-        .map(({ url }) => url)
-        .filter(isTruthy);
+      const { taskId, visible } = snapshot
+        .getLoadable(progressModalState)
+        .getValue();
+
+      const exportedVideos = Object.entries(videos);
 
       if (exportedVideos.length) {
-        exportedVideos.forEach((url) => {
-          addToast(
-            <NotificationContent title="Finished processing video">
-              <ExternalLink to={url} newTab>
-                View it here
-              </ExternalLink>
-            </NotificationContent>,
-            { appearance: 'info', autoDismiss: false }
-          );
+        exportedVideos.forEach(([id, { url, status }]) => {
+          if (url && (taskId !== id || !visible)) {
+            addToast(
+              <NotificationContent title="Finished processing video">
+                <ExternalLink to={url} newTab>
+                  View it here
+                </ExternalLink>
+              </NotificationContent>,
+              { appearance: 'info', autoDismiss: false }
+            );
+          }
         });
       }
     },
@@ -103,10 +107,13 @@ function useVideos() {
         })
       );
 
+      set(progressModalState, { visible: true, taskId: undefined });
+
       const { data } = await api.post<ExportVideoDTO>('/export', formData, {
         headers,
       });
 
+      set(progressModalState, { visible: true, taskId: data.id });
       set(videoSelector(data.id), deserializeVideoDTO(data.video));
 
       return data;

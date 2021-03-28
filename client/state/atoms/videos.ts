@@ -5,7 +5,7 @@ import { Video } from '../../interfaces/videos';
 const { persistAtom } = recoilPersist({ key: 'mediabits_videos' });
 
 export const areVideosLoadedState = atom<boolean>({
-  key: 'videosLoaded',
+  key: 'areVideosLoadedState',
   default: false,
 });
 

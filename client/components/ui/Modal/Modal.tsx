@@ -23,7 +23,7 @@ function Modal({ visible, children, className = 'max-w-2xl' }: Props) {
         leaveTo="opacity-0"
         className="fixed inset-0 transition-opacity"
       >
-        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+        <div className="absolute inset-0 bg-gray-500 opacity-75" />
       </Transition.Child>
 
       <Transition.Child

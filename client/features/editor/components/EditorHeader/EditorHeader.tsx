@@ -1,16 +1,16 @@
+import { SparklesOutline } from 'heroicons-react';
 import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import Button from '../../../../components/ui/Button';
 import Logo from '../../../../components/ui/Logo/Logo';
-import { SparklesOutline } from 'heroicons-react';
+import { ENABLE_UPGRADES } from '../../../../constants';
+import { Plan } from '../../../../interfaces/plans';
+import { userPlanState } from '../../../../state/atoms/user';
+import LoginModal from '../LoginModal';
 import ExportButton from './ExportButton';
 import OpenTemplateButton from './OpenTemplate/OpenTemplateButton';
 import SaveTemplateButton from './SaveTemplate/SaveTemplateButton';
 import VideosButton from './Videos/VideosButton';
-import LoginModal from '../LoginModal';
-import { ENABLE_UPGRADES } from '../../../../constants';
-import { userPlanState } from '../../../../state/atoms/user';
-import { useRecoilValue } from 'recoil';
-import { Plan } from '../../../../interfaces/plans';
 
 function EditorHeader() {
   const [loginVisible, setLoginVisible] = useState(false);

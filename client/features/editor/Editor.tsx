@@ -15,6 +15,7 @@ import UnsavedChangesController from './controllers/UnsavedChangesController';
 import useEditorKeyCommand from './hooks/useEditorKeyCommand';
 import useElementsDispatcher from './state/dispatchers/elements';
 import useHistoryDispatcher from './state/dispatchers/history';
+import ProgressModal from './components/ProgressModal/ProgressModal';
 
 function Editor() {
   const { redo, undo } = useHistoryDispatcher();
@@ -58,6 +59,7 @@ function decorate<P>(Component: React.FunctionComponent<P>) {
       <UnsavedChangesController />
       <EditorFocusController />
       <HistoryController />
+      <ProgressModal />
       <Component {...props} />
     </EditorAreaContainer.Provider>
   );

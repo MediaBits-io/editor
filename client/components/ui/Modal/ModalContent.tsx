@@ -1,14 +1,16 @@
 import React from 'react';
 import ModalTitle from './ModalTitle';
 import { X } from 'heroicons-react';
+import classNames from '../../../utils/classNames';
 
 interface Props {
   title?: React.ReactNode;
   children: React.ReactNode;
+  className?: string;
   close?: () => void;
 }
 
-function ModalContent({ title, children, close }: Props) {
+function ModalContent({ title, children, close, className }: Props) {
   return (
     <div className="mt-3 text-center">
       {close && (
@@ -24,7 +26,14 @@ function ModalContent({ title, children, close }: Props) {
         </div>
       )}
       {title && <ModalTitle>{title}</ModalTitle>}
-      <div className="mt-3 text-sm leading-5 text-gray-500">{children}</div>
+      <div
+        className={classNames(
+          'mt-3 text-sm leading-5 text-gray-500',
+          className
+        )}
+      >
+        {children}
+      </div>
     </div>
   );
 }
