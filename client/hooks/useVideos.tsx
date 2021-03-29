@@ -113,7 +113,7 @@ function useVideos() {
         headers,
       });
 
-      set(progressModalState, { visible: true, taskId: data.id });
+      set(progressModalState, (state) => ({ ...state, taskId: data.id }));
       set(videoSelector(data.id), deserializeVideoDTO(data.video));
 
       return data;
