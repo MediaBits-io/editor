@@ -11,7 +11,7 @@ import { progressVideoSelector } from '../../state/selectors/ui';
 import { TaskStatus } from '../../../../interfaces/videos';
 
 function ProgressModal() {
-  const [{ visible }, setProgressModalState] = useRecoilState(
+  const [{ visible, error }, setProgressModalState] = useRecoilState(
     progressModalState
   );
   const video = useRecoilValue(progressVideoSelector);
@@ -48,7 +48,7 @@ function ProgressModal() {
         </p>
         <div className="text-left bg-gray-50 p-3 border border-gray-100 rounded-md">
           <Stepper
-            error={video && video.status === TaskStatus.ERROR}
+            error={error || video?.status === TaskStatus.ERROR}
             activeIndex={activeIndex}
             steps={[
               {

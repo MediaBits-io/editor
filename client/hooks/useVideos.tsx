@@ -22,6 +22,7 @@ import {
   videoSelector,
 } from '../state/selectors/videos';
 import { api, getAuthHeaders } from '../utils/api/api';
+import { uuid } from '../utils/uuid';
 
 function useVideos() {
   const { setVideosLoaded } = useVideosDispatcher();
@@ -79,44 +80,55 @@ function useVideos() {
 
   const exportVideo = useRecoilCallback(
     ({ set, snapshot }) => async (audioBuffer?: Blob, template?: Template) => {
-      const isLoggedIn = snapshot.getLoadable(isLoggedInSelector).getValue();
-      const [templateJSON, currentAudio, headers] = await Promise.all([
-        toTemplateJSON(
-          template ?? (await snapshot.getPromise(templateSelector))
-        ),
-        audioBuffer ??
-          (await snapshot
-            .getPromise(audioSelector)
-            .then((audio) => audio!.data)),
-        isLoggedIn ? getAuthHeaders() : undefined,
-      ]);
+      const pregeneratedId = uuid('__export');
+      try {
+        set(progressModalState, { visible: true, taskId: pregeneratedId });
+        const isLoggedIn = snapshot.getLoadable(isLoggedInSelector).getValue();
+        const [templateJSON, currentAudio, headers] = await Promise.all([
+          toTemplateJSON(
+            template ?? (await snapshot.getPromise(templateSelector))
+          ),
+          audioBuffer ??
+            (await snapshot
+              .getPromise(audioSelector)
+              .then((audio) => audio!.data)),
+          isLoggedIn ? getAuthHeaders() : undefined,
+        ]);
 
-      if (audioBuffer) {
-        set(audioSelector, {
-          url: URL.createObjectURL(audioBuffer),
-          data: audioBuffer,
+        if (audioBuffer) {
+          set(audioSelector, {
+            url: URL.createObjectURL(audioBuffer),
+            data: audioBuffer,
+          });
+        }
+
+        const formData = new FormData();
+        formData.set('audio', currentAudio);
+        formData.set(
+          'template',
+          new Blob([templateJSON], {
+            type: 'application/json',
+          })
+        );
+
+        const { data } = await api.post<ExportVideoDTO>('/export', formData, {
+          headers,
         });
+
+        set(progressModalState, (state) =>
+          state.taskId === pregeneratedId
+            ? { ...state, taskId: data.id }
+            : state
+        );
+        set(videoSelector(data.id), deserializeVideoDTO(data.video));
+
+        return data;
+      } catch (e) {
+        set(progressModalState, (state) =>
+          state.taskId === pregeneratedId ? { ...state, error: true } : state
+        );
+        throw e;
       }
-
-      const formData = new FormData();
-      formData.set('audio', currentAudio);
-      formData.set(
-        'template',
-        new Blob([templateJSON], {
-          type: 'application/json',
-        })
-      );
-
-      set(progressModalState, { visible: true, taskId: undefined });
-
-      const { data } = await api.post<ExportVideoDTO>('/export', formData, {
-        headers,
-      });
-
-      set(progressModalState, (state) => ({ ...state, taskId: data.id }));
-      set(videoSelector(data.id), deserializeVideoDTO(data.video));
-
-      return data;
     },
     []
   );

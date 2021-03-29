@@ -1,13 +1,12 @@
 import { UploadOutline } from 'heroicons-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import Button from '../../../../../components/ui/Button';
 import { Plan } from '../../../../../interfaces/plans';
 import { userPlanState } from '../../../../../state/atoms/user';
 import { userPlanInfoSelector } from '../../../../../state/selectors/user';
-import { AudioState } from '../../../interfaces/Audio';
+import { audioModalState } from '../../../state/atoms/ui';
 import { audioSelector } from '../../../state/selectors/audio';
-import AudioModal from '../../AudioModal/AudioModal';
 import SideMenuPanel from '../../ui/SideMenuPanel';
 import AudioActions from './AudioActions';
 
@@ -15,29 +14,26 @@ function AudioToolPanel() {
   const userPlan = useRecoilValue(userPlanState);
   const userPlanInfo = useRecoilValue(userPlanInfoSelector);
   const [audio, setAudio] = useRecoilState(audioSelector);
-  const [isTrimModalVisible, setTrimModalVisible] = useState(false);
-  const [currentAudio, setCurrentAudio] = useState<AudioState>();
+  const [currentAudio, setCurrentAudio] = useState(audio);
   const audioRef = useRef<HTMLAudioElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isFree = userPlan.plan === Plan.Free;
 
   useEffect(() => {
-    if (!isTrimModalVisible) {
-      setCurrentAudio((currentAudio) => {
-        if (currentAudio?.url === audio?.url) {
-          return currentAudio;
-        }
+    setCurrentAudio((currentAudio) => {
+      if (currentAudio?.url === audio?.url) {
+        return currentAudio;
+      }
 
-        // Sync audio from state if changed and remove local blob urls
-        if (currentAudio) {
-          URL.revokeObjectURL(currentAudio.url);
-        }
+      // Sync audio from state if changed and remove local blob urls
+      if (currentAudio) {
+        URL.revokeObjectURL(currentAudio.url);
+      }
 
-        return audio;
-      });
-    }
-  }, [audio, isTrimModalVisible]);
+      return audio;
+    });
+  }, [audio]);
 
   useEffect(() => {
     if (audioRef.current && currentAudio) {
@@ -45,53 +41,52 @@ function AudioToolPanel() {
     }
   }, [currentAudio]);
 
-  const openTrimModal = () => {
-    setTrimModalVisible(true);
-  };
-
-  const closeTrimModal = () => {
-    setTrimModalVisible(false);
-  };
+  const openTrimModal = useRecoilCallback(
+    ({ set }) => () => {
+      set(audioModalState, {
+        visible: true,
+        initialAudio: currentAudio,
+        onContinue: (clipBuffer) => {
+          setCurrentAudio({
+            data: clipBuffer,
+            url: URL.createObjectURL(clipBuffer),
+          });
+        },
+      });
+    },
+    [currentAudio]
+  );
 
   const handleUploadAudioClick = () => {
     inputRef.current?.click();
   };
 
-  const changeAudioFile = (file?: Blob) => {
+  const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
     setCurrentAudio(
-      file
-        ? {
-            data: file,
-            url: URL.createObjectURL(file),
-          }
-        : undefined
+      file && {
+        data: file,
+        url: URL.createObjectURL(file),
+      }
     );
+
     if (inputRef.current) {
       inputRef.current.value = '';
     }
   };
 
-  const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    changeAudioFile(e.target.files?.[0]);
-  };
-
-  const handleChangeAudio = (data: Blob) => {
-    setAudio({
-      url: URL.createObjectURL(data),
-      data,
-    });
-  };
-
   const handleAudioMetadataLoaded = (
     e: React.SyntheticEvent<HTMLAudioElement, Event>
   ) => {
+    if (!currentAudio) {
+      return;
+    }
+
     // Automatically open clipping when audio is too long
-    if (
-      currentAudio &&
-      Math.round(e.currentTarget.duration) > userPlanInfo.durationLimit
-    ) {
+    if (Math.round(e.currentTarget.duration) > userPlanInfo.durationLimit) {
       openTrimModal();
-    } else if (currentAudio && currentAudio.url !== audio?.url) {
+    } else if (currentAudio.url !== audio?.url) {
       setAudio({
         url: currentAudio.url,
         data: currentAudio.data,
@@ -118,12 +113,6 @@ function AudioToolPanel() {
         ) : undefined
       }
     >
-      <AudioModal
-        initialAudio={currentAudio}
-        onContinue={handleChangeAudio}
-        visible={isTrimModalVisible}
-        close={closeTrimModal}
-      />
       <input
         ref={inputRef}
         type="file"

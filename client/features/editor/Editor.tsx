@@ -16,6 +16,7 @@ import useEditorKeyCommand from './hooks/useEditorKeyCommand';
 import useElementsDispatcher from './state/dispatchers/elements';
 import useHistoryDispatcher from './state/dispatchers/history';
 import ProgressModal from './components/ProgressModal/ProgressModal';
+import AudioModal from './components/AudioModal/AudioModal';
 
 function Editor() {
   const { redo, undo } = useHistoryDispatcher();
@@ -60,6 +61,7 @@ function decorate<P>(Component: React.FunctionComponent<P>) {
       <EditorFocusController />
       <HistoryController />
       <ProgressModal />
+      <AudioModal />
       <Component {...props} />
     </EditorAreaContainer.Provider>
   );

@@ -8,11 +8,11 @@ import Alert from '../../../../components/ui/Alert';
 import FileTooBig from './FileTooBig';
 import { ENABLE_UPGRADES } from '../../../../constants';
 import AudioClipper from '../AudioClipper/AudioClipper';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { userPlanState } from '../../../../state/atoms/user';
 import { Plan } from '../../../../interfaces/plans';
 import { userPlanInfoSelector } from '../../../../state/selectors/user';
-import { AudioState } from '../../interfaces/Audio';
+import { audioModalState } from '../../state/atoms/ui';
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
@@ -22,14 +22,10 @@ interface ClipBounds {
   duration: number;
 }
 
-interface Props {
-  visible: boolean;
-  close: () => void;
-  onContinue?: (clipBuffer: Blob) => Promise<void> | void;
-  initialAudio?: AudioState;
-}
-
-function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
+function AudioModalInner() {
+  const [{ onContinue, initialAudio }, setAudioModalState] = useRecoilState(
+    audioModalState
+  );
   const userPlan = useRecoilValue(userPlanState);
   const userPlanInfo = useRecoilValue(userPlanInfoSelector);
   const [loading, setLoading] = useState(false);
@@ -37,10 +33,6 @@ function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
   const [audio, setAudio] = useState(initialAudio);
   const [totalDuration, setTotalDuration] = useState<number>();
   const { clipAudio } = useAudioClipper(audio?.data);
-
-  useEffect(() => {
-    setAudio((audio) => (visible ? audio ?? initialAudio : initialAudio));
-  }, [initialAudio, visible]);
 
   useEffect(() => {
     if (audio) {
@@ -52,6 +44,10 @@ function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
     }
   }, [audio]);
 
+  const closeModal = () => {
+    setAudioModalState((state) => ({ ...state, visible: false }));
+  };
+
   const handleSubmit = async () => {
     if (!audio) {
       return;
@@ -62,8 +58,8 @@ function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
       const audioBuffer = bounds
         ? await clipAudio(bounds.startPart, bounds.endPart)
         : audio.data;
-      await onContinue?.(audioBuffer);
-      close();
+      onContinue?.(audioBuffer);
+      closeModal();
     } catch (e) {
       console.error(e);
     } finally {
@@ -122,10 +118,10 @@ function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
   };
 
   return (
-    <Modal visible={visible}>
+    <>
       {fileTooBig ? (
         <FileTooBig
-          onCancel={close}
+          onCancel={closeModal}
           onBack={handleTryAgain}
           onContinue={handleSubmit}
           trimRequired={trimRequired}
@@ -142,7 +138,11 @@ function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
           </ModalContent>
           <ModalFullActions
             dismiss={
-              <ModalAction disabled={loading} onClick={close} type="secondary">
+              <ModalAction
+                disabled={loading}
+                onClick={closeModal}
+                type="secondary"
+              >
                 Cancel
               </ModalAction>
             }
@@ -158,6 +158,15 @@ function AudioModal({ visible, close, initialAudio, onContinue }: Props) {
           />
         </>
       )}
+    </>
+  );
+}
+
+function AudioModal() {
+  const { visible } = useRecoilValue(audioModalState);
+  return (
+    <Modal visible={visible}>
+      <AudioModalInner />
     </Modal>
   );
 }

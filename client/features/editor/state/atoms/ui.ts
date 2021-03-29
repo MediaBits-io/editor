@@ -1,6 +1,20 @@
 import { atom } from 'recoil';
+import { AudioState } from '../../interfaces/Audio';
 
-export const progressModalState = atom<{ visible: boolean; taskId?: string }>({
+export const audioModalState = atom<{
+  visible: boolean;
+  initialAudio?: AudioState;
+  onContinue?: (clipBuffer: Blob) => void;
+}>({
+  key: 'audioModalState',
+  default: { visible: false },
+});
+
+export const progressModalState = atom<{
+  visible: boolean;
+  taskId?: string;
+  error?: boolean;
+}>({
   key: 'progressModalState',
-  default: { visible: false, taskId: undefined },
+  default: { visible: false },
 });
