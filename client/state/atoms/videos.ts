@@ -1,7 +1,6 @@
 import { atom, atomFamily } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 import { Video } from '../../interfaces/videos';
-import { generatedVideoIdsSelector } from '../selectors/videos';
 
 const { persistAtom } = recoilPersist({ key: 'mediabits_videos' });
 
@@ -16,9 +15,9 @@ export const videoIdsState = atom<string[]>({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const lastSeenVideoIdsState = atom<string[]>({
+export const lastSeenVideoIdsState = atom<string[] | undefined>({
   key: 'lastSeenVideoIdsState',
-  default: generatedVideoIdsSelector,
+  default: undefined,
   effects_UNSTABLE: [persistAtom],
 });
 

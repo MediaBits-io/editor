@@ -60,6 +60,8 @@ export const unseenVideosCountSelector = selector({
   get: ({ get }) => {
     const generatedVideoIds = get(generatedVideoIdsSelector);
     const lastSeenVideoIds = get(lastSeenVideoIdsState);
-    return without(lastSeenVideoIds, generatedVideoIds).length;
+    return lastSeenVideoIds
+      ? without(lastSeenVideoIds, generatedVideoIds).length
+      : 0;
   },
 });

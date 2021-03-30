@@ -1,11 +1,19 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { pollingVideoIdsSelector } from '../state/selectors/videos';
 import useVideos from '../hooks/useVideos';
+import { lastSeenVideoIdsState } from '../state/atoms/videos';
+import useVideosDispatcher from '../state/dispatchers/videos';
+import {
+  generatedVideoIdsSelector,
+  pollingVideoIdsSelector,
+} from '../state/selectors/videos';
 
 function VideosController() {
   const pollingIds = useRecoilValue(pollingVideoIdsSelector);
+  const lastSeenVideoIds = useRecoilValue(lastSeenVideoIdsState);
+  const generatedVideoIds = useRecoilValue(generatedVideoIdsSelector);
   const { fetchInitialVideos, fetchPollingVideos } = useVideos();
+  const { updateLastSeenVideos } = useVideosDispatcher();
   const intervalRef = useRef<any>();
 
   const startPolling = useCallback(() => {
@@ -32,6 +40,11 @@ function VideosController() {
     return stopPolling;
   }, [fetchInitialVideos, stopPolling]);
 
+  useEffect(() => {
+    if (lastSeenVideoIds === undefined && generatedVideoIds.length) {
+      updateLastSeenVideos();
+    }
+  }, [lastSeenVideoIds, updateLastSeenVideos, generatedVideoIds.length]);
   return null;
 }
 
