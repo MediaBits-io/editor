@@ -6,4 +6,7 @@ const withTM = require('next-transpile-modules')([
 
 module.exports = withTM({
   distDir: '../dist/client',
+  future: {
+    webpack5: true,
+  },
 });

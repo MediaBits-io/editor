@@ -2,8 +2,8 @@ module.exports = {
   plugins: [
     'postcss-nested',
     'postcss-import',
+    '@tailwindcss/jit',
     'autoprefixer',
-    'tailwindcss',
     'postcss-preset-env',
   ],
 };

@@ -20,6 +20,7 @@ function SideMenuButton({
   disabled,
   onClick,
   toggled,
+  className,
   ...rest
 }: Props) {
   return (
@@ -36,7 +37,8 @@ function SideMenuButton({
         selected &&
           !disabled &&
           'hover:border-blue-400 hover:text-blue-900 focus:border-blue-400 focus:text-blue-900',
-        disabled && 'cursor-default'
+        disabled && 'cursor-default',
+        className
       )}
       {...rest}
     >

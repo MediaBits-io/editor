@@ -38,7 +38,6 @@
     "js-cookie": "^2.2.1",
     "konva": "^7.2.0",
     "konva-elements": "github:MediaBits-io/konva-elements#master",
-    "next": "^10.0.3",
     "nookies": "^2.5.0",
     "ramda": "^0.27.1",
     "react": "^17.0.1",
@@ -60,11 +59,12 @@
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.8",
-    "@babel/core": "^7.12.9",
-    "@babel/preset-env": "^7.12.7",
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "@tailwindcss/forms": "^0.3.2",
+    "@tailwindcss/jit": "^0.1.17",
     "@tailwindcss/typography": "^0.4.0",
     "@types/axios": "^0.14.0",
     "@types/file-saver": "^2.0.1",
@@ -82,7 +82,7 @@
     "@types/webfontloader": "^1.6.32",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",
-    "autoprefixer": "^10.0.4",
+    "autoprefixer": "^10.2.5",
     "babel-eslint": "^10.1.0",
     "cross-env": "^7.0.2",
     "eslint": "^7.14.0",
@@ -93,13 +93,14 @@
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "ncp": "^2.0.0",
-    "next-transpile-modules": "^5.0.0",
-    "postcss": "^8.1.10",
-    "postcss-import": "^13.0.0",
-    "postcss-nested": "^5.0.3",
+    "next": "^10.1.2",
+    "next-transpile-modules": "^6.3.0",
+    "postcss": "^8.2.8",
+    "postcss-import": "^14.0.0",
+    "postcss-nested": "^5.0.5",
     "postcss-preset-env": "^6.7.0",
     "rimraf": "^3.0.2",
     "tailwindcss": "^2.0.4",
-    "typescript": "^4.1.2"
+    "typescript": "^4.2.3"
   }
 }

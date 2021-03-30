@@ -1,15 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-  purge: {
-    mode: 'layers',
-    enabled: process.env.TAILWIND_ENV === 'production',
-    content: [
-      './client/public/**/*.html',
-      './client/**/*.ts',
-      './client/**/*.tsx',
-    ],
-  },
+  purge: ['./client/public/**/*.html', './client/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       fontFamily: {
