@@ -22,12 +22,14 @@ function ProgressModal() {
 
   const activeIndex = useMemo(() => {
     switch (video?.status) {
-      case TaskStatus.RENDERING:
+      case TaskStatus.IN_QUEUE:
         return 1;
-      case TaskStatus.ERROR:
+      case TaskStatus.RENDERING:
         return 2;
-      case TaskStatus.DONE:
+      case TaskStatus.ERROR:
         return 3;
+      case TaskStatus.DONE:
+        return 4;
       default:
         return 0;
     }
@@ -51,6 +53,10 @@ function ProgressModal() {
             error={error || video?.status === TaskStatus.ERROR}
             activeIndex={activeIndex}
             steps={[
+              {
+                title: 'Connecting',
+                info: 'Connecting to the server (do not close the site)',
+              },
               {
                 title: 'Queueing',
                 info: 'Waiting for the video to start rendering',

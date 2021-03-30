@@ -10,7 +10,7 @@ function VideosController() {
 
   const startPolling = useCallback(() => {
     if (!intervalRef.current) {
-      intervalRef.current = setInterval(fetchPollingVideos, 3000);
+      intervalRef.current = setInterval(fetchPollingVideos, 2000);
     }
   }, [fetchPollingVideos]);
 

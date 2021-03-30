@@ -1,5 +1,7 @@
-import { useCallback } from 'react';
+import { without } from 'ramda';
+import { useCallback, useRef } from 'react';
 import { useToasts } from 'react-toast-notifications';
+import { useBeforeUnload } from 'react-use';
 import { useRecoilCallback } from 'recoil';
 import ExternalLink from '../components/ui/ExternalLink';
 import NotificationContent from '../components/ui/Notification/NotificationContent';
@@ -27,6 +29,11 @@ import { uuid } from '../utils/uuid';
 function useVideos() {
   const { setVideosLoaded } = useVideosDispatcher();
   const { addToast } = useToasts();
+  const exportingRef = useRef<string[]>([]);
+
+  const hasExporting = useCallback(() => !!exportingRef.current.length, []);
+
+  useBeforeUnload(hasExporting, 'Operation in progress, are you sure?');
 
   const fetchVideosByIds = useCallback(
     (ids: string[]) =>
@@ -60,9 +67,11 @@ function useVideos() {
 
       const exportedVideos = Object.entries(videos);
 
+      // TODO: update recent videos counter
+
       if (exportedVideos.length) {
         exportedVideos.forEach(([id, { url, status }]) => {
-          if (url && (taskId !== id || !visible)) {
+          if (status === 'done' && url && (taskId !== id || !visible)) {
             addToast(
               <NotificationContent title="Finished processing video">
                 <ExternalLink to={url} newTab>
@@ -82,6 +91,7 @@ function useVideos() {
     ({ set, snapshot }) => async (audioBuffer?: Blob, template?: Template) => {
       const pregeneratedId = uuid('__export');
       try {
+        exportingRef.current.push(pregeneratedId);
         set(progressModalState, { visible: true, taskId: pregeneratedId });
         const isLoggedIn = snapshot.getLoadable(isLoggedInSelector).getValue();
         const [templateJSON, currentAudio, headers] = await Promise.all([
@@ -128,6 +138,8 @@ function useVideos() {
           state.taskId === pregeneratedId ? { ...state, error: true } : state
         );
         throw e;
+      } finally {
+        exportingRef.current = without([pregeneratedId], exportingRef.current);
       }
     },
     []

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
+import { useBeforeUnload } from 'react-use';
 import useTemplateDispatcher from '../state/dispatchers/template';
 import { hasUnsavedChangesSelector } from '../state/selectors/editor';
 
@@ -7,26 +8,11 @@ function UnsavedChangesController() {
   const hasUnsavedChanges = useRecoilValue(hasUnsavedChangesSelector);
   const { setCurrentTemplateSaved } = useTemplateDispatcher();
 
+  useBeforeUnload(hasUnsavedChanges, 'You have unsaved changes, are you sure?');
+
   useEffect(() => {
     setCurrentTemplateSaved();
   }, [setCurrentTemplateSaved]);
-
-  useEffect(() => {
-    if (!hasUnsavedChanges) {
-      return;
-    }
-
-    const unloadCallback = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = '';
-      return '';
-    };
-
-    window.addEventListener('beforeunload', unloadCallback);
-    return () => {
-      window.removeEventListener('beforeunload', unloadCallback);
-    };
-  }, [hasUnsavedChanges]);
 
   return null;
 }
