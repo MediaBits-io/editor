@@ -5,13 +5,13 @@
   "private": true,
   "main": "dist/server/index.js",
   "engines": {
-    "node": "12"
+    "node": "14"
   },
   "scripts": {
     "start": "concurrently \"npm:dev:client\" \"npm:dev:server\"",
     "dev:client": "next client -p 3000",
     "dev:server": "babel server --out-dir dist/server --source-maps --watch",
-    "build:client": "cross-env TAILWIND_ENV=production next build client",
+    "build:client": "cross-env next build client",
     "build:server": "babel server --out-dir dist/server --source-maps",
     "build": "npm run build:client && npm run build:server",
     "preserve": "npm run build",
