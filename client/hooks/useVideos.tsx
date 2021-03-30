@@ -67,8 +67,6 @@ function useVideos() {
 
       const exportedVideos = Object.entries(videos);
 
-      // TODO: update recent videos counter
-
       if (exportedVideos.length) {
         exportedVideos.forEach(([id, { url, status }]) => {
           if (status === 'done' && url && (taskId !== id || !visible)) {

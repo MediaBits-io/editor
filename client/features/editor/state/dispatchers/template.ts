@@ -7,6 +7,7 @@ import {
   activePanelState,
   zoomState,
 } from '../atoms/editor';
+import { historyPresentState, historyState } from '../atoms/history';
 import { backgroundState } from '../atoms/template';
 import { templateSelector } from '../selectors/template';
 
@@ -40,7 +41,8 @@ function useTemplateDispatcher() {
       set(lastSavedTemplateState, template);
       reset(activePanelState);
       set(zoomState, zoom);
-      // TODO: reset template history
+      reset(historyState);
+      reset(historyPresentState);
     },
     []
   );

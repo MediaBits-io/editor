@@ -13,10 +13,10 @@
     &::before {
       @apply transform;
       content: '';
+    }
 
-      & {
-        @apply rotate-45 w-2 h-2 absolute z-0 bg-gray-700;
-      }
+    &&::before {
+      @apply rotate-45 w-2 h-2 absolute z-0 bg-gray-700;
     }
   }
 

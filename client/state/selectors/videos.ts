@@ -1,6 +1,11 @@
+import { without } from 'ramda';
 import { DefaultValue, selector, selectorFamily } from 'recoil';
 import { TaskStatus, Video } from '../../interfaces/videos';
-import { videoIdsState, videoState } from '../atoms/videos';
+import {
+  lastSeenVideoIdsState,
+  videoIdsState,
+  videoState,
+} from '../atoms/videos';
 
 export const videoSelector = selectorFamily<Video | undefined, string>({
   key: 'videoSelector',
@@ -47,5 +52,14 @@ export const sortedVideoIdsSelector = selector<string[]>({
       .map((id) => ({ id, video: get(videoState(id)) }))
       .sort((a, b) => b.video.createdAt.getTime() - a.video.createdAt.getTime())
       .map(({ id }) => id);
+  },
+});
+
+export const unseenVideosCountSelector = selector({
+  key: 'unseenVideosCountSelector',
+  get: ({ get }) => {
+    const generatedVideoIds = get(generatedVideoIdsSelector);
+    const lastSeenVideoIds = get(lastSeenVideoIdsState);
+    return without(lastSeenVideoIds, generatedVideoIds).length;
   },
 });

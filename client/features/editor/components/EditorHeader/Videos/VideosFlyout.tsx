@@ -1,10 +1,11 @@
 import { ClockOutline, VideoCameraOutline } from 'heroicons-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import Flyout from '../../../../../components/ui/Flyout';
 import Loader from '../../../../../components/ui/Loader/Loader';
 import Popover from '../../../../../components/ui/Popover/Popover';
 import { areVideosLoadedState } from '../../../../../state/atoms/videos';
+import useVideosDispatcher from '../../../../../state/dispatchers/videos';
 import {
   generatedVideoIdsSelector,
   pollingVideoIdsSelector,
@@ -23,8 +24,15 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
   const pendingVideoIds = useRecoilValue(pollingVideoIdsSelector);
   const generatedVideoIds = useRecoilValue(generatedVideoIdsSelector);
   const areVideosLoaded = useRecoilValue(areVideosLoadedState);
+  const { updateLastSeenVideos } = useVideosDispatcher();
   const pendingCount = pendingVideoIds.length;
   const generatedCount = generatedVideoIds.length;
+
+  useEffect(() => {
+    if (isOpen) {
+      updateLastSeenVideos();
+    }
+  }, [isOpen, updateLastSeenVideos]);
 
   return (
     <Flyout

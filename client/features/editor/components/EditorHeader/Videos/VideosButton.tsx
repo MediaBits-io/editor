@@ -1,10 +1,13 @@
 import { VideoCameraOutline } from 'heroicons-react';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import useDropdown from '../../../../../components/ui/Dropdown/useDropdown';
+import { unseenVideosCountSelector } from '../../../../../state/selectors/videos';
 import ClearButton from '../../ui/ClearButton';
 import VideosFlyout from './VideosFlyout';
 
 function VideosButton() {
+  const unseenVideosCount = useRecoilValue(unseenVideosCountSelector);
   const {
     isOpen,
     close,
@@ -19,6 +22,7 @@ function VideosButton() {
         onClick={toggle}
         ref={setTargetElement}
         icon={VideoCameraOutline}
+        notifications={unseenVideosCount}
         className="px-2.5"
       >
         Videos

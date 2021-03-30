@@ -1,7 +1,7 @@
 import { useRecoilCallback } from 'recoil';
 import { Videos } from '../../interfaces/videos';
-import { areVideosLoadedState } from '../atoms/videos';
-import { videoSelector } from '../selectors/videos';
+import { areVideosLoadedState, lastSeenVideoIdsState } from '../atoms/videos';
+import { generatedVideoIdsSelector, videoSelector } from '../selectors/videos';
 
 function useVideosDispatcher() {
   const setVideosLoaded = useRecoilCallback(
@@ -15,8 +15,19 @@ function useVideosDispatcher() {
     []
   );
 
+  const updateLastSeenVideos = useRecoilCallback(
+    ({ set, snapshot }) => () => {
+      const generatedVideoIds = snapshot
+        .getLoadable(generatedVideoIdsSelector)
+        .getValue();
+      set(lastSeenVideoIdsState, generatedVideoIds);
+    },
+    []
+  );
+
   return {
     setVideosLoaded,
+    updateLastSeenVideos,
   };
 }
 
