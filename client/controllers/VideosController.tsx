@@ -3,15 +3,11 @@ import { useRecoilValue } from 'recoil';
 import useVideos from '../hooks/useVideos';
 import { lastSeenVideoIdsState } from '../state/atoms/videos';
 import useVideosDispatcher from '../state/dispatchers/videos';
-import {
-  generatedVideoIdsSelector,
-  pollingVideoIdsSelector,
-} from '../state/selectors/videos';
+import { pollingVideoIdsSelector } from '../state/selectors/videos';
 
 function VideosController() {
   const pollingIds = useRecoilValue(pollingVideoIdsSelector);
   const lastSeenVideoIds = useRecoilValue(lastSeenVideoIdsState);
-  const generatedVideoIds = useRecoilValue(generatedVideoIdsSelector);
   const { fetchInitialVideos, fetchPollingVideos } = useVideos();
   const { updateLastSeenVideos } = useVideosDispatcher();
   const intervalRef = useRef<any>();
@@ -41,10 +37,10 @@ function VideosController() {
   }, [fetchInitialVideos, stopPolling]);
 
   useEffect(() => {
-    if (lastSeenVideoIds === undefined && generatedVideoIds.length) {
+    if (lastSeenVideoIds === undefined) {
       updateLastSeenVideos();
     }
-  }, [lastSeenVideoIds, updateLastSeenVideos, generatedVideoIds.length]);
+  }, [lastSeenVideoIds, updateLastSeenVideos]);
   return null;
 }
 
