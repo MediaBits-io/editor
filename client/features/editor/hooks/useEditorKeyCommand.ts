@@ -15,7 +15,7 @@ export default function useEditorKeyCommand<T extends HTMLElement | Document>(
           case 'shift':
             return e.shiftKey;
           case 'ctrl':
-            return e.ctrlKey;
+            return e.metaKey || e.ctrlKey;
           default:
             return key === e.key;
         }

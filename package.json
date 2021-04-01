@@ -19,7 +19,7 @@
     "predeploy": "rimraf dist/ && npm run build",
     "prestart": "npm run copy-encoder",
     "prebuild": "npm run copy-encoder",
-    "deploy": "cross-env NODE_ENV=production firebase deploy --only functions,hosting",
+    "deploy": "cross-env NODE_ENV=production firebase deploy --only functions:nextjsServer,hosting",
     "copy-encoder": "ncp ./node_modules/@etercast/mp3/dist/mp3.wasm ./client/public/mp3.wasm",
     "check-types": "npm run tsc"
   },
