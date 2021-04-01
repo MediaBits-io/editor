@@ -73,6 +73,7 @@ function Popper({
       >
         <Transition
           show={isOpen}
+          unmount={false}
           enter={classNames('transition ease-out', transitionClass[0])}
           enterFrom={classNames(
             'transform opacity-0',
@@ -88,7 +89,9 @@ function Popper({
             transitionActiveClass[1]
           )}
           leaveTo={classNames('transform opacity-0', transitionActiveClass[0])}
-          beforeEnter={() => setPopperElement(popperElRef.current)}
+          beforeEnter={() => {
+            setPopperElement(popperElRef.current);
+          }}
           afterLeave={() => setPopperElement(null)}
         >
           {typeof children === 'function'

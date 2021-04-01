@@ -1,7 +1,7 @@
-import Konva from 'konva';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import Slider from '../../../../../components/ui/Slider';
+import { ImageConfig } from '../../../interfaces/Shape';
 import useElementsDispatcher from '../../../state/dispatchers/elements';
 import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
@@ -12,7 +12,7 @@ interface Props {
 
 function ImageOpacitySetting({ elementId }: Props) {
   const elementProps = useRecoilValue(
-    elementPropsSelector<Konva.ImageConfig>(elementId)
+    elementPropsSelector<ImageConfig>(elementId)
   );
   const { updateElementProps } = useElementsDispatcher();
   const percentageOpacity = Math.floor(+(elementProps.opacity ?? 1) * 100);

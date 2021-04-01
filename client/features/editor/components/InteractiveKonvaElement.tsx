@@ -108,6 +108,8 @@ const InteractiveKonvaElement = ({
         <Transformer
           ref={transformerRef}
           enabledAnchors={anchors}
+          rotationSnaps={[0, 90, 180, 270]}
+          keepRatio
           boundBoxFunc={(oldBox, newBox) =>
             newBox.width < MIN_WIDTH || newBox.height < MIN_HEIGHT
               ? oldBox

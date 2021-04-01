@@ -23,6 +23,7 @@ function ImageToolPanel() {
       createElement(ShapeType.Image, {
         ...defaultProps,
         blurRadius: 0,
+        imageFit: 'fill',
       });
     }
   };

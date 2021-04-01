@@ -4,6 +4,7 @@ import SideMenuPanel from '../../ui/SideMenuPanel';
 import ShapeActions from '../ShapeActions/ShapeActions';
 import ImageBlurSetting from './ImageBlurSetting';
 import ImageFileSetting from './ImageFileSetting';
+import ImageFitSetting from './ImageFitSetting';
 import ImageOpacitySetting from './ImageOpacitySetting';
 
 interface Props {
@@ -20,6 +21,7 @@ function ImagePropertiesPanel({ elementId }: Props) {
       <ImageFileSetting elementId={elementId} />
       <ImageOpacitySetting elementId={elementId} />
       <ImageBlurSetting elementId={elementId} />
+      <ImageFitSetting elementId={elementId} />
     </SideMenuPanel>
   );
 }

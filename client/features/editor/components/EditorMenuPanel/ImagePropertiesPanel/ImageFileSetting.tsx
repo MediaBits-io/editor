@@ -1,9 +1,9 @@
-import Konva from 'konva';
 import React from 'react';
 import AspectRatio from 'react-aspect-ratio';
 import { useRecoilValue } from 'recoil';
 import Popover from '../../../../../components/ui/Popover/Popover';
 import useImageInput from '../../../hooks/useImageInput';
+import { ImageConfig } from '../../../interfaces/Shape';
 import useElementsDispatcher from '../../../state/dispatchers/elements';
 import { elementPropsSelector } from '../../../state/selectors/elements';
 
@@ -14,7 +14,7 @@ interface Props {
 function ImageFileSetting({ elementId }: Props) {
   const { changeImage, inputRef } = useImageInput();
   const elementProps = useRecoilValue(
-    elementPropsSelector<Konva.ImageConfig>(elementId)
+    elementPropsSelector<ImageConfig>(elementId)
   );
   const { updateElementProps } = useElementsDispatcher();
 
@@ -32,7 +32,7 @@ function ImageFileSetting({ elementId }: Props) {
       const scaleX = elementProps.scaleX ?? 1;
       const scaleY = elementProps.scaleY ?? 1;
 
-      updateElementProps<Konva.ImageConfig>(
+      updateElementProps<ImageConfig>(
         elementId,
         await changeImage(file, {
           width: image.width * scaleX,

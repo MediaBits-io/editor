@@ -1,7 +1,7 @@
 import { useRef } from 'react';
-import Konva from 'konva';
 import { useRecoilCallback } from 'recoil';
 import { dimensionsState } from '../state/atoms/template';
+import { ImageConfig } from '../interfaces/Shape';
 
 function useImageInput() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -15,7 +15,7 @@ function useImageInput() {
       }
     ) => {
       const dimensions = await snapshot.getPromise(dimensionsState);
-      return new Promise<Konva.ImageConfig>((resolve) => {
+      return new Promise<Partial<ImageConfig>>((resolve) => {
         const image = new Image();
 
         image.src = URL.createObjectURL(file);

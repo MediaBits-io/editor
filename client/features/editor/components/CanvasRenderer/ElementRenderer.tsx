@@ -3,7 +3,7 @@ import { ProgressBar, Waveform } from 'konva-elements';
 import React from 'react';
 import { Rect } from 'react-konva';
 import { useRecoilValue } from 'recoil';
-import { ShapeType } from '../../interfaces/Shape';
+import { ImageConfig, ShapeType } from '../../interfaces/Shape';
 import { elementSelector } from '../../state/selectors/elements';
 import GenericRenderer from './GenericRenderer';
 import ImageRenderer from './ImageRenderer';
@@ -44,9 +44,7 @@ function ElementRenderer({ id }: Props) {
         />
       );
     case ShapeType.Image:
-      return (
-        <ImageRenderer key={id} id={id} props={props as Konva.ImageConfig} />
-      );
+      return <ImageRenderer key={id} id={id} props={props as ImageConfig} />;
     default:
       throw new Error(`Unsupported element ${type}`);
   }

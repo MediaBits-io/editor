@@ -3,6 +3,7 @@ import { Filter } from 'konva/types/Node';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import Slider from '../../../../../components/ui/Slider';
+import { ImageConfig } from '../../../interfaces/Shape';
 import useElementsDispatcher from '../../../state/dispatchers/elements';
 import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
@@ -14,7 +15,7 @@ interface Props {
 function ImageBlurSetting({ elementId }: Props) {
   const { updateElementProps } = useElementsDispatcher();
   const elementProps = useRecoilValue(
-    elementPropsSelector<Konva.ImageConfig>(elementId)
+    elementPropsSelector<ImageConfig>(elementId)
   );
 
   // TODO: maybe save filter as string in template and let renderer handle conversion
@@ -31,7 +32,7 @@ function ImageBlurSetting({ elementId }: Props) {
       );
     }
 
-    updateElementProps<Konva.ImageConfig>(
+    updateElementProps<ImageConfig>(
       elementId,
       filters
         ? {

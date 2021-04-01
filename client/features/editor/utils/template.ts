@@ -3,7 +3,7 @@ import { readBlobAsDataURL } from '../../../utils/blob';
 import { isTruthy } from '../../../utils/boolean';
 import { loadFonts } from '../../../utils/fonts';
 import { IMAGE_FILTERS, LOADABLE_FONTS } from '../constants';
-import { ShapeType } from '../interfaces/Shape';
+import { ImageConfig, ShapeType } from '../interfaces/Shape';
 import { Template } from '../interfaces/StageConfig';
 
 export async function toTemplateJSON(template: Template) {
@@ -11,7 +11,7 @@ export async function toTemplateJSON(template: Template) {
 
   await Promise.all(
     template.elements.map(async (element) => {
-      const props = element.props as Konva.ImageConfig;
+      const props = element.props as ImageConfig;
 
       if (
         element.type === ShapeType.Image &&
