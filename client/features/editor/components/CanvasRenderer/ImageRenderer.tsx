@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
-import { Image } from 'react-konva';
-import InteractiveKonvaElement from '../InteractiveKonvaElement';
-import { KonvaEventObject } from 'konva/types/Node';
-import { ImageConfig, ImageFit } from '../../interfaces/Shape';
 import Konva from 'konva';
+import { KonvaEventObject } from 'konva/types/Node';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { Image } from 'react-konva';
+import { ImageConfig, ImageFit } from '../../interfaces/Shape';
+import InteractiveKonvaElement from '../InteractiveKonvaElement';
 
 interface Props {
   id: string;
@@ -64,16 +64,15 @@ function ImageRenderer({ id, props }: Props) {
     []
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    imageRef.current?.fire('transform');
+  }, [props.imageFit]);
+
+  useEffect(() => {
     // Cache for ability to blur background
     imageRef.current?.cache();
     imageRef.current?.getLayer()?.batchDraw();
-  }, [props.filters, props.image]);
-
-  useEffect(() => {
-    imageRef.current?.fire('transform');
-    imageRef.current?.fire('transformend');
-  }, [props.imageFit]);
+  }, [props.filters, props.image, props.width, props.height, props.imageFit]);
 
   return (
     <InteractiveKonvaElement
