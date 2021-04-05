@@ -2,8 +2,12 @@ import Konva from 'konva';
 import { KonvaEventObject } from 'konva/types/Node';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { KonvaNodeEvents, Transformer } from 'react-konva';
-import { useRecoilValue } from 'recoil';
-import { selectedElementIdState } from '../state/atoms/editor';
+import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  elementRefState,
+  guideLinesState,
+  selectedElementIdState,
+} from '../state/atoms/editor';
 import useElementsDispatcher from '../state/dispatchers/elements';
 
 export const MIN_WIDTH = 5;
@@ -34,12 +38,20 @@ const InteractiveKonvaElement = ({
   const transformerRef = useRef<Konva.Transformer>(null);
   const { updateElementProps, selectElement } = useElementsDispatcher();
   const selectedElementId = useRecoilValue(selectedElementIdState);
+  const setElementRef = useSetRecoilState(elementRefState(id));
 
   const isSelected = selectedElementId === id;
+
+  // useEffect(() => {
+  //   if (shapeRef.current) {
+  //     setElementRef(shapeRef.current);
+  //   }
+  // }, [setElementRef]);
 
   useEffect(() => {
     if (isSelected && shapeRef.current && transformerRef.current) {
       transformerRef.current.nodes([shapeRef.current]);
+      console.log(transformerRef.current.getLayer());
       transformerRef.current.getLayer()?.batchDraw();
     }
   }, [isSelected]);
@@ -53,6 +65,27 @@ const InteractiveKonvaElement = ({
       updateElementProps(id, props);
     },
     [id, updateElementProps]
+  );
+
+  const handleDragMove = useRecoilCallback(
+    ({ set }) => (e: Konva.KonvaEventObject<DragEvent>) => {
+      const y = e.target.y();
+
+      if (Math.abs(y) < 10) {
+        set(guideLinesState, [
+          {
+            x: 0,
+            y: 0,
+            points: [-6000, 0, 6000, 0],
+            stroke: 'rgb(0, 161, 255)',
+            strokeWidth: 1,
+            name: 'guid-line',
+            dash: [4, 6],
+          },
+        ]);
+      }
+    },
+    []
   );
 
   const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {
@@ -99,7 +132,9 @@ const InteractiveKonvaElement = ({
         onTap: handleSelect,
         ref: shapeRef,
         draggable: true,
+        onDragMove: handleDragMove,
         onDragEnd: handleDragEnd,
+        onDragStart: handleSelect,
         onTransformEnd: handleTransformEnd,
         onTransform: handleTransform,
       })}

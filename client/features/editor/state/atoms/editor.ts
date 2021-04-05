@@ -1,4 +1,5 @@
-import { atom } from 'recoil';
+import Konva from 'konva';
+import { atom, atomFamily } from 'recoil';
 import { EditorPanel } from '../../interfaces/Editor';
 import { Template } from '../../interfaces/StageConfig';
 import { untrackedHistoryEffect } from '../effects/history';
@@ -28,4 +29,15 @@ export const selectedElementIdState = atom<string | undefined>({
   key: 'selectedElementIdState',
   default: undefined,
   effects_UNSTABLE: [untrackedHistoryEffect],
+});
+
+export const guideLinesState = atom<Konva.LineConfig[]>({
+  key: 'guideLinesState',
+  default: [],
+  effects_UNSTABLE: [untrackedHistoryEffect], // TODO: needed?
+});
+
+export const elementRefState = atomFamily<Konva.Shape | undefined, string>({
+  key: 'elementRefsState',
+  default: undefined,
 });

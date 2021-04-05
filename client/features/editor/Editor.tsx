@@ -20,8 +20,7 @@ import AudioModal from './components/AudioModal/AudioModal';
 
 function Editor() {
   const { redo, undo } = useHistoryDispatcher();
-  const { editorAreaRef } = EditorAreaContainer.useContainer();
-  const { deleteSelectedElement } = useElementsDispatcher();
+  const { deleteSelectedElement, clearSelection } = useElementsDispatcher();
 
   useEffect(() => {
     loadFonts(PRELOAD_FONTS);
@@ -29,6 +28,15 @@ function Editor() {
 
   useEditorKeyCommand('ctrl+z', undo, process.browser ? document : undefined);
   useEditorKeyCommand('ctrl+y', redo, process.browser ? document : undefined);
+
+  const handleBackgroundClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    // TODO: remove
+    if ('tagName' in e.target && (e.target as any).tagName !== 'CANVAS') {
+      clearSelection();
+    }
+  };
 
   const handleKeyDown = useEditorKeyCommand('Delete', deleteSelectedElement);
 
@@ -46,7 +54,7 @@ function Editor() {
             <HistoryControls />
           </div>
         </div>
-        <MainArea onKeyDown={handleKeyDown} ref={editorAreaRef}>
+        <MainArea onKeyDown={handleKeyDown} onClick={handleBackgroundClick}>
           <CanvasRenderer />
         </MainArea>
       </div>

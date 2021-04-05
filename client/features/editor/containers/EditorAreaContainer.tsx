@@ -1,29 +1,26 @@
 import { useCallback, useRef } from 'react';
 import { createContainer } from 'unstated-next';
-import { EDITOR_MARGIN } from '../constants';
+import { Dimensions } from '../interfaces/StageConfig';
 
-function useEditorAreaState() {
-  const editorAreaRef = useRef<HTMLDivElement>(null);
+function useEditorAreaState(el: HTMLDivElement | null = null) {
+  const editorAreaRef = useRef<HTMLDivElement>(el);
+  const editorAreaDimensionsRef = useRef<Dimensions | null>(null);
 
   const getScreenDimensions = useCallback(() => {
-    if (!editorAreaRef.current) {
-      throw new Error('Editor area is not initialized');
+    if (!editorAreaDimensionsRef.current) {
+      throw new Error('Editor area dimensions are not initialized');
     }
+    return editorAreaDimensionsRef.current;
+  }, [editorAreaDimensionsRef]);
 
-    const {
-      height: clientHeight,
-      width: clientWidth,
-    } = editorAreaRef.current.getBoundingClientRect();
-
-    return {
-      height: clientHeight - EDITOR_MARGIN * 2,
-      width: clientWidth - EDITOR_MARGIN * 2,
-    };
-  }, [editorAreaRef]);
+  const setScreenDimensions = useCallback((dimensions: Dimensions) => {
+    editorAreaDimensionsRef.current = { ...dimensions };
+  }, []);
 
   return {
     editorAreaRef,
     getScreenDimensions,
+    setScreenDimensions,
   };
 }
 
