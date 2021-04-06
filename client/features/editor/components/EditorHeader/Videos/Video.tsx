@@ -1,5 +1,6 @@
 import { Transition } from '@headlessui/react';
-import { DownloadOutline, Pause, Play } from 'heroicons-react';
+import { PauseIcon, PlayIcon } from '@heroicons/react/solid';
+import { DownloadOutlineIcon } from '@heroicons/react/outline';
 import React, { useEffect, useRef, useState } from 'react';
 import AspectRatio from 'react-aspect-ratio';
 import { saveAs } from 'file-saver';
@@ -87,7 +88,7 @@ function Video({ id }: Props) {
             <Button
               round
               type="dark"
-              icon={isPlaying ? Pause : Play}
+              icon={isPlaying ? PauseIcon : PlayIcon}
               title={isPlaying ? 'Pause' : 'Play'}
               onClick={handleTogglePlay}
             />
@@ -96,7 +97,7 @@ function Video({ id }: Props) {
               round
               type="secondary"
               onClick={handleClickDownload}
-              icon={DownloadOutline}
+              icon={DownloadOutlineIcon}
               title="Download"
             />
           </div>

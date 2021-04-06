@@ -1,4 +1,4 @@
-import { ChevronDown } from 'heroicons-react';
+import { ChevronDownIcon } from '@heroicons/react/solid';
 import Konva from 'konva';
 import React, { useEffect, useState } from 'react';
 import { IMaskInput } from 'react-imask';
@@ -92,7 +92,7 @@ function TextSizeSetting({ elementId }: Props) {
           ref={setTargetElement}
           onClick={toggle}
         >
-          <ChevronDown className="w-4 h-4" />
+          <ChevronDownIcon className="w-4 h-4" />
         </Button>
 
         <Dropdown

@@ -51,7 +51,6 @@ const InteractiveKonvaElement = ({
   useEffect(() => {
     if (isSelected && shapeRef.current && transformerRef.current) {
       transformerRef.current.nodes([shapeRef.current]);
-      console.log(transformerRef.current.getLayer());
       transformerRef.current.getLayer()?.batchDraw();
     }
   }, [isSelected]);

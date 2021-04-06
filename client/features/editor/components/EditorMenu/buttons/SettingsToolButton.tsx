@@ -1,6 +1,6 @@
 import React from 'react';
 import SideMenuButton from '../../ui/SideMenuButton';
-import { AdjustmentsOutline } from 'heroicons-react';
+import { AdjustmentsIcon } from '@heroicons/react/outline';
 import { EditorPanel } from '../../../interfaces/Editor';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { activePanelState } from '../../../state/atoms/editor';
@@ -20,7 +20,7 @@ function SettingsToolButton() {
     <SideMenuButton
       onClick={handleClick}
       selected={selected}
-      icon={AdjustmentsOutline}
+      icon={AdjustmentsIcon}
     >
       Settings
     </SideMenuButton>

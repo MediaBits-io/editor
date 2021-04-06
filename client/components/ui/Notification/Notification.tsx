@@ -1,12 +1,12 @@
 import React from 'react';
 import { ToastProps } from 'react-toast-notifications';
 import {
-  X,
-  XCircle,
-  Exclamation,
-  CheckCircle,
-  InformationCircle,
-} from 'heroicons-react';
+  XIcon,
+  XCircleIcon,
+  ExclamationIcon,
+  CheckCircleIcon,
+  InformationCircleIcon,
+} from '@heroicons/react/solid';
 import classNames from '../../../utils/classNames';
 import NotificationContent from './NotificationContent';
 
@@ -17,10 +17,10 @@ function Notification({
   appearance = 'info',
 }: ToastProps) {
   const Icon = {
-    error: XCircle,
-    warning: Exclamation,
-    success: CheckCircle,
-    info: InformationCircle,
+    error: XCircleIcon,
+    warning: ExclamationIcon,
+    success: CheckCircleIcon,
+    info: InformationCircleIcon,
   }[appearance];
 
   return (
@@ -63,7 +63,7 @@ function Notification({
                 className="inline-flex text-gray-400 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150"
                 onClick={() => onDismiss()}
               >
-                <X className="h-5 w-5" />
+                <XIcon className="h-5 w-5" />
               </button>
             </div>
           </div>

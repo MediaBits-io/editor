@@ -20,8 +20,6 @@ function TextRenderer({ id, props }: Props) {
       const node = evt.target as Konva.Text;
       const anchor = transformer.getActiveAnchor();
 
-      console.log(evt);
-
       if (!['middle-right', 'middle-left'].includes(anchor)) {
         return {};
       }

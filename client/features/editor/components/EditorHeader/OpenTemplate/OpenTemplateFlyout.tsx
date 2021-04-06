@@ -1,4 +1,4 @@
-import { CloudDownload } from 'heroicons-react';
+import { CloudDownloadIcon } from '@heroicons/react/solid';
 import React, { useRef, useState } from 'react';
 import Flyout from '../../../../../components/ui/Flyout';
 import UploadToDiskIcon from '../../../../../components/ui/Icons/UploadToDiskIcon';
@@ -135,7 +135,7 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
           title="Import from cloud"
           description="Download the template from mediabits.io cloud (PRO)"
           onClick={() => console.info('not implemented yet')}
-          icon={CloudDownload}
+          icon={CloudDownloadIcon}
           onlyPro
         />
       </Flyout>

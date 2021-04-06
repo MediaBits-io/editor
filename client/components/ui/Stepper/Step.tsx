@@ -1,4 +1,4 @@
-import { Check, X } from 'heroicons-react';
+import { CheckIcon, XIcon } from '@heroicons/react/solid';
 import React from 'react';
 import classNames from '../../../utils/classNames';
 
@@ -41,8 +41,8 @@ function Step({ type, title, last, info }: Props) {
                 : 'border-gray-300'
             )}
           >
-            {isError && <X className="w-5 h-5 text-red-500" />}
-            {isDone && <Check className="w-5 h-5 text-white" />}
+            {isError && <XIcon className="w-5 h-5 text-red-500" />}
+            {isDone && <CheckIcon className="w-5 h-5 text-white" />}
             {isProgress && <div className="loader-circle" />}
           </span>
         </span>

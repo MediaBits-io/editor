@@ -54,7 +54,7 @@ function Popover({
       >
         {(arrowProps) => (
           <>
-            <div {...arrowProps} className="popover-arrow"></div>
+            <div {...arrowProps} className="popover-arrow" />
             <div className="outline-none rounded-md shadow-sm p-2 text-xs leading-4 bg-gray-700 text-white">
               {content}
             </div>

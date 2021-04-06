@@ -1,4 +1,4 @@
-import { VideoCameraOutline } from 'heroicons-react';
+import { VideoCameraIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import useDropdown from '../../../../../components/ui/Dropdown/useDropdown';
@@ -21,7 +21,7 @@ function VideosButton() {
       <ClearButton
         onClick={toggle}
         ref={setTargetElement}
-        icon={VideoCameraOutline}
+        icon={VideoCameraIcon}
         notifications={unseenVideosCount}
         className="px-2.5"
       >

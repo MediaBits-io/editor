@@ -1,6 +1,10 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import WaveSurfer from 'wavesurfer.js';
-import { Pause, Play, ChevronDoubleLeft } from 'heroicons-react';
+import {
+  PauseIcon,
+  PlayIcon,
+  ChevronDoubleLeftIcon,
+} from '@heroicons/react/solid';
 import IMask from 'imask';
 import CursorPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.cursor';
 import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions';
@@ -302,21 +306,21 @@ function Waveform({
   return (
     <div className="space-y-4">
       <div onWheel={handleWheel} className="relative">
-        <div ref={containerRef}></div>
-        <div ref={timelineRef}></div>
+        <div ref={containerRef} />
+        <div ref={timelineRef} />
       </div>
       {!isLoading && (
         <div className="flex items-end justify-between">
           <div className="flex items-center">
             <Button
-              icon={isPlaying ? Pause : Play}
+              icon={isPlaying ? PauseIcon : PlayIcon}
               onClick={handleClickPlayPause}
               round
             />
             <Button
               type="custom"
               className="h-8 w-8 ml-2 py-2 border focus:ring-blue-300 focus:outline-none focus:ring-2 border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500 hover:text-white"
-              icon={ChevronDoubleLeft}
+              icon={ChevronDoubleLeftIcon}
               onClick={handleSeekToStart}
               round
             />

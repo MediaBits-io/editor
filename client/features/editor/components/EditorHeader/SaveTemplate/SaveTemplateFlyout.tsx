@@ -1,4 +1,4 @@
-import { CloudUpload } from 'heroicons-react';
+import { CloudUploadIcon } from '@heroicons/react/solid';
 import React from 'react';
 import { saveAs } from 'file-saver';
 import Flyout from '../../../../../components/ui/Flyout';
@@ -46,7 +46,7 @@ function SaveTemplateFlyout({ close, isOpen, targetElement }: Props) {
         title="Export to cloud"
         description="Upload the template to mediabits.io cloud (PRO)"
         onClick={() => console.info('not implemented yet')}
-        icon={CloudUpload}
+        icon={CloudUploadIcon}
         onlyPro
       />
     </Flyout>

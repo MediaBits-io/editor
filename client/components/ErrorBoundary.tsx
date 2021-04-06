@@ -1,4 +1,4 @@
-import { EmojiSadOutline } from 'heroicons-react';
+import { EmojiSadIcon } from '@heroicons/react/outline';
 import React from 'react';
 import MainArea from './layout/MainArea';
 import Button from './ui/Button';
@@ -41,7 +41,7 @@ class ErrorBoundary extends React.Component {
             className="w-32 mx-auto mb-4"
           />
           <h1 className="flex items-center justify-center text-lg leading-6 font-medium text-gray-900 mb-2">
-            Something went extremely wrong <EmojiSadOutline className="ml-1" />
+            Something went extremely wrong <EmojiSadIcon className="ml-1" />
           </h1>
           <div>
             Contact support via

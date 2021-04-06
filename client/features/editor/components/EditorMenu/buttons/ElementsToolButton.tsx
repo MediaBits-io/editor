@@ -1,4 +1,4 @@
-import { PuzzleOutline } from 'heroicons-react';
+import { PuzzleIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { EditorPanel } from '../../../interfaces/Editor';
@@ -22,11 +22,7 @@ function ElementsToolButton() {
   };
 
   return (
-    <SideMenuButton
-      onClick={handleClick}
-      selected={selected}
-      icon={PuzzleOutline}
-    >
+    <SideMenuButton onClick={handleClick} selected={selected} icon={PuzzleIcon}>
       Elements
     </SideMenuButton>
   );

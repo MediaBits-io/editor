@@ -20,7 +20,7 @@ import AudioModal from './components/AudioModal/AudioModal';
 
 function Editor() {
   const { redo, undo } = useHistoryDispatcher();
-  const { deleteSelectedElement, clearSelection } = useElementsDispatcher();
+  const { deleteSelectedElement } = useElementsDispatcher();
 
   useEffect(() => {
     loadFonts(PRELOAD_FONTS);
@@ -29,19 +29,16 @@ function Editor() {
   useEditorKeyCommand('ctrl+z', undo, process.browser ? document : undefined);
   useEditorKeyCommand('ctrl+y', redo, process.browser ? document : undefined);
 
-  const handleBackgroundClick = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    // TODO: remove
-    if ('tagName' in e.target && (e.target as any).tagName !== 'CANVAS') {
-      clearSelection();
-    }
-  };
-
   const handleKeyDown = useEditorKeyCommand('Delete', deleteSelectedElement);
 
   return (
-    <>
+    <EditorAreaContainer.Provider>
+      <UnsavedChangesController />
+      <EditorFocusController />
+      <HistoryController />
+      <ProgressModal />
+      <AudioModal />
+
       <EditorHeader />
       <div className="flex flex-grow overflow-hidden">
         <EditorMenu />
@@ -54,25 +51,12 @@ function Editor() {
             <HistoryControls />
           </div>
         </div>
-        <MainArea onKeyDown={handleKeyDown} onClick={handleBackgroundClick}>
+        <MainArea onKeyDown={handleKeyDown}>
           <CanvasRenderer />
         </MainArea>
       </div>
-    </>
-  );
-}
-
-function decorate<P>(Component: React.FunctionComponent<P>) {
-  return (props: P) => (
-    <EditorAreaContainer.Provider>
-      <UnsavedChangesController />
-      <EditorFocusController />
-      <HistoryController />
-      <ProgressModal />
-      <AudioModal />
-      <Component {...props} />
     </EditorAreaContainer.Provider>
   );
 }
 
-export default decorate(Editor);
+export default Editor;

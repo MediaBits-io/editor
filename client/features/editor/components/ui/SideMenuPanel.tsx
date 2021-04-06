@@ -1,4 +1,4 @@
-import { ArrowLeftOutline } from 'heroicons-react';
+import { ArrowLeftIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { useSetRecoilState } from 'recoil';
 import classNames from '../../../../utils/classNames';
@@ -41,7 +41,7 @@ function SideMenuPanel({
               className="mr-2 px-1 py-1"
               title="Back"
             >
-              <ArrowLeftOutline className="w-4 h-4" />
+              <ArrowLeftIcon className="w-4 h-4" />
             </ClearButton>
           )}
           <h2 className="text-lg font-semibold leading-6 text-black-900">

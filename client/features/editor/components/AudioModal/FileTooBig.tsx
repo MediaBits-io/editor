@@ -1,4 +1,4 @@
-import { EmojiSadOutline } from 'heroicons-react';
+import { EmojiSadIcon } from '@heroicons/react/outline';
 import React from 'react';
 import ExternalLink from '../../../../components/ui/ExternalLink';
 import ModalAction from '../../../../components/ui/Modal/ModalAction';
@@ -22,7 +22,7 @@ function FileTooBig({ onBack, onCancel, onContinue, trimRequired }: Props) {
           className="w-32 mx-auto mb-4"
         />
         <h3 className="flex items-center justify-center text-lg leading-6 font-medium text-gray-900 mb-2">
-          The file is too large <EmojiSadOutline className="ml-1" />
+          The file is too large <EmojiSadIcon className="ml-1" />
         </h3>
         <div>We can't trim files larger than 50MB.</div>
         {!trimRequired && (

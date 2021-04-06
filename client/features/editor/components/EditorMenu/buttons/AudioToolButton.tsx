@@ -1,4 +1,4 @@
-import { MusicNoteOutline } from 'heroicons-react';
+import { MusicNoteIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { EditorPanel } from '../../../interfaces/Editor';
@@ -22,7 +22,7 @@ function AudioToolButton() {
     <SideMenuButton
       onClick={handleClick}
       selected={selected}
-      icon={MusicNoteOutline}
+      icon={MusicNoteIcon}
       toggled={!!audio}
     >
       Audio

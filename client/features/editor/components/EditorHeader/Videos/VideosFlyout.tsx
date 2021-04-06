@@ -1,4 +1,4 @@
-import { ClockOutline, VideoCameraOutline } from 'heroicons-react';
+import { ClockIcon, VideoCameraIcon } from '@heroicons/react/outline';
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import Flyout from '../../../../../components/ui/Flyout';
@@ -56,7 +56,7 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
               className="flex items-center"
             >
               {pendingCount}
-              <ClockOutline className="h-4 w-4 ml-0.5" />
+              <ClockIcon className="h-4 w-4 ml-0.5" />
             </Popover>
           )}
           {generatedCount > 0 && (
@@ -66,7 +66,7 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
               className="flex items-center"
             >
               {generatedCount}
-              <VideoCameraOutline className="h-4 w-4 ml-0.5" />
+              <VideoCameraIcon className="h-4 w-4 ml-0.5" />
             </Popover>
           )}
         </div>

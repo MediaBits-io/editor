@@ -1,4 +1,4 @@
-import { CheckCircle, ExclamationCircle } from 'heroicons-react';
+import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
 import Popover from '../../../../components/ui/Popover/Popover';
 import classNames from '../../../../utils/classNames';
@@ -43,7 +43,7 @@ function SideMenuButton({
       {...rest}
     >
       {toggled === true && (
-        <CheckCircle
+        <CheckCircleIcon
           className={classNames(
             'absolute right-0.5 top-0.5 w-5 h-5 transition duration-150',
             selected ? 'text-blue-300' : 'text-blue-200'
@@ -56,7 +56,7 @@ function SideMenuButton({
           content="Required for generating video"
           placement="top"
         >
-          <ExclamationCircle
+          <ExclamationCircleIcon
             className={classNames(
               'w-5 h-5 transition duration-150',
               selected ? 'text-red-300' : 'text-red-300'

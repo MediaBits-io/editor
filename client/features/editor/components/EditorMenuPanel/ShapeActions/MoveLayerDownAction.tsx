@@ -1,4 +1,4 @@
-import { ArrowDownOutline } from 'heroicons-react';
+import { ArrowDownIcon } from '@heroicons/react/outline';
 import { head } from 'ramda';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
@@ -29,7 +29,7 @@ function MoveLayerDownAction({ elementId }: Props) {
       closed={moveDownDisabled}
     >
       <PanelActionButton
-        icon={ArrowDownOutline}
+        icon={ArrowDownIcon}
         onClick={handleMoveDownClick}
         disabled={moveDownDisabled}
       />

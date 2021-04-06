@@ -1,4 +1,4 @@
-import { DownloadOutline } from 'heroicons-react';
+import { DownloadIcon } from '@heroicons/react/outline';
 import React, { useCallback, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import { useRecoilCallback } from 'recoil';
@@ -94,7 +94,7 @@ function ExportButton() {
       className="w-40"
       loading={loading}
       onClick={handleClickExport}
-      icon={DownloadOutline}
+      icon={DownloadIcon}
       type="primary"
     >
       Generate video

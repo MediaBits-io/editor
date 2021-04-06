@@ -2,8 +2,8 @@ import { useCallback, useRef } from 'react';
 import { createContainer } from 'unstated-next';
 import { Dimensions } from '../interfaces/StageConfig';
 
-function useEditorAreaState(el: HTMLDivElement | null = null) {
-  const editorAreaRef = useRef<HTMLDivElement>(el);
+function useEditorAreaState() {
+  const editorAreaRef = useRef<HTMLDivElement>(null);
   const editorAreaDimensionsRef = useRef<Dimensions | null>(null);
 
   const getScreenDimensions = useCallback(() => {
