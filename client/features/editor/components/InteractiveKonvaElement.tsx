@@ -1,13 +1,10 @@
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/types/Node';
-import React, { useCallback, useEffect, useRef } from 'react';
-import { KonvaNodeEvents, Transformer } from 'react-konva';
-import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  elementRefState,
-  guideLinesState,
-  selectedElementIdState,
-} from '../state/atoms/editor';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { KonvaNodeEvents } from 'react-konva';
+import { useRecoilCallback } from 'recoil';
+import { ElementRefsContainer } from '../containers/ElementRefsContainer';
+import { guideLinesState } from '../state/atoms/editor';
 import useElementsDispatcher from '../state/dispatchers/elements';
 
 export const MIN_WIDTH = 5;
@@ -15,7 +12,7 @@ export const MIN_HEIGHT = 5;
 
 interface Props {
   id: string;
-  children: (props: Konva.ShapeConfig & KonvaNodeEvents) => React.ReactNode;
+  children: (props: Konva.ShapeConfig & KonvaNodeEvents) => React.ReactElement;
   transform?: (
     evt: KonvaEventObject<Event>,
     transformer: Konva.Transformer
@@ -24,40 +21,37 @@ interface Props {
     evt: KonvaEventObject<Event>,
     transformer: Konva.Transformer
   ) => Konva.ShapeConfig;
-  anchors?: string[];
+  enabledAnchors?: string[];
 }
 
 const InteractiveKonvaElement = ({
   id,
-  anchors,
   children,
   transform,
   transformEnd,
+  enabledAnchors,
 }: Props) => {
-  const shapeRef = useRef<Konva.Shape>(null);
-  const transformerRef = useRef<Konva.Transformer>(null);
   const { updateElementProps, selectElement } = useElementsDispatcher();
-  const selectedElementId = useRecoilValue(selectedElementIdState);
-  const setElementRef = useSetRecoilState(elementRefState(id));
-
-  const isSelected = selectedElementId === id;
-
-  // useEffect(() => {
-  //   if (shapeRef.current) {
-  //     setElementRef(shapeRef.current);
-  //   }
-  // }, [setElementRef]);
+  const { transformerRef, setElementRef } = ElementRefsContainer.useContainer();
+  const shapeRef = useRef<Konva.Shape>(null);
 
   useEffect(() => {
-    if (isSelected && shapeRef.current && transformerRef.current) {
-      transformerRef.current.nodes([shapeRef.current]);
-      transformerRef.current.getLayer()?.batchDraw();
-    }
-  }, [isSelected]);
+    if (shapeRef.current) {
+      setElementRef(id, shapeRef.current, { enabledAnchors });
 
-  const handleSelect = () => {
-    selectElement(id);
-  };
+      return () => {
+        setElementRef(id, undefined);
+      };
+    }
+  }, [enabledAnchors, id, setElementRef]);
+
+  const handleSelect = useCallback(
+    (evt: KonvaEventObject<MouseEvent>) => {
+      evt.cancelBubble = true;
+      selectElement(id);
+    },
+    [id, selectElement]
+  );
 
   const handleChange = useCallback(
     (props: Konva.ShapeConfig) => {
@@ -87,45 +81,45 @@ const InteractiveKonvaElement = ({
     []
   );
 
-  const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {
-    handleChange({
-      x: e.target.x(),
-      y: e.target.y(),
-    });
-  };
+  const handleDragEnd = useCallback(
+    (e: Konva.KonvaEventObject<DragEvent>) => {
+      handleChange({
+        x: e.target.x(),
+        y: e.target.y(),
+      });
+    },
+    [handleChange]
+  );
 
   const handleTransform = useCallback(
     (evt: KonvaEventObject<Event>) => {
-      const node = shapeRef.current;
-      if (node && transformerRef.current && transform) {
-        node.setAttrs(transform(evt, transformerRef.current));
+      if (shapeRef.current && transformerRef.current && transform) {
+        shapeRef.current.setAttrs(transform(evt, transformerRef.current));
       }
     },
-    [transform]
+    [transform, transformerRef]
   );
 
   const handleTransformEnd = useCallback(
     (evt: KonvaEventObject<Event>) => {
-      const node = shapeRef.current;
-
-      if (!node) {
+      if (!shapeRef.current) {
         return;
       }
 
-      if (node && transformerRef.current && transformEnd) {
-        node.setAttrs(transformEnd(evt, transformerRef.current));
+      if (transformerRef.current && transformEnd) {
+        shapeRef.current.setAttrs(transformEnd(evt, transformerRef.current));
       }
 
       handleChange({
-        ...node.getAttrs(),
+        ...shapeRef.current.getAttrs(),
       });
     },
-    [handleChange, transformEnd]
+    [handleChange, transformEnd, transformerRef]
   );
 
-  return (
-    <>
-      {children({
+  return useMemo(
+    () =>
+      children({
         id,
         onClick: handleSelect,
         onTap: handleSelect,
@@ -136,22 +130,16 @@ const InteractiveKonvaElement = ({
         onDragStart: handleSelect,
         onTransformEnd: handleTransformEnd,
         onTransform: handleTransform,
-      })}
-
-      {isSelected && (
-        <Transformer
-          ref={transformerRef}
-          enabledAnchors={anchors}
-          rotationSnaps={[0, 90, 180, 270]}
-          keepRatio
-          boundBoxFunc={(oldBox, newBox) =>
-            newBox.width < MIN_WIDTH || newBox.height < MIN_HEIGHT
-              ? oldBox
-              : newBox
-          }
-        />
-      )}
-    </>
+      }),
+    [
+      children,
+      handleDragEnd,
+      handleDragMove,
+      handleSelect,
+      handleTransform,
+      handleTransformEnd,
+      id,
+    ]
   );
 };
 

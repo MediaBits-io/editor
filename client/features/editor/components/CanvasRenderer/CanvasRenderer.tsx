@@ -8,6 +8,7 @@ import Loader from '../../../../components/ui/Loader/Loader';
 import { mul } from '../../../../utils/number';
 import { EDITOR_MARGIN } from '../../constants';
 import { EditorAreaContainer } from '../../containers/EditorAreaContainer';
+import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
 import useZoomControls from '../../hooks/useZoomControls';
 import { Dimensions } from '../../interfaces/StageConfig';
 import { isLoadingState, zoomState } from '../../state/atoms/editor';
@@ -15,6 +16,7 @@ import { backgroundState, dimensionsState } from '../../state/atoms/template';
 import useElementsDispatcher from '../../state/dispatchers/elements';
 import Elements from './Elements';
 import GuideLines from './GuideLines';
+import TransformerRenderer from './TransformerRenderer';
 
 // TODO: move bounds component out of shape and render based on selected state (need refs in state)
 
@@ -117,26 +119,29 @@ function CanvasRenderer() {
         onClick={clearSelection}
       >
         <RecoilBridge>
-          <Layer
-            clipX={0}
-            clipY={0}
-            clipWidth={dimensions.width}
-            clipHeight={dimensions.width}
-          >
-            <Rect
-              width={dimensions.width}
-              height={dimensions.height}
-              shadowColor="#000000"
-              shadowOpacity={0.12}
-              shadowBlur={5}
-              shadowEnabled
-              {...background}
-            />
-            <Elements />
-          </Layer>
-          <Layer>
-            <GuideLines />
-          </Layer>
+          <ElementRefsContainer.Provider>
+            <Layer
+              clipX={0}
+              clipY={0}
+              clipWidth={dimensions.width}
+              clipHeight={dimensions.width}
+            >
+              <Rect
+                width={dimensions.width}
+                height={dimensions.height}
+                shadowColor="#000000"
+                shadowOpacity={0.12}
+                shadowBlur={5}
+                shadowEnabled
+                {...background}
+              />
+              <Elements />
+            </Layer>
+            <Layer>
+              <GuideLines />
+              <TransformerRenderer />
+            </Layer>
+          </ElementRefsContainer.Provider>
         </RecoilBridge>
       </Stage>
     </div>

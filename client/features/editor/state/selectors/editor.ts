@@ -17,8 +17,8 @@ export const hasUnsavedChangesSelector = selector({
 export const selectedElementSelector = selector({
   key: 'selectedElementSelector',
   get: ({ get }) => {
-    const selectedId = get(selectedElementIdState);
-    return selectedId ? get(elementState(selectedId)) : undefined;
+    const selectedElementId = get(selectedElementIdState);
+    return selectedElementId ? get(elementState(selectedElementId)) : undefined;
   },
 });
 

@@ -38,12 +38,16 @@ function useElementsDispatcher() {
   );
 
   const selectElement = useRecoilCallback(
-    ({ snapshot, set }) => async (element: string | CanvasElement) => {
+    ({ snapshot, set }) => (element: string | CanvasElement) => {
+      const selectedElementId = snapshot
+        .getLoadable(selectedElementIdState)
+        .getValue();
       const canvasElement =
         typeof element === 'string'
-          ? await snapshot.getPromise(elementSelector(element))
+          ? snapshot.getLoadable(elementSelector(element)).getValue()
           : element;
-      if (!canvasElement) {
+
+      if (!canvasElement || selectedElementId === canvasElement.id) {
         return;
       }
 
