@@ -15,7 +15,6 @@ import { isLoadingState, zoomState } from '../../state/atoms/editor';
 import { backgroundState, dimensionsState } from '../../state/atoms/template';
 import useElementsDispatcher from '../../state/dispatchers/elements';
 import Elements from './Elements';
-import GuideLines from './GuideLines';
 import TransformerRenderer from './TransformerRenderer';
 
 // TODO: move bounds component out of shape and render based on selected state (need refs in state)
@@ -138,7 +137,6 @@ function CanvasRenderer() {
               <Elements />
             </Layer>
             <Layer>
-              <GuideLines />
               <TransformerRenderer />
             </Layer>
           </ElementRefsContainer.Provider>

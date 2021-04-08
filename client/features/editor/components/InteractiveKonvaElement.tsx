@@ -2,9 +2,7 @@ import Konva from 'konva';
 import { KonvaEventObject } from 'konva/types/Node';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { KonvaNodeEvents } from 'react-konva';
-import { useRecoilCallback } from 'recoil';
 import { ElementRefsContainer } from '../containers/ElementRefsContainer';
-import { guideLinesState } from '../state/atoms/editor';
 import useElementsDispatcher from '../state/dispatchers/elements';
 
 export const MIN_WIDTH = 5;
@@ -60,27 +58,6 @@ const InteractiveKonvaElement = ({
     [id, updateElementProps]
   );
 
-  const handleDragMove = useRecoilCallback(
-    ({ set }) => (e: Konva.KonvaEventObject<DragEvent>) => {
-      const y = e.target.y();
-
-      if (Math.abs(y) < 10) {
-        set(guideLinesState, [
-          {
-            x: 0,
-            y: 0,
-            points: [-6000, 0, 6000, 0],
-            stroke: 'rgb(0, 161, 255)',
-            strokeWidth: 1,
-            name: 'guid-line',
-            dash: [4, 6],
-          },
-        ]);
-      }
-    },
-    []
-  );
-
   const handleDragEnd = useCallback(
     (e: Konva.KonvaEventObject<DragEvent>) => {
       handleChange({
@@ -125,7 +102,6 @@ const InteractiveKonvaElement = ({
         onTap: handleSelect,
         ref: shapeRef,
         draggable: true,
-        onDragMove: handleDragMove,
         onDragEnd: handleDragEnd,
         onDragStart: handleSelect,
         onTransformEnd: handleTransformEnd,
@@ -134,7 +110,6 @@ const InteractiveKonvaElement = ({
     [
       children,
       handleDragEnd,
-      handleDragMove,
       handleSelect,
       handleTransform,
       handleTransformEnd,
