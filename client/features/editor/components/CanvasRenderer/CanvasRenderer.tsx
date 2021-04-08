@@ -17,8 +17,6 @@ import useElementsDispatcher from '../../state/dispatchers/elements';
 import Elements from './Elements';
 import TransformerRenderer from './TransformerRenderer';
 
-// TODO: move bounds component out of shape and render based on selected state (need refs in state)
-
 function CanvasRenderer() {
   const zoom = useRecoilValue(zoomState);
   const dimensions = useRecoilValue(dimensionsState);
