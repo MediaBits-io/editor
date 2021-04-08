@@ -29,8 +29,8 @@ function useElementsDispatcher() {
   );
 
   const reorderElement = useRecoilCallback(
-    ({ snapshot, set }) => async (id: string, inc: number) => {
-      const elementIds = await snapshot.getPromise(elementIdsState);
+    ({ snapshot, set }) => (id: string, inc: number) => {
+      const elementIds = snapshot.getLoadable(elementIdsState).getValue();
       const index = elementIds.findIndex((elementId) => id === elementId);
       set(elementIdsState, move(index, index + inc, elementIds));
     },
@@ -61,8 +61,8 @@ function useElementsDispatcher() {
   );
 
   const clearSelection = useRecoilCallback(
-    ({ snapshot, reset, set }) => async () => {
-      const element = await snapshot.getPromise(selectedElementSelector);
+    ({ snapshot, reset, set }) => () => {
+      const element = snapshot.getLoadable(selectedElementSelector).getValue();
       if (!element) {
         return;
       }
@@ -80,9 +80,9 @@ function useElementsDispatcher() {
   );
 
   const deleteElement = useRecoilCallback(
-    ({ reset, snapshot }) => async (id: string) => {
-      if (await snapshot.getPromise(isSelectedElementSelector(id))) {
-        await clearSelection();
+    ({ reset, snapshot }) => (id: string) => {
+      if (snapshot.getLoadable(isSelectedElementSelector(id)).getValue()) {
+        clearSelection();
       }
       reset(elementSelector(id));
     },
@@ -90,19 +90,19 @@ function useElementsDispatcher() {
   );
 
   const deleteSelectedElement = useRecoilCallback(
-    ({ snapshot }) => async () => {
-      const selectedElementId = await snapshot.getPromise(
-        selectedElementIdState
-      );
+    ({ snapshot }) => () => {
+      const selectedElementId = snapshot
+        .getLoadable(selectedElementIdState)
+        .getValue();
       if (selectedElementId) {
-        await deleteElement(selectedElementId);
+        deleteElement(selectedElementId);
       }
     },
     [deleteElement]
   );
 
   const createElement = useRecoilCallback(
-    ({ snapshot, set }) => async <Config extends Konva.NodeConfig>(
+    ({ snapshot, set }) => <Config extends Konva.NodeConfig>(
       type: ShapeType,
       props: Config
     ) => {
@@ -115,7 +115,7 @@ function useElementsDispatcher() {
           [ShapeType.Image]: Konva.Image,
         } as any)[type] ?? Konva.Shape;
 
-      const dimensions = await snapshot.getPromise(dimensionsState);
+      const dimensions = snapshot.getLoadable(dimensionsState).getValue();
       const bounds = new BoundsShape(props).getClientRect();
       const centeredX = dimensions.width / 2 - bounds.width / 2 - bounds.x;
       const centeredY = dimensions.height / 2 - bounds.height / 2 - bounds.y;
@@ -132,16 +132,16 @@ function useElementsDispatcher() {
       };
 
       set(elementSelector(element.id), element);
-      await selectElement(element);
+      selectElement(element);
     },
     [selectElement]
   );
 
   const duplicateElement = useRecoilCallback(
-    ({ snapshot }) => async (id: string) => {
-      const element = await snapshot.getPromise(elementSelector(id));
+    ({ snapshot }) => (id: string) => {
+      const element = snapshot.getLoadable(elementSelector(id)).getValue();
       if (element) {
-        await createElement(element.type, {
+        createElement(element.type, {
           ...element.props,
           x: undefined,
           y: undefined,
