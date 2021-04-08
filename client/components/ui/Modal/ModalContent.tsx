@@ -1,6 +1,6 @@
 import React from 'react';
 import ModalTitle from './ModalTitle';
-import { X } from 'heroicons-react';
+import { XIcon } from '@heroicons/react/solid';
 import classNames from '../../../utils/classNames';
 
 interface Props {
@@ -21,7 +21,7 @@ function ModalContent({ title, children, close, className }: Props) {
             aria-label="Close"
             onClick={close}
           >
-            <X />
+            <XIcon />
           </button>
         </div>
       )}

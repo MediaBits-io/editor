@@ -1,4 +1,4 @@
-import { Heart } from 'heroicons-react';
+import { HeartIcon } from '@heroicons/react/solid';
 import React from 'react';
 import classNames from '../../../utils/classNames';
 import ExternalLink from '../ExternalLink';
@@ -56,7 +56,7 @@ function Logo({ dark, pro, className }: Props) {
           content={
             <span className="flex items-center space-x-1">
               <span>You have upgraded, thank you!</span>
-              <Heart className="w-4 h-4 text-red-500" />
+              <HeartIcon className="w-4 h-4 text-red-500" />
             </span>
           }
         >

@@ -20,7 +20,6 @@ import AudioModal from './components/AudioModal/AudioModal';
 
 function Editor() {
   const { redo, undo } = useHistoryDispatcher();
-  const { editorAreaRef } = EditorAreaContainer.useContainer();
   const { deleteSelectedElement } = useElementsDispatcher();
 
   useEffect(() => {
@@ -33,7 +32,13 @@ function Editor() {
   const handleKeyDown = useEditorKeyCommand('Delete', deleteSelectedElement);
 
   return (
-    <>
+    <EditorAreaContainer.Provider>
+      <UnsavedChangesController />
+      <EditorFocusController />
+      <HistoryController />
+      <ProgressModal />
+      <AudioModal />
+
       <EditorHeader />
       <div className="flex flex-grow overflow-hidden">
         <EditorMenu />
@@ -46,25 +51,12 @@ function Editor() {
             <HistoryControls />
           </div>
         </div>
-        <MainArea onKeyDown={handleKeyDown} ref={editorAreaRef}>
+        <MainArea onKeyDown={handleKeyDown}>
           <CanvasRenderer />
         </MainArea>
       </div>
-    </>
-  );
-}
-
-function decorate<P>(Component: React.FunctionComponent<P>) {
-  return (props: P) => (
-    <EditorAreaContainer.Provider>
-      <UnsavedChangesController />
-      <EditorFocusController />
-      <HistoryController />
-      <ProgressModal />
-      <AudioModal />
-      <Component {...props} />
     </EditorAreaContainer.Provider>
   );
 }
 
-export default decorate(Editor);
+export default Editor;

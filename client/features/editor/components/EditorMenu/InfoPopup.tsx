@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import Button from '../../../../components/ui/Button';
-import { Heart, QuestionMarkCircle, X } from 'heroicons-react';
+import {
+  HeartIcon,
+  QuestionMarkCircleIcon,
+  XIcon,
+} from '@heroicons/react/solid';
 import Popover from '../../../../components/ui/Popover/Popover';
 import { Transition } from '@headlessui/react';
 import ExternalLink from '../../../../components/ui/ExternalLink';
@@ -17,7 +21,7 @@ function InfoPopup() {
           <Button
             round
             type="dark"
-            icon={QuestionMarkCircle}
+            icon={QuestionMarkCircleIcon}
             onClick={() => setInfoVisible(true)}
           />
         </Popover>
@@ -35,7 +39,7 @@ function InfoPopup() {
           <div className="relative rounded-lg shadow border bg-gray-800 max-w-md w-full p-4">
             <Button
               type="custom"
-              icon={X}
+              icon={XIcon}
               className="text-gray-300 p-0.5 hover:text-white focus:text-white focus:outline-none absolute top-0.5 right-0.5 transition duration-150"
               onClick={() => setInfoVisible(false)}
             />
@@ -58,7 +62,8 @@ function InfoPopup() {
             <div className="flex items-end">
               <div className="flex flex-col text-sm text-gray-400">
                 <p className="flex items-center">
-                  Made with <Heart className="h-4 w-4 text-red-500 mx-1" /> by
+                  Made with <HeartIcon className="h-4 w-4 text-red-500 mx-1" />{' '}
+                  by
                   <ExternalLink
                     type="light"
                     newTab

@@ -1,4 +1,4 @@
-import { ArrowUpOutline } from 'heroicons-react';
+import { ArrowUpIcon } from '@heroicons/react/outline';
 import { last } from 'ramda';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
@@ -29,7 +29,7 @@ function MoveLayerUpAction({ elementId }: Props) {
       closed={moveUpDisabled}
     >
       <PanelActionButton
-        icon={ArrowUpOutline}
+        icon={ArrowUpIcon}
         onClick={handleMoveUpClick}
         disabled={moveUpDisabled}
       />

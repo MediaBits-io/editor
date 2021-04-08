@@ -1,4 +1,4 @@
-import { PhotographOutline } from 'heroicons-react';
+import { PhotographIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { EditorPanel } from '../../../interfaces/Editor';
@@ -23,7 +23,7 @@ function ImageToolButton() {
     <SideMenuButton
       onClick={handleClick}
       selected={selected}
-      icon={PhotographOutline}
+      icon={PhotographIcon}
     >
       Image
     </SideMenuButton>

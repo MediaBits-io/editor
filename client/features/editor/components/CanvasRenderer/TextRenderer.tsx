@@ -6,6 +6,14 @@ import { Text } from 'react-konva';
 
 const MIN_FONT_SIZE = 8;
 
+const enabledAnchors = [
+  'middle-left',
+  'middle-right',
+  'top-left',
+  'top-right',
+  'bottom-left',
+  'bottom-right',
+];
 interface Props {
   id: string;
   props: Konva.TextConfig;
@@ -59,14 +67,7 @@ function TextRenderer({ id, props }: Props) {
   return (
     <InteractiveKonvaElement
       id={id}
-      anchors={[
-        'middle-left',
-        'middle-right',
-        'top-left',
-        'top-right',
-        'bottom-left',
-        'bottom-right',
-      ]}
+      enabledAnchors={enabledAnchors}
       transform={transform}
       transformEnd={transformEnd}
     >

@@ -1,4 +1,4 @@
-import { SparklesOutline } from 'heroicons-react';
+import { SparklesIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import Button from '../../../../components/ui/Button';
@@ -41,7 +41,7 @@ function EditorHeader() {
             <Button
               onClick={handleClickUpgrade}
               type="custom"
-              icon={SparklesOutline}
+              icon={SparklesIcon}
               className="py-2 px-4 rounded-md font-semibold bg-yellow-50 hover:bg-yellow-100 focus:bg-yellow-100 transition duration-150 border border-transparent text-yellow-600 focus:text-yellow-700 hover:text-yellow-700 focus:ring-yellow-300 focus:outline-none focus:ring-2"
             >
               {isPro ? 'Professional' : 'Upgrade'}

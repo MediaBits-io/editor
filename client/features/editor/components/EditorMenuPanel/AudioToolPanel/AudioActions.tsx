@@ -1,9 +1,9 @@
 import {
-  DownloadOutline,
-  PencilOutline,
-  ScissorsOutline,
-  TrashOutline,
-} from 'heroicons-react';
+  DownloadIcon,
+  PencilIcon,
+  ScissorsIcon,
+  TrashIcon,
+} from '@heroicons/react/outline';
 import React from 'react';
 import { useResetRecoilState } from 'recoil';
 import Popover from '../../../../../components/ui/Popover/Popover';
@@ -22,16 +22,16 @@ function AudioActions({ onEditClick, onTrimClick, onDownloadClick }: Props) {
   return (
     <>
       <Popover content="Trim audio" placement="top" className="flex">
-        <PanelActionButton icon={ScissorsOutline} onClick={onTrimClick} />
+        <PanelActionButton icon={ScissorsIcon} onClick={onTrimClick} />
       </Popover>
       <Popover content="Change file" placement="top" className="flex">
-        <PanelActionButton icon={PencilOutline} onClick={onEditClick} />
+        <PanelActionButton icon={PencilIcon} onClick={onEditClick} />
       </Popover>
       <Popover content="Download audio" placement="top" className="flex">
-        <PanelActionButton icon={DownloadOutline} onClick={onDownloadClick} />
+        <PanelActionButton icon={DownloadIcon} onClick={onDownloadClick} />
       </Popover>
       <Popover content="Remove" placement="top" className="flex">
-        <PanelActionButton icon={TrashOutline} onClick={resetAudio} />
+        <PanelActionButton icon={TrashIcon} onClick={resetAudio} />
       </Popover>
     </>
   );

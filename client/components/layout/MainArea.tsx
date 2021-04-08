@@ -14,7 +14,6 @@ const MainArea = forwardRef<HTMLElement, Props>(
   ({ children, className = 'relative', noScroll, ...rest }, ref) => {
     return (
       <main
-        ref={ref}
         tabIndex={0}
         className={classNames(
           'flex flex-col flex-1 z-0 focus:outline-none',
@@ -22,6 +21,7 @@ const MainArea = forwardRef<HTMLElement, Props>(
           className
         )}
         {...rest}
+        ref={ref}
       >
         {children}
       </main>

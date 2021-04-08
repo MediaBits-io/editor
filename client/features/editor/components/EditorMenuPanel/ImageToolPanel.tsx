@@ -3,7 +3,7 @@ import { ShapeType } from '../../interfaces/Shape';
 import SideMenuPanel from '../ui/SideMenuPanel';
 import useImageInput from '../../hooks/useImageInput';
 import Button from '../../../../components/ui/Button';
-import { UploadOutline } from 'heroicons-react';
+import { UploadIcon } from '@heroicons/react/outline';
 import useElementsDispatcher from '../../state/dispatchers/elements';
 
 // TODO: clear images at some point (when leaving editor?)
@@ -37,7 +37,7 @@ function ImageToolPanel() {
         onChange={handleChangeImage}
         accept="image/*"
       />
-      <Button type="gray" icon={UploadOutline} onClick={handleClickAddImage}>
+      <Button type="gray" icon={UploadIcon} onClick={handleClickAddImage}>
         Upload image
       </Button>
     </SideMenuPanel>

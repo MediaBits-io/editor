@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  Exclamation,
-  XCircle,
-  CheckCircle,
-  InformationCircle,
-  X,
-} from 'heroicons-react';
+  ExclamationIcon,
+  XCircleIcon,
+  CheckCircleIcon,
+  InformationCircleIcon,
+  XIcon,
+} from '@heroicons/react/solid';
 import classNames from '../../utils/classNames';
 
 interface Props
@@ -31,10 +31,10 @@ function Alert({
   ...rest
 }: Props) {
   const Icon = {
-    error: XCircle,
-    warning: Exclamation,
-    success: CheckCircle,
-    info: InformationCircle,
+    error: XCircleIcon,
+    warning: ExclamationIcon,
+    success: CheckCircleIcon,
+    info: InformationCircleIcon,
   }[type];
 
   return (
@@ -94,7 +94,7 @@ function Alert({
                     aria-label="Dismiss"
                     onClick={onClose}
                   >
-                    <X className="h-5 w-5" />
+                    <XIcon className="h-5 w-5" />
                   </button>
                 </div>
               </div>

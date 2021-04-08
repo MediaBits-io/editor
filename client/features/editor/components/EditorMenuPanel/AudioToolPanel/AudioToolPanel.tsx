@@ -1,4 +1,4 @@
-import { UploadOutline } from 'heroicons-react';
+import { UploadIcon } from '@heroicons/react/outline';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import Button from '../../../../../components/ui/Button';
@@ -135,7 +135,7 @@ function AudioToolPanel() {
             type="gray"
             className="mb-2"
             onClick={handleUploadAudioClick}
-            icon={UploadOutline}
+            icon={UploadIcon}
           >
             Upload audio
           </Button>

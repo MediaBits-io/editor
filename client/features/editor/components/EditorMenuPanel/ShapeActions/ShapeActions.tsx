@@ -1,4 +1,4 @@
-import { DuplicateOutline, TrashOutline } from 'heroicons-react';
+import { DuplicateIcon, TrashIcon } from '@heroicons/react/outline';
 import React from 'react';
 import Popover from '../../../../../components/ui/Popover/Popover';
 import useElementsDispatcher from '../../../state/dispatchers/elements';
@@ -27,12 +27,12 @@ function ShapeActions({ elementId }: Props) {
       <MoveLayerDownAction elementId={elementId} />
       <Popover content="Duplicate" placement="top" className="flex">
         <PanelActionButton
-          icon={DuplicateOutline}
+          icon={DuplicateIcon}
           onClick={handleDuplicateClick}
         />
       </Popover>
       <Popover content="Remove (delete)" placement="top" className="flex">
-        <PanelActionButton icon={TrashOutline} onClick={handleDeleteClick} />
+        <PanelActionButton icon={TrashIcon} onClick={handleDeleteClick} />
       </Popover>
     </>
   );
