@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import InteractiveKonvaElement, { MIN_WIDTH } from '../InteractiveKonvaElement';
 import { KonvaEventObject } from 'konva/types/Node';
 import Konva from 'konva';
 import { Text } from 'react-konva';
+import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
 
 const MIN_FONT_SIZE = 8;
 
@@ -20,6 +21,9 @@ interface Props {
 }
 
 function TextRenderer({ id, props }: Props) {
+  const textRef = useRef<Konva.Text | null>(null);
+  const { transformerRef } = ElementRefsContainer.useContainer();
+
   const transform = useCallback(
     (
       evt: KonvaEventObject<Event>,
@@ -64,6 +68,10 @@ function TextRenderer({ id, props }: Props) {
     []
   );
 
+  useEffect(() => {
+    transformerRef.current?.forceUpdate();
+  }, [props.fontFamily, transformerRef]);
+
   return (
     <InteractiveKonvaElement
       id={id}
@@ -71,7 +79,16 @@ function TextRenderer({ id, props }: Props) {
       transform={transform}
       transformEnd={transformEnd}
     >
-      {(additionalProps) => <Text {...props} {...additionalProps} />}
+      {(additionalProps) => (
+        <Text
+          {...props}
+          {...additionalProps}
+          ref={(el) => {
+            additionalProps.ref.current = el;
+            textRef.current = el;
+          }}
+        />
+      )}
     </InteractiveKonvaElement>
   );
 }

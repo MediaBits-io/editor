@@ -48,7 +48,6 @@ export const ALL_FONTS = [
   'Georgia',
   'Helvetica',
   'Iceberg',
-  'Kumar One Outline',
   'Lobster',
   'Open Sans',
   'Oleo Script',

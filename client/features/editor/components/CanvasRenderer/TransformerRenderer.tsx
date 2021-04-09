@@ -2,15 +2,15 @@ import React, { useEffect } from 'react';
 import { Transformer } from 'react-konva';
 import { useRecoilValue } from 'recoil';
 import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
-import { selectedElementIdState } from '../../state/atoms/editor';
+import { selectedElementSelector } from '../../state/selectors/editor';
 import { MIN_HEIGHT, MIN_WIDTH } from '../InteractiveKonvaElement';
 
 function TransformerRenderer() {
   const { transformerRef, elementRefs } = ElementRefsContainer.useContainer();
-  const selectedElementId = useRecoilValue(selectedElementIdState);
+  const selectedElement = useRecoilValue(selectedElementSelector);
 
-  const element = selectedElementId
-    ? elementRefs[selectedElementId]
+  const element = selectedElement?.id
+    ? elementRefs[selectedElement.id]
     : undefined;
 
   useEffect(() => {
