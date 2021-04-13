@@ -15,6 +15,7 @@ import { isLoadingState, zoomState } from '../../state/atoms/editor';
 import { backgroundState, dimensionsState } from '../../state/atoms/template';
 import useElementsDispatcher from '../../state/dispatchers/elements';
 import Elements from './Elements';
+import GuideLines from './GuideLines';
 import TransformerRenderer from './TransformerRenderer';
 
 function CanvasRenderer() {
@@ -109,10 +110,10 @@ function CanvasRenderer() {
       <Stage
         scaleX={area.scale.x}
         scaleY={area.scale.y}
-        width={area.stageDimensions.width}
-        height={area.stageDimensions.height}
         offsetX={area.offset.x}
         offsetY={area.offset.y}
+        width={area.stageDimensions.width}
+        height={area.stageDimensions.height}
         onClick={clearSelection}
       >
         <RecoilBridge>
@@ -135,6 +136,7 @@ function CanvasRenderer() {
               <Elements />
             </Layer>
             <Layer>
+              <GuideLines />
               <TransformerRenderer />
             </Layer>
           </ElementRefsContainer.Provider>

@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import InteractiveKonvaElement, { MIN_WIDTH } from '../InteractiveKonvaElement';
+import InteractiveKonvaElement, {
+  MIN_WIDTH,
+} from '../InteractiveKonvaElement/InteractiveKonvaElement';
 import { KonvaEventObject } from 'konva/types/Node';
 import Konva from 'konva';
 import { Text } from 'react-konva';
