@@ -119,22 +119,25 @@ function CanvasRenderer() {
       >
         <RecoilBridge>
           <ElementRefsContainer.Provider>
+            <Layer>
+              <Rect
+                width={dimensions.width}
+                height={dimensions.height}
+                shadowColor="#313131"
+                shadowOpacity={0.07}
+                shadowBlur={4}
+                shadowEnabled
+                strokeWidth={1}
+                stroke="rgb(229, 231, 235)"
+                {...background}
+              />
+            </Layer>
             <Layer
               clipX={0}
               clipY={0}
               clipWidth={dimensions.width}
               clipHeight={dimensions.width}
             >
-              <Rect
-                width={dimensions.width}
-                height={dimensions.height}
-                shadowColor="#000000"
-                shadowOpacity={0.12}
-                shadowBlur={5}
-                shadowEnabled
-                {...background}
-              />
-
               <Elements />
             </Layer>
             <Layer>
