@@ -3,7 +3,7 @@ import { KonvaEventObject } from 'konva/types/Node';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Image } from 'react-konva';
 import { ImageConfig, ImageFit } from '../../interfaces/Shape';
-import InteractiveKonvaElement from '../InteractiveKonvaElement';
+import InteractiveKonvaElement from '../InteractiveKonvaElement/InteractiveKonvaElement';
 
 interface Props {
   id: string;

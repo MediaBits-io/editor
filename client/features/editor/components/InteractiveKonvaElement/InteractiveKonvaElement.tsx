@@ -2,8 +2,11 @@ import Konva from 'konva';
 import { KonvaEventObject } from 'konva/types/Node';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { KonvaNodeEvents } from 'react-konva';
-import { ElementRefsContainer } from '../containers/ElementRefsContainer';
-import useElementsDispatcher from '../state/dispatchers/elements';
+import { useRecoilCallback } from 'recoil';
+import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
+import useGuideLines from '../../hooks/useGuideLines';
+import { guideLinesState } from '../../state/atoms/editor';
+import useElementsDispatcher from '../../state/dispatchers/elements';
 
 export const MIN_WIDTH = 5;
 export const MIN_HEIGHT = 5;
@@ -31,6 +34,7 @@ const InteractiveKonvaElement = ({
 }: Props) => {
   const { updateElementProps, selectElement } = useElementsDispatcher();
   const { transformerRef, setElementRef } = ElementRefsContainer.useContainer();
+  const { updateGuideLines } = useGuideLines();
   const shapeRef = useRef<Konva.Shape>(null);
 
   useEffect(() => {
@@ -58,8 +62,9 @@ const InteractiveKonvaElement = ({
     [id, updateElementProps]
   );
 
-  const handleDragEnd = useCallback(
-    (e: Konva.KonvaEventObject<DragEvent>) => {
+  const handleDragEnd = useRecoilCallback(
+    ({ reset }) => (e: Konva.KonvaEventObject<DragEvent>) => {
+      reset(guideLinesState);
       handleChange({
         x: e.target.x(),
         y: e.target.y(),
@@ -73,12 +78,20 @@ const InteractiveKonvaElement = ({
       if (shapeRef.current && transformerRef.current && transform) {
         shapeRef.current.setAttrs(transform(evt, transformerRef.current));
       }
+      // TODO: Snap on resize. When transforming snap (and show guidelines) only on the active edge
+      // requestAnimationFrame(() => {
+      //   if (shapeRef.current) {
+      //     updateGuideLines(shapeRef.current);
+      //   }
+      // });
     },
     [transform, transformerRef]
   );
 
-  const handleTransformEnd = useCallback(
-    (evt: KonvaEventObject<Event>) => {
+  const handleTransformEnd = useRecoilCallback(
+    ({ reset }) => (evt: KonvaEventObject<Event>) => {
+      // reset(guideLinesState);
+
       if (!shapeRef.current) {
         return;
       }
@@ -94,6 +107,21 @@ const InteractiveKonvaElement = ({
     [handleChange, transformEnd, transformerRef]
   );
 
+  const handleDragMove = useCallback(
+    (e: Konva.KonvaEventObject<DragEvent>) => {
+      if (!(e.target instanceof Konva.Stage)) {
+        updateGuideLines(e.target)?.forEach((line) => {
+          if (line.orientation === 'vertical') {
+            e.target.x(line.stop - line.edgeOffset);
+          } else {
+            e.target.y(line.stop - line.edgeOffset);
+          }
+        });
+      }
+    },
+    [updateGuideLines]
+  );
+
   return useMemo(
     () =>
       children({
@@ -103,6 +131,7 @@ const InteractiveKonvaElement = ({
         ref: shapeRef,
         draggable: true,
         onDragEnd: handleDragEnd,
+        onDragMove: handleDragMove,
         onDragStart: handleSelect,
         onTransformEnd: handleTransformEnd,
         onTransform: handleTransform,
@@ -110,6 +139,7 @@ const InteractiveKonvaElement = ({
     [
       children,
       handleDragEnd,
+      handleDragMove,
       handleSelect,
       handleTransform,
       handleTransformEnd,

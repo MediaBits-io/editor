@@ -3,7 +3,10 @@ import { Transformer } from 'react-konva';
 import { useRecoilValue } from 'recoil';
 import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
 import { selectedElementSelector } from '../../state/selectors/editor';
-import { MIN_HEIGHT, MIN_WIDTH } from '../InteractiveKonvaElement';
+import {
+  MIN_HEIGHT,
+  MIN_WIDTH,
+} from '../InteractiveKonvaElement/InteractiveKonvaElement';
 
 function TransformerRenderer() {
   const { transformerRef, elementRefs } = ElementRefsContainer.useContainer();
