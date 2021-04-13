@@ -16,6 +16,7 @@ import { backgroundState, dimensionsState } from '../../state/atoms/template';
 import useElementsDispatcher from '../../state/dispatchers/elements';
 import Elements from './Elements';
 import GuideLines from './GuideLines';
+import HighlightRenderer from './HighlightRenderer';
 import TransformerRenderer from './TransformerRenderer';
 
 function CanvasRenderer() {
@@ -133,9 +134,11 @@ function CanvasRenderer() {
                 shadowEnabled
                 {...background}
               />
+
               <Elements />
             </Layer>
             <Layer>
+              <HighlightRenderer />
               <GuideLines />
               <TransformerRenderer />
             </Layer>

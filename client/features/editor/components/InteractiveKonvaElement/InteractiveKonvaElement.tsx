@@ -5,7 +5,10 @@ import { KonvaNodeEvents } from 'react-konva';
 import { useRecoilCallback } from 'recoil';
 import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
 import useGuideLines from '../../hooks/useGuideLines';
-import { guideLinesState } from '../../state/atoms/editor';
+import {
+  guideLinesState,
+  highlightedElementIdState,
+} from '../../state/atoms/editor';
 import useElementsDispatcher from '../../state/dispatchers/elements';
 
 export const MIN_WIDTH = 5;
@@ -107,6 +110,25 @@ const InteractiveKonvaElement = ({
     [handleChange, transformEnd, transformerRef]
   );
 
+  const handleMouseEnter = useRecoilCallback(
+    ({ set, snapshot }) => () => {
+      const highlightedElementId = snapshot
+        .getLoadable(highlightedElementIdState)
+        .getValue();
+      if (highlightedElementId !== id) {
+        set(highlightedElementIdState, id);
+      }
+    },
+    [id]
+  );
+
+  const handleMouseLeave = useRecoilCallback(
+    ({ reset }) => () => {
+      reset(highlightedElementIdState);
+    },
+    []
+  );
+
   const handleDragMove = useCallback(
     (e: Konva.KonvaEventObject<DragEvent>) => {
       if (!(e.target instanceof Konva.Stage)) {
@@ -135,11 +157,15 @@ const InteractiveKonvaElement = ({
         onDragStart: handleSelect,
         onTransformEnd: handleTransformEnd,
         onTransform: handleTransform,
+        onMouseEnter: handleMouseEnter,
+        onMouseLeave: handleMouseLeave,
       }),
     [
       children,
       handleDragEnd,
       handleDragMove,
+      handleMouseEnter,
+      handleMouseLeave,
       handleSelect,
       handleTransform,
       handleTransformEnd,

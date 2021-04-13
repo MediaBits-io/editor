@@ -31,8 +31,12 @@ export const selectedElementIdState = atom<string | undefined>({
   effects_UNSTABLE: [untrackedHistoryEffect],
 });
 
+export const highlightedElementIdState = atom<string | undefined>({
+  key: 'highlightedElementIdState',
+  default: undefined,
+});
+
 export const guideLinesState = atom<Konva.LineConfig[]>({
   key: 'guideLinesState',
   default: [],
-  // effects_UNSTABLE: [untrackedHistoryEffect], // TODO: needed?
 });
