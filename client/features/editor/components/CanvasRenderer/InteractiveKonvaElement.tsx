@@ -9,6 +9,7 @@ import {
   guideLinesState,
   highlightedElementIdState,
 } from '../../state/atoms/editor';
+import { dimensionsState } from '../../state/atoms/template';
 import useElementsDispatcher from '../../state/dispatchers/elements';
 
 export const MIN_WIDTH = 5;
@@ -37,7 +38,11 @@ const InteractiveKonvaElement = ({
   enabledAnchors,
   keepRatio,
 }: Props) => {
-  const { updateElementProps, selectElement } = useElementsDispatcher();
+  const {
+    updateElementProps,
+    selectElement,
+    deleteElement,
+  } = useElementsDispatcher();
   const {
     transformerRef,
     elementNodes,
@@ -71,15 +76,37 @@ const InteractiveKonvaElement = ({
     [id, updateElementProps]
   );
 
-  const handleDragEnd = useRecoilCallback(
-    ({ reset }) => (e: Konva.KonvaEventObject<DragEvent>) => {
-      reset(guideLinesState);
-      handleChange({
-        x: e.target.x(),
-        y: e.target.y(),
-      });
+  const isOutOfBounds = useRecoilCallback(
+    ({ snapshot }) => (node: Konva.Shape) => {
+      const dimensions = snapshot.getLoadable(dimensionsState).getValue();
+      return (
+        node.x() + node.width() * node.scaleX() <= 0 ||
+        node.x() >= dimensions.width ||
+        node.y() + node.height() * node.scaleY() <= 0 ||
+        node.y() >= dimensions.height
+      );
     },
-    [handleChange]
+    []
+  );
+
+  const handleDragEnd = useRecoilCallback(
+    ({ reset }) => () => {
+      reset(guideLinesState);
+
+      if (!shapeRef.current) {
+        return;
+      }
+
+      if (isOutOfBounds(shapeRef.current)) {
+        deleteElement(id);
+      } else {
+        handleChange({
+          x: shapeRef.current.x(),
+          y: shapeRef.current.y(),
+        });
+      }
+    },
+    [deleteElement, handleChange, id, isOutOfBounds]
   );
 
   const handleTransform = useCallback(
@@ -145,11 +172,22 @@ const InteractiveKonvaElement = ({
         shapeRef.current.setAttrs(transformEnd(evt, transformerRef.current));
       }
 
-      handleChange({
-        ...shapeRef.current.getAttrs(),
-      });
+      if (isOutOfBounds(shapeRef.current)) {
+        deleteElement(id);
+      } else {
+        handleChange({
+          ...shapeRef.current.getAttrs(),
+        });
+      }
     },
-    [handleChange, transformEnd, transformerRef]
+    [
+      deleteElement,
+      handleChange,
+      id,
+      isOutOfBounds,
+      transformEnd,
+      transformerRef,
+    ]
   );
 
   const handleMouseEnter = useRecoilCallback(
