@@ -3,7 +3,7 @@ import { without } from 'ramda';
 import { DefaultValue, selector, selectorFamily } from 'recoil';
 import { CanvasElement } from '../../interfaces/StageConfig';
 import { selectedElementIdState } from '../atoms/editor';
-import { elementState, elementIdsState } from '../atoms/template';
+import { elementIdsState, elementState } from '../atoms/template';
 
 export const elementsSelector = selector<CanvasElement[]>({
   key: 'elementsSelector',

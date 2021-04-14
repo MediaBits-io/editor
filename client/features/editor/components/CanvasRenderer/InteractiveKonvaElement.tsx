@@ -38,7 +38,11 @@ const InteractiveKonvaElement = ({
   keepRatio,
 }: Props) => {
   const { updateElementProps, selectElement } = useElementsDispatcher();
-  const { transformerRef, setElementRef } = ElementRefsContainer.useContainer();
+  const {
+    transformerRef,
+    elementNodes,
+    setElementRef,
+  } = ElementRefsContainer.useContainer();
   const { updateGuideLines } = useGuideLines();
   const shapeRef = useRef<Konva.Shape>(null);
 
@@ -87,7 +91,7 @@ const InteractiveKonvaElement = ({
         return;
       }
 
-      const lines = updateGuideLines(shape, anchor);
+      const lines = updateGuideLines(shape, elementNodes, anchor);
 
       lines.forEach((line) => {
         switch (line.orientation) {
@@ -126,7 +130,7 @@ const InteractiveKonvaElement = ({
         shapeRef.current.setAttrs(transform(evt, transformerRef.current));
       }
     },
-    [transform, transformerRef, updateGuideLines]
+    [elementNodes, transform, transformerRef, updateGuideLines]
   );
 
   const handleTransformEnd = useRecoilCallback(
@@ -170,7 +174,7 @@ const InteractiveKonvaElement = ({
   const handleDragMove = useCallback(
     (e: Konva.KonvaEventObject<DragEvent>) => {
       if (!(e.target instanceof Konva.Stage)) {
-        updateGuideLines(e.target).forEach((line) => {
+        updateGuideLines(e.target, elementNodes).forEach((line) => {
           if (line.orientation === 'vertical') {
             e.target.x(line.stop - line.edgeOffset);
           } else {
@@ -179,7 +183,7 @@ const InteractiveKonvaElement = ({
         });
       }
     },
-    [updateGuideLines]
+    [elementNodes, updateGuideLines]
   );
 
   return useMemo(

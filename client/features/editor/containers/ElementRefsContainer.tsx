@@ -1,19 +1,22 @@
 import Konva from 'konva';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import { createContainer } from 'unstated-next';
+import { elementIdsState } from '../state/atoms/template';
+
+export type ElementRefs = Record<
+  string,
+  | {
+      ref: Konva.Shape;
+      transformerProps?: Partial<Konva.TransformerConfig>;
+    }
+  | undefined
+>;
 
 function useElementRefsState() {
   const transformerRef = useRef<Konva.Transformer | null>(null);
-  const [elementRefs, setElementRefs] = useState<
-    Record<
-      string,
-      | {
-          ref: Konva.Shape;
-          transformerProps?: Partial<Konva.TransformerConfig>;
-        }
-      | undefined
-    >
-  >({});
+  const elementIds = useRecoilValue(elementIdsState);
+  const [elementRefs, setElementRefs] = useState<ElementRefs>({});
 
   const setElementRef = useCallback(
     (
@@ -29,10 +32,15 @@ function useElementRefsState() {
     []
   );
 
-  return useMemo(() => ({ transformerRef, elementRefs, setElementRef }), [
-    elementRefs,
-    setElementRef,
-  ]);
+  const elementNodes = useMemo(
+    () => elementIds.map((elementId) => elementRefs[elementId]?.ref!),
+    [elementIds, elementRefs]
+  );
+
+  return useMemo(
+    () => ({ transformerRef, elementRefs, setElementRef, elementNodes }),
+    [elementRefs, elementNodes, setElementRef]
+  );
 }
 
 export const ElementRefsContainer = createContainer(useElementRefsState);
