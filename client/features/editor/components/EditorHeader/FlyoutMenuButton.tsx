@@ -1,5 +1,5 @@
 import React from 'react';
-import Popover from '../../../../components/ui/Popover/Popover';
+import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
 import classNames from '../../../../utils/classNames';
 import { ENABLE_UPGRADES } from '../../../../constants';
 import { useRecoilValue } from 'recoil';
@@ -38,7 +38,7 @@ function FlyoutMenuButton({
           : 'hover:bg-gray-50 focus:ring-gray-300 focus-visible:ring-2'
       )}
     >
-      <Popover
+      <Tooltip
         className="flex items-start p-2"
         placement="bottom"
         content={
@@ -74,7 +74,7 @@ function FlyoutMenuButton({
             </p>
           )}
         </div>
-      </Popover>
+      </Tooltip>
     </button>
   );
 }

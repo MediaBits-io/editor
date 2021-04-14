@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@etercast/mp3": "github:MediaBits-io/mp3#1.0.3",
-    "@headlessui/react": "^0.3.1",
+    "@headlessui/react": "^0.3.2",
     "@heroicons/react": "^1.0.0",
     "@mirco312312/react-imask": "^6.0.6",
     "@popperjs/core": "^2.9.2",

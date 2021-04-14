@@ -2,7 +2,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import RedoIcon from '../../../../components/ui/Icons/RedoIcon';
 import UndoIcon from '../../../../components/ui/Icons/UndoIcon';
-import Popover from '../../../../components/ui/Popover/Popover';
+import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
 import useHistoryDispatcher from '../../state/dispatchers/history';
 import {
   canRedoSelector,
@@ -17,16 +17,16 @@ function HistoryControls() {
 
   return (
     <div className="flex items-center space-x-2">
-      <Popover content="Undo (ctrl+z)" placement="top" closed={!canUndo}>
+      <Tooltip content="Undo (ctrl+z)" placement="top" closed={!canUndo}>
         <ClearButton disabled={!canUndo} onClick={undo}>
           <UndoIcon className="w-4 h-4" />
         </ClearButton>
-      </Popover>
-      <Popover content="Redo (ctrl+y)" placement="top" closed={!canRedo}>
+      </Tooltip>
+      <Tooltip content="Redo (ctrl+y)" placement="top" closed={!canRedo}>
         <ClearButton disabled={!canRedo} onClick={redo}>
           <RedoIcon className="w-4 h-4" />
         </ClearButton>
-      </Popover>
+      </Tooltip>
     </div>
   );
 }

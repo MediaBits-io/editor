@@ -5,7 +5,7 @@ import {
   QuestionMarkCircleIcon,
   XIcon,
 } from '@heroicons/react/solid';
-import Popover from '../../../../components/ui/Popover/Popover';
+import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
 import { Transition } from '@headlessui/react';
 import ExternalLink from '../../../../components/ui/ExternalLink';
 import GithubIcon from '../../../../components/ui/Icons/GithubIcon';
@@ -17,14 +17,14 @@ function InfoPopup() {
   return (
     <div className="flex flex-grow">
       <div className="mt-auto">
-        <Popover content="About" placement="top">
+        <Tooltip content="About" placement="top">
           <Button
             round
             type="dark"
             icon={QuestionMarkCircleIcon}
             onClick={() => setInfoVisible(true)}
           />
-        </Popover>
+        </Tooltip>
 
         <Transition
           show={isInfoVisible}

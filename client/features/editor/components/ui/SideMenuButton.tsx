@@ -1,6 +1,6 @@
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
-import Popover from '../../../../components/ui/Popover/Popover';
+import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
 import classNames from '../../../../utils/classNames';
 
 interface Props
@@ -51,7 +51,7 @@ function SideMenuButton({
         />
       )}
       {toggled === false && (
-        <Popover
+        <Tooltip
           className="absolute right-0.5 top-0.5"
           content="Required for generating video"
           placement="top"
@@ -62,7 +62,7 @@ function SideMenuButton({
               selected ? 'text-red-300' : 'text-red-300'
             )}
           />
-        </Popover>
+        </Tooltip>
       )}
       {Icon && <Icon className="w-6 h-6" />}
       <div>{children}</div>

@@ -3,16 +3,16 @@ import DropdownMenuAnchor from '../../../../components/ui/DropdownMenu/DropdownM
 import DropdownMenu from '../../../../components/ui/DropdownMenu/DropdownMenu';
 import DropdownMenuButton from '../../../../components/ui/DropdownMenu/DropdownMenuButton';
 import useDropdown from '../../../../components/ui/Dropdown/useDropdown';
-import useZOomControls from '../../hooks/useZoomControls';
+import useZoomControls from '../../hooks/useZoomControls';
 import ClearButton from '../ui/ClearButton';
 import classNames from '../../../../utils/classNames';
-import Popover from '../../../../components/ui/Popover/Popover';
+import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
 import { useRecoilState } from 'recoil';
 import { zoomState } from '../../state/atoms/editor';
 
 function ZoomControls() {
   const [zoom, setZoom] = useRecoilState(zoomState);
-  const { fillToScreen, fitToScreen } = useZOomControls();
+  const { fillToScreen, fitToScreen } = useZoomControls();
   const { setTargetElement, targetElement } = useDropdown();
 
   return (
@@ -21,7 +21,7 @@ function ZoomControls() {
       targetElement={targetElement}
       target={({ open }) => (
         <div ref={setTargetElement}>
-          <Popover
+          <Tooltip
             content="Zoom"
             className="mt-auto"
             placement="top"
@@ -36,7 +36,7 @@ function ZoomControls() {
             >
               {Math.floor(zoom * 100)}%
             </DropdownMenuAnchor>
-          </Popover>
+          </Tooltip>
         </div>
       )}
     >

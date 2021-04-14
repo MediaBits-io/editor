@@ -2,7 +2,7 @@ import { HeartIcon } from '@heroicons/react/solid';
 import React from 'react';
 import classNames from '../../../utils/classNames';
 import ExternalLink from '../ExternalLink';
-import Popover from '../Popover/Popover';
+import Tooltip from '../Tooltip/Tooltip';
 
 interface Props {
   dark?: boolean;
@@ -43,7 +43,7 @@ function Logo({ dark, pro, className }: Props) {
       </ExternalLink>
 
       {pro && (
-        <Popover
+        <Tooltip
           modifiers={[
             {
               name: 'offset',
@@ -61,7 +61,7 @@ function Logo({ dark, pro, className }: Props) {
           }
         >
           PRO
-        </Popover>
+        </Tooltip>
       )}
     </div>
   );

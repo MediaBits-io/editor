@@ -6,7 +6,7 @@ import {
 } from '@heroicons/react/outline';
 import React from 'react';
 import { useResetRecoilState } from 'recoil';
-import Popover from '../../../../../components/ui/Popover/Popover';
+import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
 import { audioSelector } from '../../../state/selectors/audio';
 import PanelActionButton from '../../ui/PanelActionButton';
 
@@ -21,18 +21,18 @@ function AudioActions({ onEditClick, onTrimClick, onDownloadClick }: Props) {
 
   return (
     <>
-      <Popover content="Trim audio" placement="top" className="flex">
+      <Tooltip content="Trim audio" placement="top" className="flex">
         <PanelActionButton icon={ScissorsIcon} onClick={onTrimClick} />
-      </Popover>
-      <Popover content="Change file" placement="top" className="flex">
+      </Tooltip>
+      <Tooltip content="Change file" placement="top" className="flex">
         <PanelActionButton icon={PencilIcon} onClick={onEditClick} />
-      </Popover>
-      <Popover content="Download audio" placement="top" className="flex">
+      </Tooltip>
+      <Tooltip content="Download audio" placement="top" className="flex">
         <PanelActionButton icon={DownloadIcon} onClick={onDownloadClick} />
-      </Popover>
-      <Popover content="Remove" placement="top" className="flex">
+      </Tooltip>
+      <Tooltip content="Remove" placement="top" className="flex">
         <PanelActionButton icon={TrashIcon} onClick={resetAudio} />
-      </Popover>
+      </Tooltip>
     </>
   );
 }

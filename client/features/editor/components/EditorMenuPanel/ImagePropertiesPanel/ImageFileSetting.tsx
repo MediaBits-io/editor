@@ -1,7 +1,7 @@
 import React from 'react';
 import AspectRatio from 'react-aspect-ratio';
 import { useRecoilValue } from 'recoil';
-import Popover from '../../../../../components/ui/Popover/Popover';
+import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
 import useImageInput from '../../../hooks/useImageInput';
 import { ImageConfig } from '../../../interfaces/Shape';
 import useElementsDispatcher from '../../../state/dispatchers/elements';
@@ -43,7 +43,7 @@ function ImageFileSetting({ elementId }: Props) {
   };
 
   return (
-    <Popover content="Change image" className="mb-4">
+    <Tooltip content="Change image" className="mb-4">
       <input
         className="hidden"
         ref={inputRef}
@@ -71,7 +71,7 @@ function ImageFileSetting({ elementId }: Props) {
           </AspectRatio>
         )}
       </button>
-    </Popover>
+    </Tooltip>
   );
 }
 

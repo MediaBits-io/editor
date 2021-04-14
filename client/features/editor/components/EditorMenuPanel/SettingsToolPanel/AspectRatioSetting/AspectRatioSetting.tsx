@@ -5,7 +5,7 @@ import useDropdown from '../../../../../../components/ui/Dropdown/useDropdown';
 import classNames from '../../../../../../utils/classNames';
 import SideMenuSetting from '../../../ui/SideMenuSetting';
 import AspectRatioOption from './AspectRatioOption';
-import Popover from '../../../../../../components/ui/Popover/Popover';
+import Tooltip from '../../../../../../components/ui/Tooltip/Tooltip';
 import useEditorDispatcher from '../../../../state/dispatchers/editor';
 import { EditorAreaContainer } from '../../../../containers/EditorAreaContainer';
 import { useRecoilValue } from 'recoil';
@@ -79,7 +79,7 @@ function AspectRatioSetting() {
           )}
         >
           {options.map(({ dimensions, orientation, ratio, description }) => (
-            <Popover
+            <Tooltip
               key={`${dimensions.width}x${dimensions.height}`}
               content={description}
               placement="right"
@@ -89,7 +89,7 @@ function AspectRatioSetting() {
                 orientation={orientation}
                 value={ratio}
               />
-            </Popover>
+            </Tooltip>
           ))}
         </DropdownSelect>
       </div>

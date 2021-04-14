@@ -9,7 +9,7 @@ interface Props extends Partial<PopperOptions> {
   className?: string;
 }
 
-function Popover({
+function Tooltip({
   children,
   content,
   className,
@@ -39,7 +39,7 @@ function Popover({
         hasArrow
         isOpen={isOpen && !closed}
         targetElement={targetElRef.current}
-        className="popover"
+        className="tooltip"
         popperOptions={{
           ...popperOptions,
           modifiers: popperOptions.modifiers ?? [
@@ -54,7 +54,7 @@ function Popover({
       >
         {(arrowProps) => (
           <>
-            <div {...arrowProps} className="popover-arrow" />
+            <div {...arrowProps} className="tooltip-arrow" />
             <div className="outline-none rounded-md shadow-sm p-2 text-xs leading-4 bg-gray-700 text-white">
               {content}
             </div>
@@ -65,4 +65,4 @@ function Popover({
   );
 }
 
-export default Popover;
+export default Tooltip;

@@ -1,6 +1,6 @@
 import { DuplicateIcon, TrashIcon } from '@heroicons/react/outline';
 import React from 'react';
-import Popover from '../../../../../components/ui/Popover/Popover';
+import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
 import useElementsDispatcher from '../../../state/dispatchers/elements';
 import PanelActionButton from '../../ui/PanelActionButton';
 import MoveLayerDownAction from './MoveLayerDownAction';
@@ -25,15 +25,15 @@ function ShapeActions({ elementId }: Props) {
     <>
       <MoveLayerUpAction elementId={elementId} />
       <MoveLayerDownAction elementId={elementId} />
-      <Popover content="Duplicate" placement="top" className="flex">
+      <Tooltip content="Duplicate" placement="top" className="flex">
         <PanelActionButton
           icon={DuplicateIcon}
           onClick={handleDuplicateClick}
         />
-      </Popover>
-      <Popover content="Remove (delete)" placement="top" className="flex">
+      </Tooltip>
+      <Tooltip content="Remove (delete)" placement="top" className="flex">
         <PanelActionButton icon={TrashIcon} onClick={handleDeleteClick} />
-      </Popover>
+      </Tooltip>
     </>
   );
 }

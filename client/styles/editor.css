@@ -1,5 +1,5 @@
 @layer components {
-  .popover-arrow {
+  .tooltip-arrow {
     @apply w-2 h-2 absolute;
 
     &::before {
@@ -12,36 +12,36 @@
     }
   }
 
-  .popover > div {
+  .tooltip > div {
     @apply relative;
   }
 
-  .popover[data-popper-placement^='bottom'] {
+  .tooltip[data-popper-placement^='bottom'] {
     & > div {
       @apply mt-1.5;
     }
 
-    .popover-arrow {
+    .tooltip-arrow {
       @apply -mt-1 top-0 left-0;
     }
   }
 
-  .popover[data-popper-placement^='top'] {
+  .tooltip[data-popper-placement^='top'] {
     & > div {
       @apply mb-1.5;
     }
 
-    .popover-arrow {
+    .tooltip-arrow {
       @apply -mb-1 bottom-0 left-0;
     }
   }
 
-  .popover[data-popper-placement^='right'] {
+  .tooltip[data-popper-placement^='right'] {
     & > div {
       @apply ml-1.5;
     }
 
-    .popover-arrow {
+    .tooltip-arrow {
       @apply -ml-1;
     }
   }

@@ -2,7 +2,7 @@ import { ArrowDownIcon } from '@heroicons/react/outline';
 import { head } from 'ramda';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import Popover from '../../../../../components/ui/Popover/Popover';
+import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
 import { elementIdsState } from '../../../state/atoms/template';
 import useElementsDispatcher from '../../../state/dispatchers/elements';
 import PanelActionButton from '../../ui/PanelActionButton';
@@ -22,7 +22,7 @@ function MoveLayerDownAction({ elementId }: Props) {
   const moveDownDisabled = head(elementIds) === elementId;
 
   return (
-    <Popover
+    <Tooltip
       content="Move layer down"
       placement="top"
       className="flex"
@@ -33,7 +33,7 @@ function MoveLayerDownAction({ elementId }: Props) {
         onClick={handleMoveDownClick}
         disabled={moveDownDisabled}
       />
-    </Popover>
+    </Tooltip>
   );
 }
 

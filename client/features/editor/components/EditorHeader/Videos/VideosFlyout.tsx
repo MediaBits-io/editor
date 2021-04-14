@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import Flyout from '../../../../../components/ui/Flyout';
 import Loader from '../../../../../components/ui/Loader/Loader';
-import Popover from '../../../../../components/ui/Popover/Popover';
+import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
 import { areVideosLoadedState } from '../../../../../state/atoms/videos';
 import useVideosDispatcher from '../../../../../state/dispatchers/videos';
 import {
@@ -50,24 +50,24 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
         <h2 className="leading-6">Videos in the last 24h</h2>
         <div className="text-gray-500 text-sm ml-2 space-x-2 flex">
           {pendingCount > 0 && (
-            <Popover
+            <Tooltip
               content="Pending videos"
               placement="top"
               className="flex items-center"
             >
               {pendingCount}
               <ClockIcon className="h-4 w-4 ml-0.5" />
-            </Popover>
+            </Tooltip>
           )}
           {generatedCount > 0 && (
-            <Popover
+            <Tooltip
               content="Recent videos"
               placement="top"
               className="flex items-center"
             >
               {generatedCount}
               <VideoCameraIcon className="h-4 w-4 ml-0.5" />
-            </Popover>
+            </Tooltip>
           )}
         </div>
       </div>
