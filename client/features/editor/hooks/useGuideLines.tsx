@@ -51,19 +51,42 @@ const getSnappingEdges = (stage: Konva.Stage, node: Konva.Shape): LineStops => {
 const getLines = (
   node: Konva.Shape,
   stops: LineStops,
-  edges: LineStops
+  edges: LineStops,
+  snapAnchor?: string // anchor to limit snapping to
 ): GuideLine[] => {
   const resultV: GuideLine[] = [];
   const resultH: GuideLine[] = [];
   const position = node.getPosition();
 
+  const matchesSnappingAnchor = (
+    orientation: 'horizontal' | 'vertical',
+    index: number
+  ) => {
+    if (snapAnchor) {
+      switch (orientation) {
+        case 'horizontal':
+          return (
+            (index === 0 && snapAnchor.includes('top')) ||
+            (index === 2 && snapAnchor.includes('bottom'))
+          );
+        case 'vertical':
+          return (
+            (index === 0 && snapAnchor.includes('left')) ||
+            (index === 2 && snapAnchor.includes('right'))
+          );
+      }
+    }
+    return true;
+  };
+
   stops.horizontal.forEach((stop) => {
-    edges.horizontal.forEach((edge) => {
-      const diff = Math.abs(stop - edge - position.y);
-      if (diff < MAX_OFFSET) {
+    const orientation = 'horizontal';
+    edges.horizontal.forEach((edgeOffset, i) => {
+      const diff = Math.abs(stop - edgeOffset - position.y);
+      if (diff < MAX_OFFSET && matchesSnappingAnchor(orientation, i)) {
         resultH.push({
-          orientation: 'horizontal',
-          edgeOffset: edge,
+          orientation,
+          edgeOffset,
           stop,
           diff,
         });
@@ -72,12 +95,13 @@ const getLines = (
   });
 
   stops.vertical.forEach((stop) => {
-    edges.vertical.forEach((edge) => {
-      const diff = Math.abs(stop - edge - position.x);
-      if (diff < MAX_OFFSET) {
+    const orientation = 'vertical';
+    edges.vertical.forEach((edgeOffset, i) => {
+      const diff = Math.abs(stop - edgeOffset - position.x);
+      if (diff < MAX_OFFSET && matchesSnappingAnchor(orientation, i)) {
         resultV.push({
-          orientation: 'vertical',
-          edgeOffset: edge,
+          orientation,
+          edgeOffset,
           stop,
           diff,
         });
@@ -85,16 +109,15 @@ const getLines = (
     });
   });
 
-  const guides: GuideLine[] = [];
-
   // Find closest snap
+  const guides: GuideLine[] = [];
   const minH = resultH.sort((a, b) => a.diff - b.diff)[0];
   const minV = resultV.sort((a, b) => a.diff - b.diff)[0];
   if (minH) {
-    guides.push({ ...minH, orientation: 'horizontal' });
+    guides.push(minH);
   }
   if (minV) {
-    guides.push({ ...minV, orientation: 'vertical' });
+    guides.push(minV);
   }
   return guides;
 };
@@ -126,11 +149,11 @@ const getLineShapes = (lines: GuideLine[]) => {
 
 function useGuideLines() {
   const updateGuideLines = useRecoilCallback(
-    ({ snapshot, set }) => (node: Konva.Shape) => {
+    ({ snapshot, set }) => (node: Konva.Shape, snapAnchor?: string) => {
       const stage = node.getStage();
 
       if (!stage) {
-        return;
+        return [];
       }
 
       const guideLines = snapshot.getLoadable(guideLinesState).getValue();
@@ -138,7 +161,7 @@ function useGuideLines() {
 
       const stops = getStops(dimensions);
       const edges = getSnappingEdges(stage, node);
-      const lines = getLines(node, stops, edges);
+      const lines = getLines(node, stops, edges, snapAnchor);
       const shapes = getLineShapes(lines);
 
       if (

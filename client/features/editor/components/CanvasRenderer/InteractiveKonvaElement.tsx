@@ -26,6 +26,7 @@ interface Props {
     transformer: Konva.Transformer
   ) => Konva.ShapeConfig;
   enabledAnchors?: string[];
+  keepRatio?: boolean;
 }
 
 const InteractiveKonvaElement = ({
@@ -34,6 +35,7 @@ const InteractiveKonvaElement = ({
   transform,
   transformEnd,
   enabledAnchors,
+  keepRatio,
 }: Props) => {
   const { updateElementProps, selectElement } = useElementsDispatcher();
   const { transformerRef, setElementRef } = ElementRefsContainer.useContainer();
@@ -42,13 +44,13 @@ const InteractiveKonvaElement = ({
 
   useEffect(() => {
     if (shapeRef.current) {
-      setElementRef(id, shapeRef.current, { enabledAnchors });
+      setElementRef(id, shapeRef.current, { keepRatio, enabledAnchors });
 
       return () => {
         setElementRef(id, undefined);
       };
     }
-  }, [enabledAnchors, id, setElementRef]);
+  }, [enabledAnchors, id, keepRatio, setElementRef]);
 
   const handleSelect = useCallback(
     (evt: KonvaEventObject<MouseEvent>) => {
@@ -78,22 +80,58 @@ const InteractiveKonvaElement = ({
 
   const handleTransform = useCallback(
     (evt: KonvaEventObject<Event>) => {
+      const shape = shapeRef.current;
+      const anchor = transformerRef.current?.getActiveAnchor();
+
+      if (!shape || !anchor) {
+        return;
+      }
+
+      const lines = updateGuideLines(shape, anchor);
+
+      lines.forEach((line) => {
+        switch (line.orientation) {
+          case 'vertical': {
+            const scaleX = shape.scaleX();
+            const width = shape.width() * scaleX;
+
+            let relativeDiff = line.stop - shape.x() - line.edgeOffset;
+
+            if (anchor.includes('left')) {
+              relativeDiff *= -1;
+              shape.x(line.stop);
+            }
+
+            shape.scaleX(scaleX * ((width + relativeDiff) / width));
+            break;
+          }
+          case 'horizontal': {
+            const scaleY = shape.scaleY();
+            const height = shape.height() * scaleY;
+
+            let relativeDiff = line.stop - shape.y() - line.edgeOffset;
+
+            if (anchor.includes('top')) {
+              relativeDiff *= -1;
+              shape.y(line.stop);
+            }
+
+            shape.scaleY(scaleY * ((height + relativeDiff) / height));
+            break;
+          }
+        }
+      });
+
       if (shapeRef.current && transformerRef.current && transform) {
         shapeRef.current.setAttrs(transform(evt, transformerRef.current));
       }
-      // TODO: Snap on resize. When transforming snap (and show guidelines) only on the active edge
-      // requestAnimationFrame(() => {
-      //   if (shapeRef.current) {
-      //     updateGuideLines(shapeRef.current);
-      //   }
-      // });
     },
-    [transform, transformerRef]
+    [transform, transformerRef, updateGuideLines]
   );
 
   const handleTransformEnd = useRecoilCallback(
     ({ reset }) => (evt: KonvaEventObject<Event>) => {
-      // reset(guideLinesState);
+      reset(guideLinesState);
 
       if (!shapeRef.current) {
         return;
@@ -132,7 +170,7 @@ const InteractiveKonvaElement = ({
   const handleDragMove = useCallback(
     (e: Konva.KonvaEventObject<DragEvent>) => {
       if (!(e.target instanceof Konva.Stage)) {
-        updateGuideLines(e.target)?.forEach((line) => {
+        updateGuideLines(e.target).forEach((line) => {
           if (line.orientation === 'vertical') {
             e.target.x(line.stop - line.edgeOffset);
           } else {

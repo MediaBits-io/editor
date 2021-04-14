@@ -2,7 +2,7 @@ import Konva from 'konva';
 import { ShapeConfig } from 'konva/types/Shape';
 import React from 'react';
 import { KonvaNodeEvents } from 'react-konva';
-import InteractiveKonvaElement from '../InteractiveKonvaElement/InteractiveKonvaElement';
+import InteractiveKonvaElement from './InteractiveKonvaElement';
 
 interface Props {
   id: string;

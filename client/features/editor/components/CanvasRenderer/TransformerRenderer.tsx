@@ -3,10 +3,7 @@ import { Transformer } from 'react-konva';
 import { useRecoilValue } from 'recoil';
 import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
 import { selectedElementIdState } from '../../state/atoms/editor';
-import {
-  MIN_HEIGHT,
-  MIN_WIDTH,
-} from '../InteractiveKonvaElement/InteractiveKonvaElement';
+import { MIN_HEIGHT, MIN_WIDTH } from './InteractiveKonvaElement';
 
 function TransformerRenderer() {
   const { transformerRef, elementRefs } = ElementRefsContainer.useContainer();
@@ -38,7 +35,7 @@ function TransformerRenderer() {
       {...element?.transformerProps}
       ref={transformerRef}
       rotationSnaps={[0, 90, 180, 270]}
-      keepRatio
+      keepRatio={element?.transformerProps?.keepRatio ?? false}
       boundBoxFunc={(oldBox, newBox) =>
         newBox.width < MIN_WIDTH || newBox.height < MIN_HEIGHT ? oldBox : newBox
       }

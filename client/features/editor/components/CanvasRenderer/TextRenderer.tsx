@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import InteractiveKonvaElement, {
-  MIN_WIDTH,
-} from '../InteractiveKonvaElement/InteractiveKonvaElement';
+import InteractiveKonvaElement, { MIN_WIDTH } from './InteractiveKonvaElement';
 import { KonvaEventObject } from 'konva/types/Node';
 import Konva from 'konva';
 import { Text } from 'react-konva';
@@ -78,6 +76,7 @@ function TextRenderer({ id, props }: Props) {
     <InteractiveKonvaElement
       id={id}
       enabledAnchors={enabledAnchors}
+      keepRatio
       transform={transform}
       transformEnd={transformEnd}
     >
