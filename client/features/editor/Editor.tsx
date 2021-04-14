@@ -28,6 +28,11 @@ function Editor() {
 
   useEditorKeyCommand('ctrl+z', undo, process.browser ? document : undefined);
   useEditorKeyCommand('ctrl+y', redo, process.browser ? document : undefined);
+  useEditorKeyCommand(
+    'ctrl+shift+z',
+    redo,
+    process.browser ? document : undefined
+  );
 
   const handleKeyDown = useEditorKeyCommand('Delete', deleteSelectedElement);
 

@@ -17,7 +17,7 @@ export default function useEditorKeyCommand<T extends HTMLElement | Document>(
           case 'ctrl':
             return e.metaKey || e.ctrlKey;
           default:
-            return key === e.key;
+            return key === e.key.toLowerCase();
         }
       });
 
