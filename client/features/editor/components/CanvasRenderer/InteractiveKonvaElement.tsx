@@ -114,47 +114,49 @@ const InteractiveKonvaElement = ({
       const shape = shapeRef.current;
       const anchor = transformerRef.current?.getActiveAnchor();
 
-      if (!shape || !anchor) {
+      if (!shape) {
         return;
       }
 
-      const lines = updateGuideLines(shape, elementNodes, anchor);
+      if (anchor) {
+        const lines = updateGuideLines(shape, elementNodes, anchor);
 
-      lines.forEach((line) => {
-        switch (line.orientation) {
-          case 'vertical': {
-            const scaleX = shape.scaleX();
-            const width = shape.width() * scaleX;
+        lines.forEach((line) => {
+          switch (line.orientation) {
+            case 'vertical': {
+              const scaleX = shape.scaleX();
+              const width = shape.width() * scaleX;
 
-            let relativeDiff = line.stop - shape.x() - line.edgeOffset;
+              let relativeDiff = line.stop - shape.x() - line.edgeOffset;
 
-            if (anchor.includes('left')) {
-              relativeDiff *= -1;
-              shape.x(line.stop);
+              if (anchor.includes('left')) {
+                relativeDiff *= -1;
+                shape.x(line.stop);
+              }
+
+              shape.scaleX(scaleX * ((width + relativeDiff) / width));
+              break;
             }
+            case 'horizontal': {
+              const scaleY = shape.scaleY();
+              const height = shape.height() * scaleY;
 
-            shape.scaleX(scaleX * ((width + relativeDiff) / width));
-            break;
-          }
-          case 'horizontal': {
-            const scaleY = shape.scaleY();
-            const height = shape.height() * scaleY;
+              let relativeDiff = line.stop - shape.y() - line.edgeOffset;
 
-            let relativeDiff = line.stop - shape.y() - line.edgeOffset;
+              if (anchor.includes('top')) {
+                relativeDiff *= -1;
+                shape.y(line.stop);
+              }
 
-            if (anchor.includes('top')) {
-              relativeDiff *= -1;
-              shape.y(line.stop);
+              shape.scaleY(scaleY * ((height + relativeDiff) / height));
+              break;
             }
-
-            shape.scaleY(scaleY * ((height + relativeDiff) / height));
-            break;
           }
-        }
-      });
+        });
+      }
 
-      if (shapeRef.current && transformerRef.current && transform) {
-        shapeRef.current.setAttrs(transform(evt, transformerRef.current));
+      if (transformerRef.current && transform) {
+        shape.setAttrs(transform(evt, transformerRef.current));
       }
     },
     [elementNodes, transform, transformerRef, updateGuideLines]

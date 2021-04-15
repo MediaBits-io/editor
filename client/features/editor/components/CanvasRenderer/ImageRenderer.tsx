@@ -66,7 +66,7 @@ function ImageRenderer({ id, props }: Props) {
 
   useEffect(() => {
     imageRef.current?.fire('transform');
-  }, [props.imageFit]);
+  }, [props.imageFit, props.width, props.height]);
 
   useEffect(() => {
     // Cache for ability to blur background
