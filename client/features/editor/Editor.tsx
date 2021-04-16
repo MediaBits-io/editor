@@ -17,6 +17,8 @@ import useElementsDispatcher from './state/dispatchers/elements';
 import useHistoryDispatcher from './state/dispatchers/history';
 import ProgressModal from './components/ProgressModal/ProgressModal';
 import AudioModal from './components/AudioModal/AudioModal';
+import ExternalLink from '../../components/ui/ExternalLink';
+import Alert from '../../components/ui/Alert';
 
 function Editor() {
   const { redo, undo } = useHistoryDispatcher();
@@ -43,6 +45,24 @@ function Editor() {
       <HistoryController />
       <ProgressModal />
       <AudioModal />
+
+      <div className="fixed inset-0 bg-white z-10 p-4 overflow-auto sm:hidden">
+        <div style={{ minWidth: 320 }}>
+          <Alert title="Mediabits.io editor is not available on Mobile">
+            Please view it on larger screen.
+          </Alert>
+          <p className="mt-4 text-sm text-center text-gray-400">
+            Contact support through
+            <ExternalLink
+              className="mx-1"
+              newTab
+              to="mailto:support@mediabits.io"
+            >
+              support@mediabits.io
+            </ExternalLink>
+          </p>
+        </div>
+      </div>
 
       <EditorHeader />
       <div className="flex flex-grow overflow-hidden">

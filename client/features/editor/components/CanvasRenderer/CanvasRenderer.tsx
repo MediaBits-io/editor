@@ -113,8 +113,8 @@ function CanvasRenderer() {
         scaleY={area.scale.y}
         offsetX={area.offset.x}
         offsetY={area.offset.y}
-        width={area.stageDimensions.width}
-        height={area.stageDimensions.height}
+        width={Math.max(1, area.stageDimensions.width)}
+        height={Math.max(1, area.stageDimensions.height)}
         onClick={clearSelection}
       >
         <RecoilBridge>
