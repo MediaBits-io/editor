@@ -16,10 +16,10 @@ function HistoryControls() {
 
   return (
     <div className="flex items-center space-x-2">
-      <Tooltip content="Undo (ctrl+z)" placement="top" closed={!canUndo}>
+      <Tooltip content="Undo (ctrl+z)" placement="bottom" closed={!canUndo}>
         <ClearButton icon={ReplyIcon} disabled={!canUndo} onClick={undo} />
       </Tooltip>
-      <Tooltip content="Redo (ctrl+y)" placement="top" closed={!canRedo}>
+      <Tooltip content="Redo (ctrl+y)" placement="bottom" closed={!canRedo}>
         <ClearButton
           icon={ReplyIcon}
           disabled={!canRedo}

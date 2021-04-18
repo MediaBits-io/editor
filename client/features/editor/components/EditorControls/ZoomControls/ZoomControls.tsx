@@ -17,14 +17,14 @@ function ZoomControls() {
 
   return (
     <DropdownMenu
-      placement="top"
+      placement="bottom"
       targetElement={targetElement}
       target={({ open }) => (
         <div ref={setTargetElement}>
           <Tooltip
             content="Zoom"
             className="mt-auto"
-            placement="top"
+            placement="bottom"
             closed={open}
           >
             <DropdownMenuAnchor

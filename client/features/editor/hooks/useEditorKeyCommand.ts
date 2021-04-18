@@ -13,7 +13,7 @@ export default function useEditorKeyCommand<T extends HTMLElement | Document>(
       const keys = command.split('+');
 
       const triggered =
-        keys.includes(e.key.toLowerCase()) &&
+        keys.includes(e.key?.toLowerCase()) &&
         keys.includes('ctrl') === isCtrlDown &&
         keys.includes('shift') === isShiftDown;
 
