@@ -65,7 +65,7 @@ function Alert({
           <div className="flex">
             <h3
               className={classNames(
-                'text-sm leading-5 font-medium',
+                'text-smd leading-5 font-medium',
                 type === 'info' && 'text-blue-800',
                 type === 'error' && 'text-red-800',
                 type === 'warning' && 'text-yellow-800',

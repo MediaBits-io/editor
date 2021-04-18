@@ -1,14 +1,14 @@
 import React from 'react';
-import DropdownMenuAnchor from '../../../../components/ui/DropdownMenu/DropdownMenuAnchor';
-import DropdownMenu from '../../../../components/ui/DropdownMenu/DropdownMenu';
-import DropdownMenuButton from '../../../../components/ui/DropdownMenu/DropdownMenuButton';
-import useDropdown from '../../../../components/ui/Dropdown/useDropdown';
-import useZoomControls from '../../hooks/useZoomControls';
-import ClearButton from '../ui/ClearButton';
-import classNames from '../../../../utils/classNames';
-import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
+import DropdownMenuAnchor from '../../../../../components/ui/DropdownMenu/DropdownMenuAnchor';
+import DropdownMenu from '../../../../../components/ui/DropdownMenu/DropdownMenu';
+import DropdownMenuButton from '../../../../../components/ui/DropdownMenu/DropdownMenuButton';
+import useDropdown from '../../../../../components/ui/Dropdown/useDropdown';
+import useZoomControls from '../../../hooks/useZoomControls';
+import ClearButton from '../../ui/ClearButton';
+import classNames from '../../../../../utils/classNames';
+import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
 import { useRecoilState } from 'recoil';
-import { zoomState } from '../../state/atoms/editor';
+import { zoomState } from '../../../state/atoms/editor';
 
 function ZoomControls() {
   const [zoom, setZoom] = useRecoilState(zoomState);
