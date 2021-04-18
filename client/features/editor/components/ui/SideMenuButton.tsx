@@ -30,7 +30,7 @@ function SideMenuButton({
       disabled={disabled}
       onClick={disabled ? undefined : onClick}
       className={classNames(
-        'relative h-20 w-20 p-2 text-xs flex flex-col items-center justify-center rounded-md shadow-sm hover:shadow-none border focus:outline-none transition duration-150',
+        'relative h-20 w-20 p-2 text-xs flex flex-col items-center justify-center rounded-md shadow hover:shadow-none border focus:outline-none transition duration-150',
         selected
           ? 'bg-blue-50 text-blue-800 border-blue-300'
           : 'bg-white text-gray-700',

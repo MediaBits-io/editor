@@ -32,7 +32,7 @@ function SideMenuPanel({
   return (
     <div
       className={classNames(
-        'flex flex-col flex-grow mt-2 mb-2 p-3 bg-white text-gray-900 border rounded-md w-72',
+        'flex flex-col flex-grow p-3 bg-white text-gray-900 border-r w-72',
         className
       )}
     >

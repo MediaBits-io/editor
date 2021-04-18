@@ -5,9 +5,9 @@ import AudioControls from './AudioControls/AudioControls';
 
 function EditorControls() {
   return (
-    <div className="flex w-full space-x-2 px-2 pt-2 justify-between items-center">
+    <div className="flex w-full bg-white space-x-2 p-1.5 justify-between items-center border-b">
       <AudioControls />
-      <div className="bg-white rounded-md border p-1.5 flex justify-between space-x-2">
+      <div className="flex justify-between space-x-2 border-l p-0.5 pl-2">
         <ZoomControls />
         <HistoryControls />
       </div>
