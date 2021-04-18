@@ -1,7 +1,7 @@
 import { DownloadIcon } from '@heroicons/react/outline';
 import React, { useCallback, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
-import { useRecoilCallback } from 'recoil';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 import Button from '../../../../components/ui/Button';
 import ExternalLink from '../../../../components/ui/ExternalLink';
 import NotificationContent from '../../../../components/ui/Notification/NotificationContent';
@@ -15,6 +15,7 @@ function ExportButton() {
   const { exportVideo } = useVideos();
   const { addToast } = useToasts();
   const { setNewAudio } = useAudioDispatcher();
+  const audio = useRecoilValue(audioSelector);
   const [loading, setLoading] = useState(false);
 
   const saveAndExportVideo = useCallback(
@@ -95,7 +96,7 @@ function ExportButton() {
       loading={loading}
       onClick={handleClickExport}
       icon={DownloadIcon}
-      type="primary"
+      type={audio ? 'primary' : 'gray'}
     >
       Generate video
     </Button>

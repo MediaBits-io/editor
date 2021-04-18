@@ -4,7 +4,8 @@ import { uniq } from 'ramda';
 import { EditorPanel } from './interfaces/Editor';
 import { ShapeType } from './interfaces/Shape';
 
-export const EDITOR_MARGIN = 8;
+export const CANVAS_STROKE = 1;
+export const EDITOR_MARGIN = 8 + CANVAS_STROKE;
 
 export const IMAGE_FILTERS: { [filter: string]: Filter } = {
   blur: Konva.Filters.Blur,

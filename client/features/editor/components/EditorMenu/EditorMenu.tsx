@@ -4,17 +4,17 @@ import TextToolButton from './buttons/TextToolButton';
 import ImageToolButton from './buttons/ImageToolButton';
 import SettingsToolButton from './buttons/SettingsToolButton';
 import ElementsToolButton from './buttons/ElementsToolButton';
-import AudioToolButton from './buttons/AudioToolButton';
 import InfoPopup from './InfoPopup';
+import SubtitlesToolButton from './buttons/SubtitlesToolButton';
 
 function EditorMenu() {
   return (
     <SideMenu>
       <SettingsToolButton />
-      <AudioToolButton />
       <TextToolButton />
       <ImageToolButton />
       <ElementsToolButton />
+      <SubtitlesToolButton />
       <InfoPopup />
     </SideMenu>
   );

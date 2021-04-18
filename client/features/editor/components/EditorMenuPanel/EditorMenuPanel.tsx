@@ -40,8 +40,8 @@ function EditorMenuPanel() {
       return <TextToolPanel />;
     case EditorPanel.Image:
       return <ImageToolPanel />;
-    case EditorPanel.Audio:
-      return <AudioToolPanel />;
+    // case EditorPanel.Audio:
+    //   return <AudioToolPanel />;
     case EditorPanel.Elements:
       return <ElementToolPanel />;
     default:

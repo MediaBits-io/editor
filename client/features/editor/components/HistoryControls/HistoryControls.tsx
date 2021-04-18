@@ -1,3 +1,8 @@
+import {
+  ArrowCircleLeftIcon,
+  ArrowLeftIcon,
+  ReplyIcon,
+} from '@heroicons/react/outline';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import RedoIcon from '../../../../components/ui/Icons/RedoIcon';
@@ -18,14 +23,15 @@ function HistoryControls() {
   return (
     <div className="flex items-center space-x-2">
       <Tooltip content="Undo (ctrl+z)" placement="top" closed={!canUndo}>
-        <ClearButton disabled={!canUndo} onClick={undo}>
-          <UndoIcon className="w-4 h-4" />
-        </ClearButton>
+        <ClearButton icon={ReplyIcon} disabled={!canUndo} onClick={undo} />
       </Tooltip>
       <Tooltip content="Redo (ctrl+y)" placement="top" closed={!canRedo}>
-        <ClearButton disabled={!canRedo} onClick={redo}>
-          <RedoIcon className="w-4 h-4" />
-        </ClearButton>
+        <ClearButton
+          icon={ReplyIcon}
+          disabled={!canRedo}
+          onClick={redo}
+          className="transform -scale-x-1"
+        />
       </Tooltip>
     </div>
   );

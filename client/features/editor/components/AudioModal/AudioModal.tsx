@@ -73,7 +73,7 @@ function AudioModalInner() {
 
   const changeAudioFile = (data: Blob) => {
     if (audio && initialAudio?.url !== audio.url) {
-      URL.revokeObjectURL(audio.url);
+      // URL.revokeObjectURL(audio.url);
     }
 
     setAudio({
@@ -134,6 +134,16 @@ function AudioModalInner() {
               audioFile={audio?.data}
               setAudioFile={changeAudioFile}
             />
+
+            {isFree && !audio && (
+              <Alert
+                title="Maximum duration is 1 minute for free users."
+                className="mt-3"
+              >
+                You can trim an audio file of 50MB or less after uploading it.
+              </Alert>
+            )}
+
             {renderError()}
           </ModalContent>
           <ModalFullActions

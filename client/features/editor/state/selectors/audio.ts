@@ -8,9 +8,9 @@ export const audioSelector = selector<AudioState | undefined>({
   set: ({ get, set, reset }, newAudioState) => {
     const currentAudioState = get(audioState);
 
-    if (currentAudioState) {
-      URL.revokeObjectURL(currentAudioState.url);
-    }
+    // if (currentAudioState) {
+    //   URL.revokeObjectURL(currentAudioState.url);
+    // }
 
     if (newAudioState instanceof DefaultValue) {
       reset(audioState);

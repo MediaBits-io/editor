@@ -28,7 +28,7 @@ function AudioToolPanel() {
 
       // Sync audio from state if changed and remove local blob urls
       if (currentAudio) {
-        URL.revokeObjectURL(currentAudio.url);
+        // URL.revokeObjectURL(currentAudio.url);
       }
 
       return audio;
