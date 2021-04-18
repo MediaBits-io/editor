@@ -35,7 +35,7 @@ function Editor() {
     process.browser ? document : undefined
   );
 
-  const handleKeyDown = useEditorKeyCommand('Delete', deleteSelectedElement);
+  const handleKeyDown = useEditorKeyCommand('delete', deleteSelectedElement);
 
   return (
     <EditorAreaContainer.Provider>

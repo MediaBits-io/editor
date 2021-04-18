@@ -30,16 +30,14 @@ function SideMenuButton({
       disabled={disabled}
       onClick={disabled ? undefined : onClick}
       className={classNames(
-        'relative h-20 w-20 p-2 text-xs flex flex-col items-center justify-center rounded-md shadow hover:shadow-none border focus:outline-none transition duration-150',
-        selected
-          ? 'bg-blue-50 text-blue-800 border-blue-300'
-          : 'bg-white text-gray-700',
+        'relative h-16 w-16 p-1.5 text-xs flex flex-col items-center justify-center rounded-md focus:outline-none transition duration-150',
+        selected ? 'text-blue-800 bg-blue-50' : 'text-gray-700',
         selected &&
           !disabled &&
-          'hover:border-blue-400 hover:text-blue-900 focus:border-blue-400 focus:text-blue-900',
+          ' hover:bg-blue-100 hover:text-blue-900 focus:text-blue-900',
         !selected &&
           !disabled &&
-          'bg-gray-50 hover:border-gray-400 hover:text-gray-900 focus:border-gray-400 focus:text-gray-900',
+          'hover:bg-gray-50 hover:text-gray-800 focus:text-gray-800',
         disabled && 'cursor-default',
         className
       )}
