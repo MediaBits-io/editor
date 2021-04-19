@@ -1,13 +1,13 @@
 import { ReplyIcon } from '@heroicons/react/outline';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
-import useHistoryDispatcher from '../../../state/dispatchers/history';
+import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
+import useHistoryDispatcher from '../../state/dispatchers/history';
 import {
   canRedoSelector,
   canUndoSelector,
-} from '../../../state/selectors/history';
-import ClearButton from '../../ui/ClearButton';
+} from '../../state/selectors/history';
+import ClearButton from '../ui/ClearButton';
 
 function HistoryControls() {
   const canUndo = useRecoilValue(canUndoSelector);

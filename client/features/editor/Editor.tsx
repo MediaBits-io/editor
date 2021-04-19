@@ -5,11 +5,12 @@ import ExternalLink from '../../components/ui/ExternalLink';
 import { loadFonts } from '../../utils/fonts';
 import AudioModal from './components/AudioModal/AudioModal';
 import CanvasRenderer from './components/CanvasRenderer/CanvasRenderer';
-import EditorControls from './components/EditorControls/EditorControls';
 import EditorHeader from './components/EditorHeader/EditorHeader';
 import EditorMenu from './components/EditorMenu/EditorMenu';
 import EditorMenuPanel from './components/EditorMenuPanel/EditorMenuPanel';
+import HistoryControls from './components/HistoryControls/HistoryControls';
 import ProgressModal from './components/ProgressModal/ProgressModal';
+import ZoomControls from './components/ZoomControls/ZoomControls';
 import { PRELOAD_FONTS } from './constants';
 import { EditorAreaContainer } from './containers/EditorAreaContainer';
 import EditorFocusController from './controllers/EditorFocusController';
@@ -63,29 +64,23 @@ function Editor() {
         </div>
       </div>
 
-      <EditorHeader />
       <div className="flex flex-grow overflow-hidden">
         <EditorMenu />
-        <div className="flex flex-col">
-          <EditorMenuPanel />
+        <div className="flex flex-grow flex-col overflow-hidden">
+          <EditorHeader />
+          <div className="flex flex-grow overflow-hidden">
+            <div className="flex flex-col">
+              <EditorMenuPanel />
+              <div className="py-1.5 px-2 space-x-2 flex w-full border-r bg-white justify-center border-t">
+                <HistoryControls />
+                <ZoomControls />
+              </div>
+            </div>
+            <MainArea onKeyDown={handleKeyDown}>
+              <CanvasRenderer />
+            </MainArea>
+          </div>
         </div>
-        <MainArea onKeyDown={handleKeyDown}>
-          {/* <div className="pl-2 pt-4 absolute z-10">
-              <Tooltip content="Upload audio">
-                <button
-                  className="bg-white text-gray-700 border shadow-md p-3 rounded-full flex items-center cursor-pointer"
-                  onClick={() => console.log('asd')}
-                >
-                  <MusicNoteIcon className="w-5 h-5" />
-                  <div className="bg-gray-400 text-white absolute -right-1.5 p-0.5 flex rounded-full shadow-sm">
-                    <ArrowRightIcon className="w-3 h-3" />
-                  </div>
-                </button>
-              </Tooltip>
-            </div> */}
-          <EditorControls />
-          <CanvasRenderer />
-        </MainArea>
       </div>
     </EditorAreaContainer.Provider>
   );

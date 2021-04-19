@@ -6,6 +6,7 @@ import Button from '../../../../components/ui/Button';
 import ExternalLink from '../../../../components/ui/ExternalLink';
 import NotificationContent from '../../../../components/ui/Notification/NotificationContent';
 import useVideos from '../../../../hooks/useVideos';
+import classNames from '../../../../utils/classNames';
 import { openNewsletterWindow } from '../../../../utils/newsletter';
 import { audioModalState } from '../../state/atoms/ui';
 import useAudioDispatcher from '../../state/dispatchers/audio';
@@ -92,7 +93,7 @@ function ExportButton() {
 
   return (
     <Button
-      className="w-40"
+      className={classNames('w-40', audio && 'shadow')}
       loading={loading}
       onClick={handleClickExport}
       icon={DownloadIcon}

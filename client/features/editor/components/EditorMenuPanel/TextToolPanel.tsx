@@ -39,31 +39,33 @@ function TextToolPanel() {
   };
 
   return (
-    <SideMenuPanel title="Text" className="space-y-2">
-      <Button
-        type="gray"
-        className="font-bold text-base"
-        style={{ fontFamily: DefaultFonts.Headline }}
-        onClick={handleClickAddText(DefaultFonts.Headline)}
-      >
-        Headline
-      </Button>
-      <Button
-        type="gray"
-        className="text-base"
-        style={{ fontFamily: DefaultFonts.Regular }}
-        onClick={handleClickAddText(DefaultFonts.Regular)}
-      >
-        Regular
-      </Button>
-      <Button
-        type="gray"
-        className="text-base"
-        style={{ fontFamily: DefaultFonts.Handwritten }}
-        onClick={handleClickAddText(DefaultFonts.Handwritten)}
-      >
-        Handwritten
-      </Button>
+    <SideMenuPanel title="Text">
+      <div className="flex flex-col space-y-2">
+        <Button
+          type="gray"
+          className="font-bold text-base py-1.5"
+          style={{ fontFamily: DefaultFonts.Headline }}
+          onClick={handleClickAddText(DefaultFonts.Headline)}
+        >
+          Headline
+        </Button>
+        <Button
+          type="gray"
+          className="text-base py-1.5"
+          style={{ fontFamily: DefaultFonts.Regular }}
+          onClick={handleClickAddText(DefaultFonts.Regular)}
+        >
+          Regular
+        </Button>
+        <Button
+          type="gray"
+          className="text-base py-1.5"
+          style={{ fontFamily: DefaultFonts.Handwritten }}
+          onClick={handleClickAddText(DefaultFonts.Handwritten)}
+        >
+          Handwritten
+        </Button>
+      </div>
     </SideMenuPanel>
   );
 }

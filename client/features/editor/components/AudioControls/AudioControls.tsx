@@ -8,13 +8,13 @@ import {
 } from '@heroicons/react/outline';
 import React from 'react';
 import { useRecoilCallback, useRecoilValue, useResetRecoilState } from 'recoil';
-import Button from '../../../../../components/ui/Button';
-import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
-import classNames from '../../../../../utils/classNames';
-import { audioModalState } from '../../../state/atoms/ui';
-import useAudioDispatcher from '../../../state/dispatchers/audio';
-import { audioSelector } from '../../../state/selectors/audio';
-import ClearButton from '../../ui/ClearButton';
+import Button from '../../../../components/ui/Button';
+import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
+import classNames from '../../../../utils/classNames';
+import { audioModalState } from '../../state/atoms/ui';
+import useAudioDispatcher from '../../state/dispatchers/audio';
+import { audioSelector } from '../../state/selectors/audio';
+import ClearButton from '../ui/ClearButton';
 
 function AudioControls() {
   const audio = useRecoilValue(audioSelector);
@@ -37,21 +37,16 @@ function AudioControls() {
       type="primary"
       icon={MusicNoteIcon}
       onClick={handleUploadClick}
-      className="shadow hover:shadow-md"
+      className="shadow"
     >
       Upload audio
     </Button>
   ) : (
-    <div
-      className={classNames(
-        'flex bg-white text-gray-700 space-x-2 p-0.5',
-        audio && 'flex-grow'
-      )}
-    >
+    <div className={classNames('flex space-x-2 p-0.5', audio && 'flex-grow')}>
       <Tooltip content="Play audio" placement="bottom" className="flex">
         <ClearButton icon={PlayIcon} />
       </Tooltip>
-      <div className="flex flex-1 rounded-md bg-gray-100" />
+      <div className="flex flex-grow rounded-md bg-gray-100" />
       <Tooltip content="Trim audio" placement="bottom" className="flex">
         <ClearButton icon={ScissorsIcon} />
       </Tooltip>

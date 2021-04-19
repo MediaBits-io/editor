@@ -21,7 +21,7 @@ function SaveTemplateButton() {
         icon={SaveIcon}
         className="px-2.5"
       >
-        Save template
+        Save
       </ClearButton>
       <SaveTemplateFlyout
         close={close}

@@ -5,11 +5,7 @@ interface Props {
 }
 
 function SideMenu({ children }: Props) {
-  return (
-    <div className="flex flex-col space-y-2 p-2 bg-white border-r">
-      {children}
-    </div>
-  );
+  return <div className="flex flex-col bg-gray-700">{children}</div>;
 }
 
 export default SideMenu;

@@ -2,11 +2,11 @@ import { SparklesIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import Button from '../../../../components/ui/Button';
-import Logo from '../../../../components/ui/Logo/Logo';
 import { ENABLE_UPGRADES } from '../../../../constants';
 import { Plan } from '../../../../interfaces/plans';
 import { userPlanState } from '../../../../state/atoms/user';
 import LoginModal from '../LoginModal';
+import AudioControls from '../AudioControls/AudioControls';
 import ExportButton from './ExportButton';
 import OpenTemplateButton from './OpenTemplate/OpenTemplateButton';
 import SaveTemplateButton from './SaveTemplate/SaveTemplateButton';
@@ -23,20 +23,22 @@ function EditorHeader() {
   };
 
   return (
-    <div className="flex bg-white border-b w-full p-2 items-center">
+    <div className="flex bg-white border-b w-full py-2 items-center">
       <LoginModal close={() => setLoginVisible(false)} visible={loginVisible} />
-      <div className="flex pr-5 mr-5">
-        <Logo dark pro={isPro} />
-      </div>
 
-      <div className="flex flex-grow items-center justify-between">
-        <div className="flex items-center space-x-2">
+      <div className="flex flex-grow items-center">
+        <div className="flex items-center space-x-2 px-2 w-72">
           <OpenTemplateButton />
           <SaveTemplateButton />
           <VideosButton />
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-grow items-center px-2">
+          <AudioControls />
+        </div>
+
+        <div className="flex items-center space-x-2 px-2">
+          <ExportButton />
           {ENABLE_UPGRADES && (
             <Button
               onClick={handleClickUpgrade}
@@ -47,7 +49,6 @@ function EditorHeader() {
               {isPro ? 'Professional' : 'Upgrade'}
             </Button>
           )}
-          <ExportButton />
         </div>
       </div>
     </div>

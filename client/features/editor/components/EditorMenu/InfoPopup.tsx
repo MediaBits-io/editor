@@ -35,7 +35,7 @@ function InfoPopup() {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-90"
         >
-          <div className="relative rounded-lg shadow border bg-gray-800 max-w-md w-full p-4">
+          <div className="relative rounded-lg shadow bg-gray-900 max-w-md w-full p-4">
             <Button
               type="custom"
               icon={XIcon}

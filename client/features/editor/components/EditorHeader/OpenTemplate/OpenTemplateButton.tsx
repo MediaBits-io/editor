@@ -21,7 +21,7 @@ function OpenTemplateButton() {
         icon={OpenIcon}
         className="px-2.5"
       >
-        Open template
+        Open
       </ClearButton>
       <OpenTemplateFlyout
         close={close}
