@@ -7,7 +7,7 @@ import ExternalLink from '../components/ui/ExternalLink';
 import NotificationContent from '../components/ui/Notification/NotificationContent';
 import { Template } from '../features/editor/interfaces/StageConfig';
 import { progressModalState } from '../features/editor/state/atoms/ui';
-import { audioSelector } from '../features/editor/state/selectors/audio';
+import { audioState } from '../features/editor/state/atoms/audio';
 import { templateSelector } from '../features/editor/state/selectors/template';
 import { toTemplateJSON } from '../features/editor/utils/template';
 import {
@@ -98,13 +98,13 @@ function useVideos() {
           ),
           audioBuffer ??
             (await snapshot
-              .getPromise(audioSelector)
+              .getPromise(audioState)
               .then((audio) => audio!.data)),
           isLoggedIn ? getAuthHeaders() : undefined,
         ]);
 
         if (audioBuffer) {
-          set(audioSelector, {
+          set(audioState, {
             url: URL.createObjectURL(audioBuffer),
             data: audioBuffer,
           });

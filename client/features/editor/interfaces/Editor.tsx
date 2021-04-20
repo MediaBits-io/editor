@@ -2,7 +2,6 @@ export enum EditorPanel {
   Settings = 'settings-panel',
   Text = 'text-panel',
   Elements = 'elements-panel',
-  Audio = 'audio-panel',
   Image = 'image-panel',
   Subtitles = 'subtitles-panel',
   ImageProperties = 'image-properties-panel',

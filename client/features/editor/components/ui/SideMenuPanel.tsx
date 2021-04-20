@@ -32,11 +32,11 @@ function SideMenuPanel({
   return (
     <div
       className={classNames(
-        'flex flex-col flex-grow p-3 bg-white text-gray-900 border-r w-72',
+        'flex flex-col flex-grow overflow-y-hidden bg-white text-gray-900 border-r w-72',
         className
       )}
     >
-      <div className="mb-6 flex items-center">
+      <div className="p-3 flex items-center">
         {previous && (
           <ClearButton
             onClick={handleClickBack}
@@ -53,7 +53,9 @@ function SideMenuPanel({
           <div className="flex items-center ml-auto space-x-1">{actions}</div>
         )}
       </div>
-      {children}
+      <div className="flex flex-col flex-grow overflow-y-auto p-3">
+        {children}
+      </div>
     </div>
   );
 }

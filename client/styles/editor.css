@@ -53,4 +53,10 @@
   .button-default {
     @apply inline-flex justify-center items-center text-base sm:text-sm leading-6 sm:leading-5 whitespace-nowrap font-medium transition ease-in-out duration-150;
   }
+
+  .audio-bar {
+    wave {
+      overflow: hidden !important;
+    }
+  }
 }

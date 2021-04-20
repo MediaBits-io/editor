@@ -23,9 +23,10 @@ interface ClipBounds {
 }
 
 function AudioModalInner() {
-  const [{ onContinue, initialAudio }, setAudioModalState] = useRecoilState(
-    audioModalState
-  );
+  const [
+    { onContinue, onCancel, initialAudio },
+    setAudioModalState,
+  ] = useRecoilState(audioModalState);
   const userPlan = useRecoilValue(userPlanState);
   const userPlanInfo = useRecoilValue(userPlanInfoSelector);
   const [loading, setLoading] = useState(false);
@@ -33,6 +34,8 @@ function AudioModalInner() {
   const [audio, setAudio] = useState(initialAudio);
   const [totalDuration, setTotalDuration] = useState<number>();
   const { clipAudio } = useAudioClipper(audio?.data);
+
+  console.log('INIT', audio);
 
   useEffect(() => {
     if (audio) {
@@ -46,6 +49,7 @@ function AudioModalInner() {
 
   const closeModal = () => {
     setAudioModalState((state) => ({ ...state, visible: false }));
+    onCancel?.();
   };
 
   const handleSubmit = async () => {
@@ -68,12 +72,15 @@ function AudioModalInner() {
   };
 
   const handleTryAgain = () => {
+    if (audio) {
+      URL.revokeObjectURL(audio.url);
+    }
     setAudio(undefined);
   };
 
   const changeAudioFile = (data: Blob) => {
     if (audio && initialAudio?.url !== audio.url) {
-      // URL.revokeObjectURL(audio.url);
+      URL.revokeObjectURL(audio.url);
     }
 
     setAudio({

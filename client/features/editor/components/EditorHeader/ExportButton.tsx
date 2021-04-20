@@ -10,13 +10,13 @@ import classNames from '../../../../utils/classNames';
 import { openNewsletterWindow } from '../../../../utils/newsletter';
 import { audioModalState } from '../../state/atoms/ui';
 import useAudioDispatcher from '../../state/dispatchers/audio';
-import { audioSelector } from '../../state/selectors/audio';
+import { audioState } from '../../state/atoms/audio';
 
 function ExportButton() {
   const { exportVideo } = useVideos();
   const { addToast } = useToasts();
   const { setNewAudio } = useAudioDispatcher();
-  const audio = useRecoilValue(audioSelector);
+  const audio = useRecoilValue(audioState);
   const [loading, setLoading] = useState(false);
 
   const saveAndExportVideo = useCallback(
@@ -74,7 +74,7 @@ function ExportButton() {
 
   const handleClickExport = useRecoilCallback(
     ({ set, snapshot }) => () => {
-      const audio = snapshot.getLoadable(audioSelector).getValue();
+      const audio = snapshot.getLoadable(audioState).getValue();
 
       if (!audio) {
         set(audioModalState, {

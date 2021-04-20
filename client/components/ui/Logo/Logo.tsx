@@ -1,15 +1,12 @@
-import { HeartIcon } from '@heroicons/react/solid';
 import React from 'react';
 import classNames from '../../../utils/classNames';
 import ExternalLink from '../ExternalLink';
-import Tooltip from '../Tooltip/Tooltip';
 
 interface Props {
-  pro?: boolean;
   className?: string;
 }
 
-function Logo({ pro, className }: Props) {
+function Logo({ className }: Props) {
   return (
     <ExternalLink
       className={classNames(
@@ -29,28 +26,6 @@ function Logo({ pro, className }: Props) {
           fill="#A4CAFE"
         />
       </svg>
-
-      {pro && (
-        <Tooltip
-          modifiers={[
-            {
-              name: 'offset',
-              options: {
-                offset: [0, 10],
-              },
-            },
-          ]}
-          className="absolute p-1.5 -top-1 right-0 text-xs font-semibold mb-2 text-yellow-400 hover:text-yellow-500 cursor-default"
-          content={
-            <span className="flex items-center space-x-1">
-              <span>You have upgraded, thank you!</span>
-              <HeartIcon className="w-4 h-4 text-red-500" />
-            </span>
-          }
-        >
-          PRO
-        </Tooltip>
-      )}
     </ExternalLink>
   );
 }

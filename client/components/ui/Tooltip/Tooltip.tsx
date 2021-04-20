@@ -53,12 +53,12 @@ function Tooltip({
         }}
       >
         {(arrowProps) => (
-          <>
+          <div className="m-0.5">
             <div {...arrowProps} className="tooltip-arrow" />
             <div className="outline-none rounded-md shadow-sm p-2 text-xs leading-4 bg-gray-700 text-white">
               {content}
             </div>
-          </>
+          </div>
         )}
       </Popper>
     </div>

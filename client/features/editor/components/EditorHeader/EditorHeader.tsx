@@ -26,16 +26,14 @@ function EditorHeader() {
     <div className="flex bg-white border-b w-full py-2 items-center">
       <LoginModal close={() => setLoginVisible(false)} visible={loginVisible} />
 
-      <div className="flex flex-grow items-center">
+      <div className="flex w-full items-center">
         <div className="flex items-center space-x-2 px-2 w-72">
           <OpenTemplateButton />
           <SaveTemplateButton />
           <VideosButton />
         </div>
 
-        <div className="flex flex-grow items-center px-2">
-          <AudioControls />
-        </div>
+        <AudioControls />
 
         <div className="flex items-center space-x-2 px-2">
           <ExportButton />
