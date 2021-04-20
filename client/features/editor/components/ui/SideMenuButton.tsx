@@ -1,6 +1,4 @@
-import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/solid';
 import React from 'react';
-import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
 import classNames from '../../../../utils/classNames';
 
 interface Props
@@ -10,7 +8,6 @@ interface Props
   > {
   icon?: React.ComponentType<{ className?: string }>;
   selected?: boolean;
-  toggled?: boolean;
 }
 
 function SideMenuButton({
@@ -19,7 +16,6 @@ function SideMenuButton({
   selected,
   disabled,
   onClick,
-  toggled,
   className,
   ...rest
 }: Props) {
@@ -30,40 +26,17 @@ function SideMenuButton({
       disabled={disabled}
       onClick={disabled ? undefined : onClick}
       className={classNames(
-        'relative h-20 w-20 p-2 text-xs flex flex-col items-center justify-center rounded-md border focus:outline-none transition duration-150',
-        selected
-          ? 'bg-blue-50 text-blue-800 border-blue-300'
-          : 'bg-white text-gray-700 hover:border-gray-400 hover:text-gray-900 focus:border-gray-400 focus:text-gray-900',
-        selected &&
+        'relative h-16 w-16 p-1.5 text-xs flex flex-col items-center justify-center rounded-md focus:outline-none transition duration-150',
+        selected ? 'text-gray-200 bg-gray-900' : 'text-gray-300',
+        selected && !disabled && 'hover:text-white focus:text-white',
+        !selected &&
           !disabled &&
-          'hover:border-blue-400 hover:text-blue-900 focus:border-blue-400 focus:text-blue-900',
+          'hover:bg-gray-700 hover:text-white focus:text-white',
         disabled && 'cursor-default',
         className
       )}
       {...rest}
     >
-      {toggled === true && (
-        <CheckCircleIcon
-          className={classNames(
-            'absolute right-0.5 top-0.5 w-5 h-5 transition duration-150',
-            selected ? 'text-blue-300' : 'text-blue-200'
-          )}
-        />
-      )}
-      {toggled === false && (
-        <Tooltip
-          className="absolute right-0.5 top-0.5"
-          content="Required for generating video"
-          placement="top"
-        >
-          <ExclamationCircleIcon
-            className={classNames(
-              'w-5 h-5 transition duration-150',
-              selected ? 'text-red-300' : 'text-red-300'
-            )}
-          />
-        </Tooltip>
-      )}
       {Icon && <Icon className="w-6 h-6" />}
       <div>{children}</div>
     </button>

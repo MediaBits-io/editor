@@ -68,9 +68,7 @@ function AudioClipper({ audioFile, setAudioFile, onChange }: Props) {
           >
             <span className="flex flex-col justify-center text-center">
               <span className="mb-1">Click to select audio</span>
-              <span className="text-sm text-gray-500">
-                You can trim files up to 50MB
-              </span>
+              <span className="text-sm text-gray-500">Max size is 50MB</span>
             </span>
           </button>
         )}

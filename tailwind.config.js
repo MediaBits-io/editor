@@ -12,6 +12,9 @@ module.exports = {
         29: '7.25rem',
         68: '17rem',
       },
+      scale: {
+        '-1': '-1',
+      },
     },
   },
   plugins: [

@@ -5,6 +5,7 @@ export const audioModalState = atom<{
   visible: boolean;
   initialAudio?: AudioState;
   onContinue?: (clipBuffer: Blob) => void;
+  onCancel?: () => void;
 }>({
   key: 'audioModalState',
   default: { visible: false },

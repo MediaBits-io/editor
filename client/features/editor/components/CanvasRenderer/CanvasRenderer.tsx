@@ -6,7 +6,7 @@ import {
 } from 'recoil';
 import Loader from '../../../../components/ui/Loader/Loader';
 import { mul } from '../../../../utils/number';
-import { EDITOR_MARGIN } from '../../constants';
+import { CANVAS_STROKE, EDITOR_MARGIN } from '../../constants';
 import { EditorAreaContainer } from '../../containers/EditorAreaContainer';
 import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
 import useZoomControls from '../../hooks/useZoomControls';
@@ -64,27 +64,32 @@ function CanvasRenderer() {
   }, [editorAreaRef, fitToScreen, setScreenDimensions]);
 
   const area = useMemo(() => {
-    const screenDimensions = {
-      width: containerDimensions.width - 2 * EDITOR_MARGIN,
-      height: containerDimensions.height - 2 * EDITOR_MARGIN,
+    const canvasArea = {
+      width: dimensions.width * zoom + 2 * EDITOR_MARGIN,
+      height: dimensions.height * zoom + 2 * EDITOR_MARGIN,
     };
+
     const stageDimensions = {
-      width: Math.max(containerDimensions.width, dimensions.width * zoom),
-      height: Math.max(containerDimensions.height, dimensions.height * zoom),
+      width: Math.max(1, containerDimensions.width, canvasArea.width),
+      height: Math.max(1, containerDimensions.height, canvasArea.height),
     };
+
+    // Absolute offset, so divided by zoom, because offset is scaled by default
     const offsetX =
-      Math.max(0, (stageDimensions.width / zoom - dimensions.width) / 2) +
-      EDITOR_MARGIN;
+      (Math.max(0, (stageDimensions.width - canvasArea.width) / 2) +
+        EDITOR_MARGIN) /
+      zoom;
     const offsetY =
-      Math.max(0, (stageDimensions.height / zoom - dimensions.height) / 2) +
-      EDITOR_MARGIN;
+      (Math.max(0, (stageDimensions.height - canvasArea.height) / 2) +
+        EDITOR_MARGIN) /
+      zoom;
+
     return {
       containerDimensions,
-      screenDimensions,
       stageDimensions,
       scale: {
-        x: zoom * (screenDimensions.width / containerDimensions.width),
-        y: zoom * (screenDimensions.height / containerDimensions.height),
+        x: zoom,
+        y: zoom,
       },
       offset: {
         x: -offsetX,
@@ -121,14 +126,23 @@ function CanvasRenderer() {
           <ElementRefsContainer.Provider>
             <Layer>
               <Rect
-                width={dimensions.width}
-                height={dimensions.height}
-                shadowColor="#313131"
-                shadowOpacity={0.07}
+                x={-CANVAS_STROKE / zoom}
+                y={-CANVAS_STROKE / zoom}
+                width={dimensions.width + (2 * CANVAS_STROKE) / zoom}
+                height={dimensions.height + (2 * CANVAS_STROKE) / zoom}
+                shadowColor="black"
+                shadowOpacity={0.1}
                 shadowBlur={4}
                 shadowEnabled
-                strokeWidth={1}
-                stroke="rgb(229, 231, 235)"
+                fill="rgb(229, 231, 235)"
+              />
+              <Rect
+                width={dimensions.width}
+                height={dimensions.height}
+                shadowColor="black"
+                shadowOpacity={0.06}
+                shadowBlur={2}
+                shadowEnabled
                 {...background}
               />
             </Layer>

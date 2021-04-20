@@ -120,7 +120,7 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
       />
       <Flyout
         wrapperClass="w-72"
-        className="p-3 space-y-2"
+        className="p-3 space-y-1.5"
         targetElement={targetElement}
         isOpen={isOpen}
         close={close}

@@ -78,6 +78,7 @@ function Waveform({
       progressColor: '#fce96a',
       partialRender: true,
       normalize: true,
+      forceDecode: true,
       plugins: [
         RegionsPlugin.create({}),
         CursorPlugin.create({

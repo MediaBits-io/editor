@@ -11,9 +11,12 @@ function useEditorDispatcher() {
     ) => {
       const { height, width } =
         canvasDimensions ?? (await snapshot.getPromise(dimensionsState));
-      const zoom = Math.min(
-        screenDimensions.height / height,
-        screenDimensions.width / width
+      const zoom = Math.max(
+        0.01,
+        Math.min(
+          screenDimensions.height / height,
+          screenDimensions.width / width
+        )
       );
       set(zoomState, zoom);
     },
@@ -28,6 +31,7 @@ function useEditorDispatcher() {
       const { height, width } =
         canvasDimensions ?? (await snapshot.getPromise(dimensionsState));
       const zoom = Math.max(
+        0.01,
         screenDimensions.height / height,
         screenDimensions.width / width
       );

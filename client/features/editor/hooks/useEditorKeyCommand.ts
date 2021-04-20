@@ -8,18 +8,14 @@ export default function useEditorKeyCommand<T extends HTMLElement | Document>(
   const handleKeyDown = useCallback(
     (evt: Event | React.KeyboardEvent) => {
       const e = evt as KeyboardEvent;
+      const isCtrlDown = e.metaKey || e.ctrlKey;
+      const isShiftDown = e.shiftKey;
       const keys = command.split('+');
 
-      const triggered = keys.every((key) => {
-        switch (key) {
-          case 'shift':
-            return e.shiftKey;
-          case 'ctrl':
-            return e.metaKey || e.ctrlKey;
-          default:
-            return key === e.key.toLowerCase();
-        }
-      });
+      const triggered =
+        keys.includes(e.key?.toLowerCase()) &&
+        keys.includes('ctrl') === isCtrlDown &&
+        keys.includes('shift') === isShiftDown;
 
       if (triggered) {
         handler();

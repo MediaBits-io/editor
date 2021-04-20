@@ -1,20 +1,22 @@
 import { DownloadIcon } from '@heroicons/react/outline';
 import React, { useCallback, useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
-import { useRecoilCallback } from 'recoil';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 import Button from '../../../../components/ui/Button';
 import ExternalLink from '../../../../components/ui/ExternalLink';
 import NotificationContent from '../../../../components/ui/Notification/NotificationContent';
 import useVideos from '../../../../hooks/useVideos';
+import classNames from '../../../../utils/classNames';
 import { openNewsletterWindow } from '../../../../utils/newsletter';
 import { audioModalState } from '../../state/atoms/ui';
 import useAudioDispatcher from '../../state/dispatchers/audio';
-import { audioSelector } from '../../state/selectors/audio';
+import { audioState } from '../../state/atoms/audio';
 
 function ExportButton() {
   const { exportVideo } = useVideos();
   const { addToast } = useToasts();
   const { setNewAudio } = useAudioDispatcher();
+  const audio = useRecoilValue(audioState);
   const [loading, setLoading] = useState(false);
 
   const saveAndExportVideo = useCallback(
@@ -72,7 +74,7 @@ function ExportButton() {
 
   const handleClickExport = useRecoilCallback(
     ({ set, snapshot }) => () => {
-      const audio = snapshot.getLoadable(audioSelector).getValue();
+      const audio = snapshot.getLoadable(audioState).getValue();
 
       if (!audio) {
         set(audioModalState, {
@@ -91,11 +93,11 @@ function ExportButton() {
 
   return (
     <Button
-      className="w-40"
+      className={classNames('w-40', audio && 'shadow')}
       loading={loading}
       onClick={handleClickExport}
       icon={DownloadIcon}
-      type="primary"
+      type={audio ? 'primary' : 'gray'}
     >
       Generate video
     </Button>

@@ -37,7 +37,7 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
   return (
     <Flyout
       placement="bottom"
-      className="p-3 space-y-2"
+      className="p-3 space-y-1.5"
       wrapperClass={classNames(
         'w-full',
         generatedCount <= 1 ? 'max-w-xs' : 'max-w-md'
