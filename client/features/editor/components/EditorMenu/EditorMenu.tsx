@@ -25,7 +25,6 @@ function EditorMenu() {
         <TextToolButton />
         <ImageToolButton />
         <ElementsToolButton />
-        {/* <SubtitlesToolButton /> */}
         <div className="flex flex-grow">
           <div className="mt-auto">
             {isPro && (

@@ -96,7 +96,6 @@ function AudioControls() {
     }
   };
 
-  // TODO: reset on cancel
   const handleAudioMetadataLoaded = (
     e: React.SyntheticEvent<HTMLAudioElement, Event>
   ) => {
