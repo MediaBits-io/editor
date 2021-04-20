@@ -6,7 +6,6 @@ import {
   selectedElementIdState,
 } from '../../state/atoms/editor';
 import SideMenuPanel from '../ui/SideMenuPanel';
-import AudioToolPanel from './AudioToolPanel/AudioToolPanel';
 import ElementToolPanel from './ElementToolPanel';
 import ImagePropertiesPanel from './ImagePropertiesPanel/ImagePropertiesPanel';
 import ImageToolPanel from './ImageToolPanel';
