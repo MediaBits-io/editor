@@ -57,7 +57,7 @@ function Dropdown({
       isOpen={isOpen}
       targetElement={targetElement}
       popperOptions={popperOptions}
-      className={classNames('z-20', wrapperClass)}
+      className={classNames('z-10', wrapperClass)}
     >
       <div
         ref={containerElRef}

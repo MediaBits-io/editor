@@ -1,12 +1,9 @@
 import { CloudUploadIcon } from '@heroicons/react/solid';
 import React from 'react';
-import { saveAs } from 'file-saver';
 import Flyout from '../../../../../components/ui/Flyout';
 import DownloadToDiskIcon from '../../../../../components/ui/Icons/DownloadToDiskIcon';
-import { toTemplateJSON } from '../../../utils/template';
-import { useToasts } from 'react-toast-notifications';
+import useTemplate from '../../../hooks/useTemplate';
 import FlyoutMenuButton from '../FlyoutMenuButton';
-import useTemplateDispatcher from '../../../state/dispatchers/template';
 
 interface Props {
   isOpen: boolean;
@@ -15,16 +12,10 @@ interface Props {
 }
 
 function SaveTemplateFlyout({ close, isOpen, targetElement }: Props) {
-  const { setCurrentTemplateSaved } = useTemplateDispatcher();
-  const { addToast } = useToasts();
-  const downloadTemplate = async () => {
-    const template = await setCurrentTemplateSaved();
-    saveAs(
-      new Blob([await toTemplateJSON(template)], {
-        type: 'application/json',
-      })
-    );
-    addToast('Template saved successfully', { appearance: 'success' });
+  const { downloadTemplate } = useTemplate();
+
+  const handleSaveClick = () => {
+    downloadTemplate();
     close();
   };
 
@@ -37,9 +28,14 @@ function SaveTemplateFlyout({ close, isOpen, targetElement }: Props) {
       close={close}
     >
       <FlyoutMenuButton
-        title="Save to disk"
+        title={
+          <span className="flex justify-between items-start">
+            <span>Save to disk</span>
+            <span className="text-xs text-gray-400 p-0.5">(ctrl+s)</span>
+          </span>
+        }
         description="Download the template file to your computer"
-        onClick={downloadTemplate}
+        onClick={handleSaveClick}
         icon={DownloadToDiskIcon}
       />
       <FlyoutMenuButton

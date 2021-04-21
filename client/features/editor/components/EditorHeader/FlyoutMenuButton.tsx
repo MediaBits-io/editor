@@ -9,7 +9,7 @@ import { Plan } from '../../../../interfaces/plans';
 interface Props {
   onClick: () => void;
   icon: React.ComponentType<{ className?: string }>;
-  title: string;
+  title: React.ReactNode;
   description?: string;
   onlyPro?: boolean;
 }

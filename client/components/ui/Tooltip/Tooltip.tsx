@@ -39,7 +39,7 @@ function Tooltip({
         hasArrow
         isOpen={isOpen && !closed}
         targetElement={targetElRef.current}
-        className="tooltip"
+        className="tooltip z-20"
         popperOptions={{
           ...popperOptions,
           modifiers: popperOptions.modifiers ?? [

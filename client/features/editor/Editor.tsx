@@ -17,17 +17,24 @@ import EditorFocusController from './controllers/EditorFocusController';
 import HistoryController from './controllers/HistoryController';
 import UnsavedChangesController from './controllers/UnsavedChangesController';
 import useEditorKeyCommand from './hooks/useEditorKeyCommand';
+import useTemplate from './hooks/useTemplate';
 import useElementsDispatcher from './state/dispatchers/elements';
 import useHistoryDispatcher from './state/dispatchers/history';
 
 function Editor() {
   const { redo, undo } = useHistoryDispatcher();
   const { deleteSelectedElement } = useElementsDispatcher();
+  const { downloadTemplate } = useTemplate();
 
   useEffect(() => {
     loadFonts(PRELOAD_FONTS);
   }, []);
 
+  useEditorKeyCommand(
+    'ctrl+s',
+    downloadTemplate,
+    process.browser ? document : undefined
+  );
   useEditorKeyCommand('ctrl+z', undo, process.browser ? document : undefined);
   useEditorKeyCommand('ctrl+y', redo, process.browser ? document : undefined);
   useEditorKeyCommand(
