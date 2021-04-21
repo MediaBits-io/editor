@@ -5,7 +5,6 @@ import {
   ScissorsIcon,
   TrashIcon,
 } from '@heroicons/react/outline';
-import dynamic from 'next/dynamic';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   useRecoilCallback,
@@ -20,10 +19,7 @@ import { audioState } from '../../state/atoms/audio';
 import { audioModalState } from '../../state/atoms/ui';
 import useAudioDispatcher from '../../state/dispatchers/audio';
 import ClearButton from '../ui/ClearButton';
-
-const AudioBar = dynamic(() => import('./AudioBar'), {
-  ssr: false,
-});
+import AudioBar from './AudioBar';
 
 function AudioControls() {
   const userPlanInfo = useRecoilValue(userPlanInfoSelector);

@@ -35,8 +35,6 @@ function AudioModalInner() {
   const [totalDuration, setTotalDuration] = useState<number>();
   const { clipAudio } = useAudioClipper(audio?.data);
 
-  console.log('INIT', audio);
-
   useEffect(() => {
     if (audio) {
       const audioEl = new Audio();

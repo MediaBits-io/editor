@@ -23,46 +23,54 @@ function AudioBar({ audioUrl }: Props) {
 
     setLoading(true);
 
-    wavesurferRef.current = WaveSurfer.create({
-      container: containerRef.current,
-      waveColor: '#D1D5DB',
-      cursorColor: 'transparent',
-      progressColor: '#4b5563',
-      partialRender: true,
-      normalize: true,
-      height: 30,
-      forceDecode: true,
-      responsive: true,
-      plugins: [
-        CursorPlugin.create({
-          showTime: true,
-          opacity: 1,
-          color: '#111827',
-          customShowTimeStyle: {
-            'background-color': '#111827',
-            color: '#ffffff',
-            padding: '0.075rem 0.2rem',
-            'font-size': '0.75rem',
-          },
-        }),
-      ],
-    });
+    const container = containerRef.current;
 
-    wavesurferRef.current.load(audioUrl);
+    const init = async () => {
+      const WaveSurfer = (await import('wavesurfer.js')).default;
 
-    const handleReady = () => {
-      setLoading(false);
+      wavesurferRef.current = WaveSurfer.create({
+        container,
+        waveColor: '#D1D5DB',
+        cursorColor: 'transparent',
+        progressColor: '#4b5563',
+        partialRender: true,
+        normalize: true,
+        height: 30,
+        forceDecode: true,
+        responsive: true,
+        plugins: [
+          CursorPlugin.create({
+            showTime: true,
+            opacity: 1,
+            color: '#111827',
+            customShowTimeStyle: {
+              'background-color': '#111827',
+              color: '#ffffff',
+              padding: '0.075rem 0.2rem',
+              'font-size': '0.75rem',
+            },
+          }),
+        ],
+      });
+
+      wavesurferRef.current.load(audioUrl);
+
+      const handleReady = () => {
+        setLoading(false);
+      };
+
+      const handleTogglePlay = () => {
+        if (wavesurferRef.current) {
+          setIsPlaying(wavesurferRef.current.isPlaying());
+        }
+      };
+
+      wavesurferRef.current.on('ready', handleReady);
+      wavesurferRef.current.on('pause', handleTogglePlay);
+      wavesurferRef.current.on('play', handleTogglePlay);
     };
 
-    const handleTogglePlay = () => {
-      if (wavesurferRef.current) {
-        setIsPlaying(wavesurferRef.current.isPlaying());
-      }
-    };
-
-    wavesurferRef.current.on('ready', handleReady);
-    wavesurferRef.current.on('pause', handleTogglePlay);
-    wavesurferRef.current.on('play', handleTogglePlay);
+    init();
 
     return () => {
       wavesurferRef.current?.destroy();

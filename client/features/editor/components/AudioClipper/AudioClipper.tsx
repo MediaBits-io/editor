@@ -1,11 +1,7 @@
 import React, { useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
 import Loader from '../../../../components/ui/Loader/Loader';
 import classNames from '../../../../utils/classNames';
-
-const Waveform = dynamic(() => import('./Waveform'), {
-  ssr: false,
-});
+import Waveform from './Waveform';
 
 interface Props {
   audioFile?: Blob;

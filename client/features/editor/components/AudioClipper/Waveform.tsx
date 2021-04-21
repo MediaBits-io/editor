@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import WaveSurfer from 'wavesurfer.js';
 import {
   PauseIcon,
   PlayIcon,
@@ -71,122 +70,129 @@ function Waveform({
 
     setLoading(true);
 
-    wavesurferRef.current = WaveSurfer.create({
-      container: containerRef.current,
-      waveColor: 'white',
-      cursorColor: 'transparent',
-      progressColor: '#fce96a',
-      partialRender: true,
-      normalize: true,
-      forceDecode: true,
-      plugins: [
-        RegionsPlugin.create({}),
-        CursorPlugin.create({
-          showTime: true,
-          opacity: 1,
-          color: '#3f83f8',
-          customShowTimeStyle: {
-            'background-color': '#000000',
-            border: '1px solid #3f83f8',
-            color: '#ffffff',
-            padding: '0.1rem 0.25rem',
-            'font-size': '0.75rem',
+    const container = containerRef.current;
+
+    const init = async () => {
+      const WaveSurfer = (await import('wavesurfer.js')).default;
+      wavesurferRef.current = WaveSurfer.create({
+        container,
+        waveColor: 'white',
+        cursorColor: 'transparent',
+        progressColor: '#fce96a',
+        partialRender: true,
+        normalize: true,
+        forceDecode: true,
+        plugins: [
+          RegionsPlugin.create({}),
+          CursorPlugin.create({
+            showTime: true,
+            opacity: 1,
+            color: '#3f83f8',
+            customShowTimeStyle: {
+              'background-color': '#000000',
+              border: '1px solid #3f83f8',
+              color: '#ffffff',
+              padding: '0.1rem 0.25rem',
+              'font-size': '0.75rem',
+            },
+          }),
+          TimelinePlugin.create({
+            container: timelineRef.current,
+            primaryColor: '#e1effe',
+            secondaryColor: '#e1effe',
+            primaryFontColor: '#e1effe',
+            secondaryFontColor: '#e1effe',
+            unlabeledNotchColor: '#64748b',
+            formatTimeCallback: formatDuration,
+          }),
+        ],
+      });
+
+      wavesurferRef.current.loadBlob(audioFile);
+
+      const handleRegionUpdate = (region: any) => {
+        if (!wavesurferRef.current) {
+          return;
+        }
+
+        const duration = wavesurferRef.current.getDuration();
+        const start = Math.max(region.start, 0);
+        const end = Math.max(region.end, start + minDuration);
+
+        if (duration) {
+          updateRegionRange({ start, end });
+          onChange({
+            startPart: start / duration,
+            endPart: end / duration,
+            duration,
+          });
+        }
+
+        if (!wavesurferRef.current.isPlaying()) {
+          wavesurferRef.current.setCurrentTime(start);
+        }
+      };
+
+      const handleReady = () => {
+        setLoading(false);
+
+        const wavesurfer = wavesurferRef.current;
+
+        if (!wavesurfer) {
+          return;
+        }
+
+        const duration = wavesurfer.getDuration();
+        const start = 0;
+        const end = Math.min(duration, start + 15);
+
+        const region = wavesurfer.addRegion({
+          start,
+          end,
+          minLength: minDuration,
+          color: 'rgba(63, 131, 248, 0.25)',
+          handleStyle: {
+            left: {
+              minWidth: '2px',
+              backgroundColor: 'rgba(63, 131, 248)',
+            },
+            right: {
+              minWidth: '2px',
+              backgroundColor: 'rgba(63, 131, 248)',
+            },
           },
-        }),
-        TimelinePlugin.create({
-          container: timelineRef.current,
-          primaryColor: '#e1effe',
-          secondaryColor: '#e1effe',
-          primaryFontColor: '#e1effe',
-          secondaryFontColor: '#e1effe',
-          unlabeledNotchColor: '#64748b',
-          formatTimeCallback: formatDuration,
-        }),
-      ],
-    });
+        });
 
-    wavesurferRef.current.loadBlob(audioFile);
-
-    const handleRegionUpdate = (region: any) => {
-      if (!wavesurferRef.current) {
-        return;
-      }
-
-      const duration = wavesurferRef.current.getDuration();
-      const start = Math.max(region.start, 0);
-      const end = Math.max(region.end, start + minDuration);
-
-      if (duration) {
         updateRegionRange({ start, end });
         onChange({
-          startPart: start / duration,
-          endPart: end / duration,
+          startPart: region.start / duration,
+          endPart: region.end / duration,
           duration,
         });
-      }
 
-      if (!wavesurferRef.current.isPlaying()) {
-        wavesurferRef.current.setCurrentTime(start);
-      }
-    };
+        setTimeout(() => {
+          const wrapper = wavesurfer.drawer.wrapper;
 
-    const handleReady = () => {
-      setLoading(false);
+          if (wrapper) {
+            zoomRef.current = wrapper.clientWidth / 30; // Fit 30 seconds to screen
+            wavesurfer.zoom(zoomRef.current);
+          }
+        }, 10);
+      };
 
-      const wavesurfer = wavesurferRef.current;
-
-      if (!wavesurfer) {
-        return;
-      }
-
-      const duration = wavesurfer.getDuration();
-      const start = 0;
-      const end = Math.min(duration, start + 15);
-
-      const region = wavesurfer.addRegion({
-        start,
-        end,
-        minLength: minDuration,
-        color: 'rgba(63, 131, 248, 0.25)',
-        handleStyle: {
-          left: {
-            minWidth: '2px',
-            backgroundColor: 'rgba(63, 131, 248)',
-          },
-          right: {
-            minWidth: '2px',
-            backgroundColor: 'rgba(63, 131, 248)',
-          },
-        },
-      });
-
-      updateRegionRange({ start, end });
-      onChange({
-        startPart: region.start / duration,
-        endPart: region.end / duration,
-        duration,
-      });
-
-      setTimeout(() => {
-        const wrapper = wavesurfer.drawer.wrapper;
-
-        if (wrapper) {
-          zoomRef.current = wrapper.clientWidth / 30; // Fit 30 seconds to screen
-          wavesurfer.zoom(zoomRef.current);
+      const handleTogglePlay = () => {
+        if (wavesurferRef.current) {
+          setIsPlaying(wavesurferRef.current.isPlaying());
         }
-      }, 10);
+      };
+
+      wavesurferRef.current.on('region-updated', handleRegionUpdate);
+      wavesurferRef.current.on('ready', handleReady);
+      wavesurferRef.current.on('pause', handleTogglePlay);
+      wavesurferRef.current.on('play', handleTogglePlay);
     };
 
-    const handleTogglePlay = () => {
-      if (wavesurferRef.current) {
-        setIsPlaying(wavesurferRef.current.isPlaying());
-      }
-    };
-
-    wavesurferRef.current.on('region-updated', handleRegionUpdate);
-    wavesurferRef.current.on('ready', handleReady);
-    wavesurferRef.current.on('pause', handleTogglePlay);
-    wavesurferRef.current.on('play', handleTogglePlay);
+    init();
 
     return () => {
       wavesurferRef.current?.destroy();
