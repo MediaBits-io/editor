@@ -83,7 +83,7 @@ function Editor() {
                 <ZoomControls />
               </div>
             </div>
-            <MainArea onKeyDown={handleKeyDown}>
+            <MainArea onKeyDown={handleKeyDown} className="overflow-hidden">
               <CanvasRenderer />
             </MainArea>
           </div>

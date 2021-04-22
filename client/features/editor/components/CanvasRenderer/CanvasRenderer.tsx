@@ -5,7 +5,7 @@ import {
   useRecoilValue,
 } from 'recoil';
 import Loader from '../../../../components/ui/Loader/Loader';
-import { mul } from '../../../../utils/number';
+import classNames from '../../../../utils/classNames';
 import { CANVAS_STROKE, EDITOR_MARGIN } from '../../constants';
 import { EditorAreaContainer } from '../../containers/EditorAreaContainer';
 import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
@@ -39,6 +39,7 @@ function CanvasRenderer() {
   useEffect(() => {
     if (editorAreaRef.current) {
       const containerDimensions = editorAreaRef.current.getBoundingClientRect();
+
       setScreenDimensions({
         width: containerDimensions.width - 2 * EDITOR_MARGIN,
         height: containerDimensions.height - 2 * EDITOR_MARGIN,
@@ -48,6 +49,7 @@ function CanvasRenderer() {
 
       const observer = new ResizeObserver((entries) => {
         const containerDimensions = entries[0].target.getBoundingClientRect();
+
         setContainerDimensions(containerDimensions);
         setScreenDimensions({
           width: containerDimensions.width - 2 * EDITOR_MARGIN,
@@ -99,14 +101,20 @@ function CanvasRenderer() {
   }, [containerDimensions, dimensions.height, dimensions.width, zoom]);
 
   return (
-    <div className="overflow-auto w-full h-full" ref={editorAreaRef}>
+    <div
+      className={classNames(
+        'relative w-full h-full',
+        isLoading ? 'overflow-hidden' : 'overflow-auto'
+      )}
+      ref={editorAreaRef}
+    >
       {isLoading && (
         <>
           <div
-            className="z-10 absolute inset-0 m-auto rounded-lg bg-gray-900 opacity-75"
+            className="z-10 absolute bg-gray-600 opacity-75"
             style={{
-              width: mul(dimensions.width, zoom),
-              height: mul(dimensions.height, zoom),
+              width: area.stageDimensions.width,
+              height: area.stageDimensions.height,
             }}
           />
           <Loader className="z-10 absolute inset-0 m-auto h-10 text-white" />
