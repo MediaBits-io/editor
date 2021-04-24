@@ -4,28 +4,30 @@ import {
   QuestionMarkCircleIcon,
   XIcon,
 } from '@heroicons/react/solid';
-import React, { useState } from 'react';
+import React from 'react';
+import { useRecoilState } from 'recoil';
 import Button from '../../../../components/ui/Button';
 import ExternalLink from '../../../../components/ui/ExternalLink';
 import GithubIcon from '../../../../components/ui/Icons/GithubIcon';
 import { openNewsletterWindow } from '../../../../utils/newsletter';
+import { infoPopupState } from '../../state/atoms/ui';
 
 function InfoPopup() {
-  const [isInfoVisible, setInfoVisible] = useState(false);
+  const [{ visible }, setInfoPopup] = useRecoilState(infoPopupState);
 
   return (
     <>
       <Button
         round
         type="dark"
-        onClick={() => setInfoVisible(true)}
+        onClick={() => setInfoPopup({ visible: true })}
         className="text-xs w-16"
       >
         <QuestionMarkCircleIcon className="h-4 w-4 mr-1" /> Info
       </Button>
 
       <Transition
-        show={isInfoVisible}
+        show={visible}
         className="z-10 absolute bottom-0 left-0 px-2 py-1.5 w-full origin-bottom-left"
         enter="transition ease-out duration-150"
         enterFrom="transform opacity-50 scale-90"
@@ -39,7 +41,7 @@ function InfoPopup() {
             type="custom"
             icon={XIcon}
             className="text-gray-300 p-0.5 hover:text-white focus:text-white focus:outline-none absolute top-0.5 right-0.5 transition duration-150"
-            onClick={() => setInfoVisible(false)}
+            onClick={() => setInfoPopup({ visible: false })}
           />
 
           <h2 className="text-base font-semibold tracking-wide text-white mb-2">
