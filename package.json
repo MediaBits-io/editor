@@ -29,6 +29,8 @@
     "@heroicons/react": "^1.0.0",
     "@mirco312312/react-imask": "^6.0.6",
     "@popperjs/core": "^2.9.2",
+    "@sentry/react": "^6.3.1",
+    "@sentry/tracing": "^6.3.1",
     "audio-buffer-utils": "^5.1.2",
     "axios": "^0.21.0",
     "file-saver": "^2.0.5",

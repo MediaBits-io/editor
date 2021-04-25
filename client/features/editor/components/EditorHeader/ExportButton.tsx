@@ -8,9 +8,9 @@ import NotificationContent from '../../../../components/ui/Notification/Notifica
 import useVideos from '../../../../hooks/useVideos';
 import classNames from '../../../../utils/classNames';
 import { openNewsletterWindow } from '../../../../utils/newsletter';
+import { audioState } from '../../state/atoms/audio';
 import { audioModalState } from '../../state/atoms/ui';
 import useAudioDispatcher from '../../state/dispatchers/audio';
-import { audioState } from '../../state/atoms/audio';
 
 function ExportButton() {
   const { exportVideo } = useVideos();
@@ -50,7 +50,6 @@ function ExportButton() {
           );
         }
       } catch (e) {
-        console.error(e);
         const errorText = e?.response?.data?.error || "Something's wrong";
         addToast(
           <NotificationContent title={errorText}>

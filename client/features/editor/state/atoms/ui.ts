@@ -25,6 +25,6 @@ export const progressModalState = atom<{
 
 export const infoPopupState = atom<{ visible: boolean }>({
   key: 'infoPopupState',
-  default: { visible: true },
+  default: { visible: process.browser },
   effects_UNSTABLE: [persistAtom],
 });

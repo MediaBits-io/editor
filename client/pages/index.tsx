@@ -14,6 +14,7 @@ import { plansState } from '../state/atoms/plans';
 import AuthController from '../controllers/AuthController';
 import { Plans } from '../interfaces/plans';
 import VideosController from '../controllers/VideosController';
+import AppController from '../controllers/AppController';
 
 interface Props {
   plans: Plans;
@@ -61,6 +62,7 @@ export default function Home({ plans, authInfo }: Props) {
           }
         }}
       >
+        <AppController />
         <ToastProvider
           autoDismissTimeout={5000}
           autoDismiss

@@ -1,10 +1,12 @@
 import { Transition } from '@headlessui/react';
-import React, { useEffect, useRef, useState } from 'react';
-import { Portal } from 'react-portal';
 import { Options as PopperOptions } from '@popperjs/core';
+import React, { useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
-import classNames from '../../utils/classNames';
+import { Portal } from 'react-portal';
+import { useRecoilValue } from 'recoil';
+import { appReadyState } from '../../state/atoms/app';
 import { isTruthy } from '../../utils/boolean';
+import classNames from '../../utils/classNames';
 
 interface Props {
   targetElement: HTMLElement | null;
@@ -32,7 +34,7 @@ function Popper({
   transitionActiveClass = ['scale-95', 'scale-100'],
   transitionClass = ['duration-100', 'duration-75'],
 }: Props) {
-  const [isMounted, setMounted] = useState(false);
+  const appReady = useRecoilValue(appReadyState);
   const popperElRef = useRef<HTMLDivElement>(null);
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
@@ -55,11 +57,7 @@ function Popper({
     ].filter(isTruthy),
   });
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!isMounted) {
+  if (!appReady.rendered) {
     return null;
   }
 

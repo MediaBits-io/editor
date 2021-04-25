@@ -9,7 +9,7 @@ export const zoomState = atom({
   default: 1,
 });
 
-export const activePanelState = atom({
+export const activePanelState = atom<EditorPanel>({
   key: 'activePanelState',
   default: EditorPanel.Settings,
   effects_UNSTABLE: [untrackedHistoryEffect],

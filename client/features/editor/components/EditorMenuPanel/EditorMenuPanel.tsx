@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { EditorPanel } from '../../interfaces/Editor';
@@ -42,7 +43,7 @@ function EditorMenuPanel() {
     case EditorPanel.Elements:
       return <ElementToolPanel />;
     default:
-      console.error(`Panel ${activePanel} does not exist`);
+      Sentry.captureMessage(`Panel ${activePanel} does not exist`);
       return <SideMenuPanel />;
   }
 }

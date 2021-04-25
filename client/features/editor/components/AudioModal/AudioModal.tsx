@@ -1,18 +1,19 @@
+import * as Sentry from '@sentry/react';
 import React, { useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import Alert from '../../../../components/ui/Alert';
 import Modal from '../../../../components/ui/Modal/Modal';
-import ModalFullActions from '../../../../components/ui/Modal/ModalFullActions';
 import ModalAction from '../../../../components/ui/Modal/ModalAction';
 import ModalContent from '../../../../components/ui/Modal/ModalContent';
-import useAudioClipper from '../AudioClipper/useAudioClipper';
-import Alert from '../../../../components/ui/Alert';
-import FileTooBig from './FileTooBig';
+import ModalFullActions from '../../../../components/ui/Modal/ModalFullActions';
 import { ENABLE_UPGRADES } from '../../../../constants';
-import AudioClipper from '../AudioClipper/AudioClipper';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { userPlanState } from '../../../../state/atoms/user';
 import { Plan } from '../../../../interfaces/plans';
+import { userPlanState } from '../../../../state/atoms/user';
 import { userPlanInfoSelector } from '../../../../state/selectors/user';
 import { audioModalState } from '../../state/atoms/ui';
+import AudioClipper from '../AudioClipper/AudioClipper';
+import useAudioClipper from '../AudioClipper/useAudioClipper';
+import FileTooBig from './FileTooBig';
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
@@ -63,7 +64,7 @@ function AudioModalInner() {
       onContinue?.(audioBuffer);
       closeModal();
     } catch (e) {
-      console.error(e);
+      Sentry.captureException(e);
     } finally {
       setLoading(false);
     }

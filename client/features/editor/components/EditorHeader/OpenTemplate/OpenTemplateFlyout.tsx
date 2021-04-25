@@ -1,24 +1,25 @@
 import { CloudDownloadIcon } from '@heroicons/react/solid';
+import * as Sentry from '@sentry/react';
 import React, { useRef, useState } from 'react';
+import { useToasts } from 'react-toast-notifications';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import ExternalLink from '../../../../../components/ui/ExternalLink';
 import Flyout from '../../../../../components/ui/Flyout';
 import UploadToDiskIcon from '../../../../../components/ui/Icons/UploadToDiskIcon';
-import FlyoutMenuButton from '../FlyoutMenuButton';
+import NotificationContent from '../../../../../components/ui/Notification/NotificationContent';
 import { readBlobAsText } from '../../../../../utils/blob';
-import DiscardChangesModal from '../../DiscardChangesModal';
+import { EditorAreaContainer } from '../../../containers/EditorAreaContainer';
+import { Template } from '../../../interfaces/StageConfig';
+import { isLoadingState } from '../../../state/atoms/editor';
+import useTemplateDispatcher from '../../../state/dispatchers/template';
+import { hasUnsavedChangesSelector } from '../../../state/selectors/editor';
 import {
   autoCorrectTemplateIssues,
   loadTemplateFonts,
   loadTemplateImages,
 } from '../../../utils/template';
-import { useToasts } from 'react-toast-notifications';
-import NotificationContent from '../../../../../components/ui/Notification/NotificationContent';
-import ExternalLink from '../../../../../components/ui/ExternalLink';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isLoadingState } from '../../../state/atoms/editor';
-import { Template } from '../../../interfaces/StageConfig';
-import useTemplateDispatcher from '../../../state/dispatchers/template';
-import { EditorAreaContainer } from '../../../containers/EditorAreaContainer';
-import { hasUnsavedChangesSelector } from '../../../state/selectors/editor';
+import DiscardChangesModal from '../../DiscardChangesModal';
+import FlyoutMenuButton from '../FlyoutMenuButton';
 
 interface Props {
   isOpen: boolean;
@@ -65,7 +66,7 @@ function OpenTemplateFlyout({ isOpen, close, targetElement }: Props) {
 
         setLoadedTemplate(template, getScreenDimensions());
       } catch (e) {
-        console.error(e);
+        Sentry.captureException(e);
         addToast(
           <NotificationContent title="Failed to load template">
             Please contact support through

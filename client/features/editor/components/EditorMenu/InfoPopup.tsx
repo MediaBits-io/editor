@@ -5,14 +5,16 @@ import {
   XIcon,
 } from '@heroicons/react/solid';
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import Button from '../../../../components/ui/Button';
 import ExternalLink from '../../../../components/ui/ExternalLink';
 import GithubIcon from '../../../../components/ui/Icons/GithubIcon';
+import { appReadyState } from '../../../../state/atoms/app';
 import { openNewsletterWindow } from '../../../../utils/newsletter';
 import { infoPopupState } from '../../state/atoms/ui';
 
 function InfoPopup() {
+  const appReady = useRecoilValue(appReadyState);
   const [{ visible }, setInfoPopup] = useRecoilState(infoPopupState);
 
   return (
@@ -27,7 +29,7 @@ function InfoPopup() {
       </Button>
 
       <Transition
-        show={visible}
+        show={appReady.rendered && visible}
         className="z-10 absolute bottom-0 left-0 px-2 py-1.5 w-full origin-bottom-left"
         enter="transition ease-out duration-150"
         enterFrom="transform opacity-50 scale-90"

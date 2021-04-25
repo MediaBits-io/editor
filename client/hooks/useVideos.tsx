@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import { without } from 'ramda';
 import { useCallback, useRef } from 'react';
 import { useToasts } from 'react-toast-notifications';
@@ -6,8 +7,8 @@ import { useRecoilCallback } from 'recoil';
 import ExternalLink from '../components/ui/ExternalLink';
 import NotificationContent from '../components/ui/Notification/NotificationContent';
 import { Template } from '../features/editor/interfaces/StageConfig';
-import { progressModalState } from '../features/editor/state/atoms/ui';
 import { audioState } from '../features/editor/state/atoms/audio';
+import { progressModalState } from '../features/editor/state/atoms/ui';
 import { templateSelector } from '../features/editor/state/selectors/template';
 import { toTemplateJSON } from '../features/editor/utils/template';
 import {
@@ -129,9 +130,9 @@ function useVideos() {
             : state
         );
         set(videoSelector(data.id), deserializeVideoDTO(data.video));
-
         return data;
       } catch (e) {
+        Sentry.captureException(e);
         set(progressModalState, (state) =>
           state.taskId === pregeneratedId ? { ...state, error: true } : state
         );

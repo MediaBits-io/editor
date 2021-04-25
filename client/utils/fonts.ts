@@ -1,4 +1,5 @@
 import type { Config } from 'webfontloader';
+import * as Sentry from '@sentry/react';
 
 export async function loadFonts(families: string[], config?: Config) {
   await new Promise<void>(async (resolve, reject) => {
@@ -15,7 +16,7 @@ export async function loadFonts(families: string[], config?: Config) {
         },
         active: resolve,
         fontinactive: (family) => {
-          console.error(`Failed to load font "${family}"`);
+          Sentry.captureMessage(`Failed to load font "${family}"`);
         },
         ...config,
       });
