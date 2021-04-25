@@ -62,7 +62,7 @@ const InteractiveKonvaElement = ({
   }, [enabledAnchors, id, keepRatio, setElementRef]);
 
   const handleSelect = useCallback(
-    async (evt: KonvaEventObject<MouseEvent>) => {
+    (evt: KonvaEventObject<MouseEvent>) => {
       evt.cancelBubble = true;
       selectElement(id);
     },
