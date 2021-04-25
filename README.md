@@ -5,7 +5,7 @@
 This is a repository for the main editor, which is currently being rebuilt from scratch. It can be found on https://app.mediabits.io
 
 <p align="center">
-  <img src="https://res.cloudinary.com/dpqtultzq/image/upload/v1607885719/frame_generic_dark_9_evcn5l.png">
+  <img src="https://res.cloudinary.com/dpqtultzq/image/upload/v1619370126/frame_chrome_mac_dark_bohzhb.png">
 </p>
 
 ## Goals
