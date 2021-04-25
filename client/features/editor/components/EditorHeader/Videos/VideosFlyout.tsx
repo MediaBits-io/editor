@@ -72,7 +72,7 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
         </div>
       </div>
       {areVideosLoaded ? (
-        <VideosGrid />
+        <VideosGrid visible={isOpen} />
       ) : (
         <Loader className="my-6 text-gray-400" />
       )}
