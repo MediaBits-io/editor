@@ -12,6 +12,7 @@ import ImagePropertiesPanel from './ImagePropertiesPanel/ImagePropertiesPanel';
 import ImageToolPanel from './ImageToolPanel';
 import ProgressBarPropertiesPanel from './ProgressBarPropertiesPanel/ProgressBarPropertiesPanel';
 import SettingsToolPanel from './SettingsToolPanel/SettingsToolPanel';
+import SubtitlesToolPanel from './SubtitlesToolPanel/SubtitlesToolPanel';
 import TextPropertiesPanel from './TextPropertiesPanel/TextPropertiesPanel';
 import TextToolPanel from './TextToolPanel';
 import WaveformPropertiesPanel from './WaveformPropertiesPanel/WaveformPropertiesPanel';
@@ -42,6 +43,8 @@ function EditorMenuPanel() {
       return <ImageToolPanel />;
     case EditorPanel.Elements:
       return <ElementToolPanel />;
+    case EditorPanel.Subtitles:
+      return <SubtitlesToolPanel />;
     default:
       Sentry.captureMessage(`Panel ${activePanel} does not exist`);
       return <SideMenuPanel />;
