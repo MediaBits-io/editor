@@ -9,10 +9,7 @@ import SideMenuButton from '../../ui/SideMenuButton';
 function SubtitlesToolButton() {
   const setActivePanel = useSetRecoilState(activePanelState);
   const selected = useRecoilValue(
-    isEitherPanelActiveSelector([
-      EditorPanel.Subtitles,
-      EditorPanel.SubtitlesProperties,
-    ])
+    isEitherPanelActiveSelector([EditorPanel.Subtitles])
   );
 
   const handleClick = () => {

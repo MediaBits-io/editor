@@ -9,5 +9,4 @@ export enum EditorPanel {
   ProgressBarProperties = 'progress-bar-properties-panel',
   WaveformProperties = 'waveform-properties-panel',
   RectangleProperties = 'rectangle-properties-panel',
-  SubtitlesProperties = 'subtitles-properties-panel',
 }

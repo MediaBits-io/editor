@@ -19,6 +19,7 @@ export const SHAPE_PROPERTIES_PANEL: Partial<
   [ShapeType.ProgressBar]: EditorPanel.ProgressBarProperties,
   [ShapeType.Waveform]: EditorPanel.WaveformProperties,
   [ShapeType.Rectangle]: EditorPanel.RectangleProperties,
+  [ShapeType.Subtitle]: EditorPanel.Subtitles,
 };
 
 export const SHAPE_TOOL_PANEL: Partial<{ [key in ShapeType]: EditorPanel }> = {
@@ -27,11 +28,12 @@ export const SHAPE_TOOL_PANEL: Partial<{ [key in ShapeType]: EditorPanel }> = {
   [ShapeType.ProgressBar]: EditorPanel.Elements,
   [ShapeType.Waveform]: EditorPanel.Elements,
   [ShapeType.Rectangle]: EditorPanel.Elements,
+  [ShapeType.Subtitle]: EditorPanel.Subtitles,
 };
 
 export enum DefaultFonts {
   Headline = 'Archivo Black',
-  Regular = 'Helvetica',
+  Regular = 'Arial',
   Handwritten = 'Bad Script',
 }
 
@@ -40,6 +42,7 @@ export const ALL_FONTS = [
   'Alfa Slab One',
   'Anton',
   'Archivo Black',
+  'Arial',
   'Arial Black',
   'Arimo',
   'Bad Script',
@@ -47,7 +50,6 @@ export const ALL_FONTS = [
   'Cinzel',
   'Courier',
   'Georgia',
-  'Helvetica',
   'Iceberg',
   'Lobster',
   'Open Sans',
@@ -70,9 +72,9 @@ export const ALL_FONTS = [
 
 export const PROPRIETARY_FONTS = [
   'Courier',
-  'Helvetica',
-  'Georgia',
+  'Arial',
   'Arial Black',
+  'Georgia',
   'Times',
 ];
 
