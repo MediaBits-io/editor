@@ -1,11 +1,15 @@
-import { without } from 'ramda';
+import { sortBy, without, prop } from 'ramda';
 import { DefaultValue, selector, selectorFamily } from 'recoil';
 import { Subtitle } from '../../interfaces/Subtitles';
 import { subtitleIdsState, subtitleState } from '../atoms/template';
 
 export const subtitlesSelector = selector<Subtitle[]>({
   key: 'subtitlesSelector',
-  get: ({ get }) => get(subtitleIdsState).map((id) => get(subtitleState(id))!),
+  get: ({ get }) =>
+    sortBy(
+      prop('start'),
+      get(subtitleIdsState).map((id) => get(subtitleState(id))!)
+    ),
   set: ({ reset, get, set }, subtitles) => {
     if (subtitles instanceof DefaultValue) {
       get(subtitleIdsState).map((id) => reset(subtitleState(id)));
@@ -20,6 +24,16 @@ export const subtitlesSelector = selector<Subtitle[]>({
       );
     }
   },
+});
+
+export const subtitlesByEndSelector = selector<Subtitle[]>({
+  key: 'subtitlesByEndSelector',
+  get: ({ get }) => sortBy(prop('end'), get(subtitlesSelector)),
+});
+
+export const subtitlesByStartSelector = selector<Subtitle[]>({
+  key: 'subtitlesByStartSelector',
+  get: ({ get }) => sortBy(prop('start'), get(subtitlesSelector)),
 });
 
 export const subtitleSelector = selectorFamily<Subtitle | undefined, string>({

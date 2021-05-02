@@ -15,16 +15,7 @@ function SubtitlesToolPanel() {
       {subtitleIds.length > 0 ? (
         <SubtitlesList />
       ) : (
-        <Button
-          type="gray"
-          onClick={() =>
-            createSubtitle({
-              start: 0,
-              end: 1510,
-              text: 'Test subtitles',
-            })
-          }
-        >
+        <Button type="gray" onClick={() => createSubtitle('Test subtitles')}>
           Manual subtitles
         </Button>
       )}

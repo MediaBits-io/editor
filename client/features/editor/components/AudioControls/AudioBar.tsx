@@ -1,9 +1,13 @@
 import { PauseIcon, PlayIcon } from '@heroicons/react/outline';
 import React, { useEffect, useRef, useState } from 'react';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 import WaveSurfer from 'wavesurfer.js';
 import CursorPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.cursor';
 import Loader from '../../../../components/ui/Loader/Loader';
 import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
+import useThrottle from '../../../../utils/hooks/useThrottle';
+import { TARGET_FPS } from '../../constants';
+import { audioProgressState } from '../../state/atoms/audio';
 import ClearButton from '../ui/ClearButton';
 
 interface Props {
@@ -11,10 +15,28 @@ interface Props {
 }
 
 function AudioBar({ audioUrl }: Props) {
+  const audioProgress = useRecoilValue(audioProgressState);
   const [isLoading, setLoading] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const wavesurferRef = useRef<WaveSurfer>();
-  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handleProgress = useThrottle(
+    useRecoilCallback(
+      ({ set }) => () => {
+        const wavesurfer = wavesurferRef.current;
+        if (wavesurfer) {
+          console.log(wavesurfer.getCurrentTime());
+          set(
+            audioProgressState,
+            Math.floor(wavesurfer.getCurrentTime() * 1000)
+          );
+        }
+      },
+      []
+    ),
+    Math.floor(1000 / TARGET_FPS)
+  );
 
   useEffect(() => {
     if (!containerRef.current) {
@@ -31,7 +53,7 @@ function AudioBar({ audioUrl }: Props) {
       wavesurferRef.current = WaveSurfer.create({
         container,
         waveColor: '#D1D5DB',
-        cursorColor: 'transparent',
+        cursorColor: '#4b5563',
         progressColor: '#4b5563',
         partialRender: true,
         normalize: true,
@@ -68,6 +90,12 @@ function AudioBar({ audioUrl }: Props) {
       wavesurferRef.current.on('ready', handleReady);
       wavesurferRef.current.on('pause', handleTogglePlay);
       wavesurferRef.current.on('play', handleTogglePlay);
+      wavesurferRef.current.on('audioprocess', handleProgress);
+      wavesurferRef.current.on('seek', () => {
+        if (!wavesurferRef.current?.isPlaying()) {
+          handleProgress();
+        }
+      });
     };
 
     init();
@@ -75,7 +103,7 @@ function AudioBar({ audioUrl }: Props) {
     return () => {
       wavesurferRef.current?.destroy();
     };
-  }, [audioUrl, setLoading]);
+  }, [audioUrl, handleProgress, setLoading]);
 
   const handleClickPlayPause = async () => {
     if (wavesurferRef.current) {
@@ -85,7 +113,7 @@ function AudioBar({ audioUrl }: Props) {
 
   return (
     <div className="flex flex-1">
-      <div className="flex items-center mr-2">
+      <div className="flex items-center mr-1.5">
         <Tooltip
           content={isPlaying ? 'Pause audio' : 'Play audio'}
           placement="bottom"
@@ -97,14 +125,19 @@ function AudioBar({ audioUrl }: Props) {
           />
         </Tooltip>
       </div>
-      <div className="flex w-full justify-center items-center max-h-full bg-gray-50 border text-gray-400 rounded-md py-0.5 px-1">
-        {isLoading && (
-          <div className="absolute flex">
-            <Loader />
-            <span className="ml-2 text-sm">Analyzing audio...</span>
-          </div>
-        )}
-        <div ref={containerRef} className="audio-bar relative w-full" />
+      <div className="flex w-full items-center max-h-full bg-gray-50 border text-gray-400 rounded-md overflow-hidden">
+        <div className="h-full flex justify-end items-center w-16 px-1 py-0.5 text-xs border-r">
+          {audioProgress}
+        </div>
+        <div className="flex w-full justify-center items-center py-0.5 pr-1 max-h-full">
+          {isLoading && (
+            <div className="absolute flex">
+              <Loader />
+              <span className="ml-2 text-sm">Analyzing audio...</span>
+            </div>
+          )}
+          <div ref={containerRef} className="audio-bar relative w-full" />
+        </div>
       </div>
     </div>
   );

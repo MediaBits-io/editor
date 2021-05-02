@@ -1,4 +1,5 @@
 import {
+  DotsVerticalIcon,
   DownloadIcon,
   MusicNoteIcon,
   PencilIcon,
@@ -13,6 +14,9 @@ import {
   useResetRecoilState,
 } from 'recoil';
 import Button from '../../../../components/ui/Button';
+import Dropdown from '../../../../components/ui/Dropdown/Dropdown';
+import DropdownButton from '../../../../components/ui/Dropdown/DropdownButton';
+import useDropdown from '../../../../components/ui/Dropdown/useDropdown';
 import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
 import { userPlanInfoSelector } from '../../../../state/selectors/user';
 import { audioState } from '../../state/atoms/audio';
@@ -29,6 +33,14 @@ function AudioControls() {
   const [currentAudio, setCurrentAudio] = useState(audio);
   const audioRef = useRef<HTMLAudioElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    setTargetElement,
+    targetElement,
+    isOpen,
+    toggle,
+    close,
+  } = useDropdown();
 
   useEffect(() => {
     setCurrentAudio((currentAudio) => {
@@ -145,36 +157,57 @@ function AudioControls() {
             <source src={currentAudio.url} type="audio/mp3" />
           </audio>
           <AudioBar audioUrl={currentAudio.url} />
-          <div className="flex space-x-2 ml-2">
-            <Tooltip
-              content="Trim audio"
-              placement="bottom"
+          <Tooltip
+            content="Manage audio"
+            placement="bottom"
+            closed={isOpen}
+            className="ml-1.5"
+          >
+            <ClearButton
+              icon={DotsVerticalIcon}
+              ref={setTargetElement}
+              onClick={toggle}
+            />
+          </Tooltip>
+          <Dropdown
+            placement="bottom"
+            targetElement={targetElement}
+            isOpen={isOpen}
+            close={close}
+          >
+            <DropdownButton
+              state="stateless"
               className="flex items-center"
+              onClick={handleUploadAudioClick}
             >
-              <ClearButton icon={ScissorsIcon} onClick={openTrimModal} />
-            </Tooltip>
-            <Tooltip
-              content="Change file"
-              placement="bottom"
+              <PencilIcon className="w-4 h-4 mr-2" />
+              <span>Change file</span>
+            </DropdownButton>
+            <DropdownButton
+              state="stateless"
               className="flex items-center"
+              onClick={openTrimModal}
             >
-              <ClearButton icon={PencilIcon} onClick={handleUploadAudioClick} />
-            </Tooltip>
-            <Tooltip
-              content="Download audio"
-              placement="bottom"
+              <ScissorsIcon className="w-4 h-4 mr-2" />
+              <span>Trim audio</span>
+            </DropdownButton>
+            <DropdownButton
+              state="stateless"
               className="flex items-center"
+              onClick={handleDownloadAudio}
             >
-              <ClearButton icon={DownloadIcon} onClick={handleDownloadAudio} />
-            </Tooltip>
-            <Tooltip
-              content="Remove audio"
-              placement="bottom"
+              <DownloadIcon className="w-4 h-4 mr-2" />
+              <span>Download audio</span>
+            </DropdownButton>
+            <DropdownButton
+              state="stateless"
               className="flex items-center"
+              onClick={resetAudio}
             >
-              <ClearButton icon={TrashIcon} onClick={resetAudio} />
-            </Tooltip>
-          </div>
+              <TrashIcon className="w-4 h-4 mr-2" />
+              <span>Remove audio</span>
+            </DropdownButton>
+          </Dropdown>
         </>
       )}
     </div>
