@@ -12,3 +12,8 @@ export const audioProgressState = atom({
   key: 'audioProgressState',
   default: 0,
 });
+
+export const waveformFramesState = atom<number[][][] | undefined>({
+  key: 'waveformFramesState',
+  default: undefined,
+});
