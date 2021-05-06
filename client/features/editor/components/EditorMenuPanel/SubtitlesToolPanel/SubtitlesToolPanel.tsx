@@ -15,7 +15,7 @@ function SubtitlesToolPanel() {
       {subtitleIds.length > 0 ? (
         <SubtitlesList />
       ) : (
-        <Button type="gray" onClick={() => createSubtitle('Test subtitles')}>
+        <Button type="gray" onClick={() => createSubtitle('New subtitle line')}>
           Manual subtitles
         </Button>
       )}

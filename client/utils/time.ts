@@ -1,14 +1,21 @@
 import { prependZero } from './number';
 
+export const dateToSeconds = (date: Date) => {
+  let seconds = 0;
+  seconds += date.getHours() * 3600;
+  seconds += date.getMinutes() * 60;
+  seconds += date.getSeconds();
+  seconds += date.getMilliseconds() / 1000;
+  return seconds;
+};
+
 export const secondsToDate = (totalSeconds: number) => {
   const seconds = Math.floor(totalSeconds);
   const date = new Date();
   date.setHours(Math.floor(seconds / 3600));
   date.setMinutes(Math.floor((seconds % 3600) / 60));
   date.setSeconds(seconds % 60);
-  date.setMilliseconds(
-    Math.floor((totalSeconds - Math.floor(totalSeconds)) * 1000)
-  );
+  date.setMilliseconds((totalSeconds * 1000) % 1000);
   return date;
 };
 
@@ -37,22 +44,41 @@ export const dateToTimeString = (
     .join(':')}.${millis}`;
 };
 
-export const timeStringToDate = (str: string) => {
-  const [hours, minutes, secondsAndMillis] = str.split(':');
+export const timeStringToDate = (
+  str: string,
+  config: {
+    optHours?: boolean;
+    shortMillis?: boolean;
+  } = {}
+) => {
+  const values = str.split(':');
+  const hours = config.optHours ? 0 : values[0];
+  const minutes = config.optHours ? values[0] : values[1];
+  const secondsAndMillis = config.optHours ? values[1] : values[2];
   const [seconds, millis] = secondsAndMillis.split('.');
   const date = new Date();
   date.setHours(Number(hours));
   date.setMinutes(Number(minutes));
   date.setSeconds(Number(seconds));
-  date.setMilliseconds(Number(millis));
+  date.setMilliseconds(
+    config.shortMillis ? Number(millis) * 100 : Number(millis)
+  );
   return date;
 };
 
-export const formatTime = (milliseconds: number) => {
-  return dateToTimeString(secondsToDate(milliseconds / 1000), {
+export const formatTime = (seconds: number) => {
+  return dateToTimeString(secondsToDate(seconds), {
     optHours: true,
     shortMillis: true,
   });
+};
+export const parseTime = (timeString: string) => {
+  return dateToSeconds(
+    timeStringToDate(timeString, {
+      optHours: true,
+      shortMillis: true,
+    })
+  );
 };
 
 export const formatDuration = (totalSeconds: number, round = true) => {

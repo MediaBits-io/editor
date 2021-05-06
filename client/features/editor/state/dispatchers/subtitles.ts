@@ -43,7 +43,7 @@ function useSubtitlesDispatcher() {
         id,
         text,
         start,
-        end: start + 3000,
+        end: start + 3,
         type: ShapeType.Subtitle,
       });
     },

@@ -8,6 +8,9 @@ export const audioState = atom<AudioState | undefined>({
   effects_UNSTABLE: [historyEffect],
 });
 
+/**
+ * Progress in seconds (decimal milliseconds)
+ */
 export const audioProgressState = atom({
   key: 'audioProgressState',
   default: 0,

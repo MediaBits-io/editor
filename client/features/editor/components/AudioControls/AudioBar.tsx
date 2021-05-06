@@ -1,13 +1,13 @@
 import { PauseIcon, PlayIcon } from '@heroicons/react/outline';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import WaveSurfer from 'wavesurfer.js';
 import CursorPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.cursor';
 import Loader from '../../../../components/ui/Loader/Loader';
 import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
 import useThrottle from '../../../../utils/hooks/useThrottle';
 import { formatTime } from '../../../../utils/time';
 import { TARGET_FPS } from '../../constants';
+import { AudioControlsContainer } from '../../containers/AudioControlsContainer';
 import { audioProgressState } from '../../state/atoms/audio';
 import ClearButton from '../ui/ClearButton';
 
@@ -20,20 +20,17 @@ function AudioBar({ audioUrl }: Props) {
   const [isLoading, setLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const wavesurferRef = useRef<WaveSurfer>();
+  const { wavesurferRef } = AudioControlsContainer.useContainer();
 
   const handleProgress = useThrottle(
     useRecoilCallback(
       ({ set }) => () => {
         const wavesurfer = wavesurferRef.current;
         if (wavesurfer) {
-          set(
-            audioProgressState,
-            Math.floor(wavesurfer.getCurrentTime() * 1000)
-          );
+          set(audioProgressState, wavesurfer.getCurrentTime());
         }
       },
-      []
+      [wavesurferRef]
     ),
     Math.floor(1000 / TARGET_FPS)
   );
@@ -43,12 +40,12 @@ function AudioBar({ audioUrl }: Props) {
       const wavesurfer = wavesurferRef.current;
 
       if (wavesurfer) {
-        set(audioProgressState, Math.floor(wavesurfer.getCurrentTime() * 1000));
+        set(audioProgressState, wavesurfer.getCurrentTime());
       }
 
       setLoading(false);
     },
-    []
+    [wavesurferRef]
   );
 
   useEffect(() => {
@@ -111,8 +108,9 @@ function AudioBar({ audioUrl }: Props) {
 
     return () => {
       wavesurferRef.current?.destroy();
+      wavesurferRef.current = undefined;
     };
-  }, [audioUrl, handleProgress, handleReady]);
+  }, [audioUrl, handleProgress, handleReady, wavesurferRef]);
 
   const handleClickPlayPause = async () => {
     if (wavesurferRef.current) {

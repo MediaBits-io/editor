@@ -13,6 +13,7 @@ interface Props {
   ) => void;
 }
 
+// TODO: treeshake imask, import only esm modules
 function TimestampInput({ value, onChange, className, label }: Props) {
   return (
     <label className={className}>

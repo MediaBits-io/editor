@@ -1,14 +1,15 @@
 import { ClockIcon, TrashIcon } from '@heroicons/react/outline';
 import React, { ChangeEvent } from 'react';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilCallback, useRecoilValue, useResetRecoilState } from 'recoil';
 import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
 import classNames from '../../../../../utils/classNames';
-import { formatTime } from '../../../../../utils/time';
+import { AudioControlsContainer } from '../../../containers/AudioControlsContainer';
 import { Subtitle } from '../../../interfaces/Subtitles';
 import { audioProgressState } from '../../../state/atoms/audio';
 import useSubtitlesDispatcher from '../../../state/dispatchers/subtitles';
 import { subtitleSelector } from '../../../state/selectors/subtitles';
 import PanelActionButton from '../../ui/PanelActionButton';
+import SubtitleTimeInput from './SubtitleTimeInput';
 
 interface Props {
   subtitle: Subtitle;
@@ -18,6 +19,7 @@ function SubtitleCard({ subtitle }: Props) {
   const { updateSubtitle } = useSubtitlesDispatcher();
   const resetSubtitle = useResetRecoilState(subtitleSelector(subtitle.id));
   const audioProgress = useRecoilValue(audioProgressState);
+  const { wavesurferRef } = AudioControlsContainer.useContainer();
 
   const isActive =
     audioProgress >= subtitle.start && audioProgress < subtitle.end;
@@ -26,7 +28,32 @@ function SubtitleCard({ subtitle }: Props) {
     updateSubtitle(subtitle.id, { text: e.target.value });
   };
 
-  // TODO: on click/focus select, selected=focused style
+  const handleFocusSubtitle = useRecoilCallback(
+    ({ set }) => () => {
+      if (wavesurferRef.current) {
+        wavesurferRef.current.setCurrentTime(subtitle.start);
+      } else {
+        set(audioProgressState, subtitle.start);
+      }
+    },
+    [subtitle.start, wavesurferRef]
+  );
+
+  const handleChangeStart = (value: number) => {
+    const start = Math.min(subtitle.end, value);
+    updateSubtitle(subtitle.id, {
+      start,
+    });
+  };
+
+  const handleChangeEnd = (value: number) => {
+    const end = Math.max(subtitle.start, value);
+    updateSubtitle(subtitle.id, {
+      end,
+    });
+  };
+
+  // TODO: mask for longer videos than 1 hour
   return (
     <div
       className={classNames(
@@ -34,19 +61,32 @@ function SubtitleCard({ subtitle }: Props) {
         isActive && 'border-gray-400'
       )}
     >
-      <div className="text-gray-400 text-xs flex items-center justify-between">
+      <div className="text-gray-400 flex items-center justify-between">
         <div className="flex items-center">
-          <span className="flex items-center font-mono">
-            <ClockIcon className="w-4 h-4 mr-1" />
-            {formatTime(subtitle.start)}
-          </span>
-          <span className="flex items-center border-l ml-2 pl-2 font-mono">
-            <ClockIcon className="w-4 h-4 mr-1 transform -scale-x-1" />
-            {formatTime(subtitle.end)}
-          </span>
+          <SubtitleTimeInput
+            id={`${subtitle.id}_end`}
+            value={subtitle.start}
+            label="Start time"
+            onChange={handleChangeStart}
+            icon={<ClockIcon className="w-4 h-4 mr-1" />}
+          />
+
+          <span className="border-l mx-1.5 h-6" />
+
+          <SubtitleTimeInput
+            id={`${subtitle.id}_end`}
+            value={subtitle.end}
+            label="End time"
+            onChange={handleChangeEnd}
+            icon={<ClockIcon className="w-4 h-4 mr-1 transform -scale-x-1" />}
+          />
         </div>
         <Tooltip content="Delete" placement="top">
-          <PanelActionButton icon={TrashIcon} onClick={() => resetSubtitle()} />
+          <PanelActionButton
+            type="white"
+            icon={TrashIcon}
+            onClick={() => resetSubtitle()}
+          />
         </Tooltip>
       </div>
       <textarea
@@ -56,6 +96,7 @@ function SubtitleCard({ subtitle }: Props) {
         }
         value={subtitle.text}
         onChange={handleChangeText}
+        onFocus={handleFocusSubtitle}
       />
     </div>
   );
