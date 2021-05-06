@@ -6,6 +6,7 @@ import CursorPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.cursor';
 import Loader from '../../../../components/ui/Loader/Loader';
 import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
 import useThrottle from '../../../../utils/hooks/useThrottle';
+import { formatTime } from '../../../../utils/time';
 import { TARGET_FPS } from '../../constants';
 import { audioProgressState } from '../../state/atoms/audio';
 import ClearButton from '../ui/ClearButton';
@@ -26,7 +27,6 @@ function AudioBar({ audioUrl }: Props) {
       ({ set }) => () => {
         const wavesurfer = wavesurferRef.current;
         if (wavesurfer) {
-          console.log(wavesurfer.getCurrentTime());
           set(
             audioProgressState,
             Math.floor(wavesurfer.getCurrentTime() * 1000)
@@ -36,6 +36,19 @@ function AudioBar({ audioUrl }: Props) {
       []
     ),
     Math.floor(1000 / TARGET_FPS)
+  );
+
+  const handleReady = useRecoilCallback(
+    ({ set }) => async () => {
+      const wavesurfer = wavesurferRef.current;
+
+      if (wavesurfer) {
+        set(audioProgressState, Math.floor(wavesurfer.getCurrentTime() * 1000));
+      }
+
+      setLoading(false);
+    },
+    []
   );
 
   useEffect(() => {
@@ -77,10 +90,6 @@ function AudioBar({ audioUrl }: Props) {
 
       wavesurferRef.current.load(audioUrl);
 
-      const handleReady = () => {
-        setLoading(false);
-      };
-
       const handleTogglePlay = () => {
         if (wavesurferRef.current) {
           setIsPlaying(wavesurferRef.current.isPlaying());
@@ -103,7 +112,7 @@ function AudioBar({ audioUrl }: Props) {
     return () => {
       wavesurferRef.current?.destroy();
     };
-  }, [audioUrl, handleProgress, setLoading]);
+  }, [audioUrl, handleProgress, handleReady]);
 
   const handleClickPlayPause = async () => {
     if (wavesurferRef.current) {
@@ -126,8 +135,8 @@ function AudioBar({ audioUrl }: Props) {
         </Tooltip>
       </div>
       <div className="flex w-full items-center max-h-full bg-gray-50 border text-gray-400 rounded-md overflow-hidden">
-        <div className="h-full flex justify-end items-center w-16 px-1 py-0.5 text-xs border-r">
-          {audioProgress}
+        <div className="h-full flex justify-end items-center w-16 px-1 py-0.5 text-xs border-r font-mono">
+          {formatTime(audioProgress)}
         </div>
         <div className="flex w-full justify-center items-center py-0.5 pr-1 max-h-full">
           {isLoading && (

@@ -3,6 +3,7 @@ import React, { ChangeEvent } from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
 import classNames from '../../../../../utils/classNames';
+import { formatTime } from '../../../../../utils/time';
 import { Subtitle } from '../../../interfaces/Subtitles';
 import { audioProgressState } from '../../../state/atoms/audio';
 import useSubtitlesDispatcher from '../../../state/dispatchers/subtitles';
@@ -35,13 +36,13 @@ function SubtitleCard({ subtitle }: Props) {
     >
       <div className="text-gray-400 text-xs flex items-center justify-between">
         <div className="flex items-center">
-          <span className="flex items-center">
+          <span className="flex items-center font-mono">
             <ClockIcon className="w-4 h-4 mr-1" />
-            {subtitle.start}
+            {formatTime(subtitle.start)}
           </span>
-          <span className="flex items-center border-l ml-2 pl-2">
+          <span className="flex items-center border-l ml-2 pl-2 font-mono">
             <ClockIcon className="w-4 h-4 mr-1 transform -scale-x-1" />
-            {subtitle.end}
+            {formatTime(subtitle.end)}
           </span>
         </div>
         <Tooltip content="Delete" placement="top">

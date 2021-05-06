@@ -11,7 +11,7 @@ import TimelinePlugin from 'wavesurfer.js/dist/plugin/wavesurfer.timeline';
 import Button from '../../../../components/ui/Button';
 import TimestampInput from './TimestampInput';
 import useThrottle from '../../../../utils/hooks/useThrottle';
-import { formatDateToValue, formatDuration } from '../../../../utils/time';
+import { dateToTimeString, formatDuration } from '../../../../utils/time';
 
 interface Props {
   audioFile: Blob;
@@ -55,8 +55,8 @@ function Waveform({
   const updateRegionRange = useThrottle(
     useCallback(
       (region: any) => {
-        setStartTime(formatDateToValue(getTime(region.start)));
-        setEndTime(formatDateToValue(getTime(region.end)));
+        setStartTime(dateToTimeString(getTime(region.start)));
+        setEndTime(dateToTimeString(getTime(region.end)));
       },
       [getTime]
     ),
