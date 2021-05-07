@@ -17,6 +17,7 @@ import useElementsDispatcher from '../../state/dispatchers/elements';
 import Elements from './Elements';
 import GuideLines from './GuideLines';
 import HighlightRenderer from './HighlightRenderer';
+import Subtitles from './Subtitles';
 import TransformerRenderer from './TransformerRenderer';
 
 function CanvasRenderer() {
@@ -163,6 +164,7 @@ function CanvasRenderer() {
               </Layer>
               <Layer>
                 <HighlightRenderer />
+                <Subtitles />
                 <GuideLines />
                 <TransformerRenderer />
               </Layer>

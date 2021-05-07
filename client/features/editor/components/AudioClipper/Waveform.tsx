@@ -11,7 +11,12 @@ import TimelinePlugin from 'wavesurfer.js/dist/plugin/wavesurfer.timeline';
 import Button from '../../../../components/ui/Button';
 import TimestampInput from './TimestampInput';
 import useThrottle from '../../../../utils/hooks/useThrottle';
-import { formatDateToValue, formatDuration } from '../../../../utils/time';
+import {
+  dateToSeconds,
+  dateToTimeString,
+  formatDuration,
+  secondsToDate,
+} from '../../../../utils/time';
 
 interface Props {
   audioFile: Blob;
@@ -25,6 +30,7 @@ interface Props {
   setLoading: (value: boolean) => void;
 }
 
+// TODO: fix imask emitting onChange when value changes / region resize slow
 function Waveform({
   audioFile,
   onChange,
@@ -40,26 +46,11 @@ function Waveform({
   const [startTime, setStartTime] = useState('00:00:00.000');
   const [endTime, setEndTime] = useState('00:00:15.000');
 
-  const getTime = useCallback((totalSeconds: number) => {
-    const seconds = Math.floor(totalSeconds);
-    const date = new Date();
-    date.setHours(Math.floor(seconds / 3600));
-    date.setMinutes(Math.floor((seconds % 3600) / 60));
-    date.setSeconds(seconds % 60);
-    date.setMilliseconds(
-      Math.floor((totalSeconds - Math.floor(totalSeconds)) * 1000)
-    );
-    return date;
-  }, []);
-
   const updateRegionRange = useThrottle(
-    useCallback(
-      (region: any) => {
-        setStartTime(formatDateToValue(getTime(region.start)));
-        setEndTime(formatDateToValue(getTime(region.end)));
-      },
-      [getTime]
-    ),
+    useCallback((region: any) => {
+      setStartTime(dateToTimeString(secondsToDate(region.start)));
+      setEndTime(dateToTimeString(secondsToDate(region.end)));
+    }, []),
     50
   );
 
@@ -255,11 +246,7 @@ function Waveform({
     }
 
     const region: any = Object.values(wavesurferRef.current.regions.list)[0];
-    const seconds =
-      mask.typedValue.getMilliseconds() / 1000 +
-      mask.typedValue.getSeconds() +
-      mask.typedValue.getMinutes() * 60 +
-      mask.typedValue.getHours() * 3600;
+    const seconds = dateToSeconds(mask.typedValue);
 
     if (mask.typedValue) {
       region.onResize(seconds - region.end);
@@ -288,11 +275,7 @@ function Waveform({
     }
 
     const region: any = Object.values(wavesurferRef.current.regions.list)[0];
-    const seconds =
-      mask.typedValue.getMilliseconds() / 1000 +
-      mask.typedValue.getSeconds() +
-      mask.typedValue.getMinutes() * 60 +
-      mask.typedValue.getHours() * 3600;
+    const seconds = dateToSeconds(mask.typedValue);
 
     if (mask.typedValue) {
       region.onDrag(seconds - region.start);

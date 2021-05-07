@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMaskInput } from 'react-imask';
 import IMask from 'imask';
-import { formatDateToValue, parseDateFromValue } from '../../../../utils/time';
+import { dateToTimeString, timeStringToDate } from '../../../../utils/time';
 
 interface Props {
   className?: string;
@@ -13,6 +13,7 @@ interface Props {
   ) => void;
 }
 
+// TODO: treeshake imask, import only esm modules
 function TimestampInput({ value, onChange, className, label }: Props) {
   return (
     <label className={className}>
@@ -47,8 +48,8 @@ function TimestampInput({ value, onChange, className, label }: Props) {
         }}
         value={value}
         onAccept={onChange}
-        format={formatDateToValue}
-        parse={parseDateFromValue}
+        format={dateToTimeString}
+        parse={timeStringToDate}
       />
     </label>
   );

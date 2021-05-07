@@ -46,6 +46,10 @@ export function extractTemplateFonts(template: Template) {
     }
   });
 
+  if (template.subtitles?.style.fontFamily) {
+    fonts.add(template.subtitles.style.fontFamily);
+  }
+
   return Array.from(fonts);
 }
 

@@ -6,6 +6,7 @@ export enum ShapeType {
   ProgressBar = 'progress-bar',
   Waveform = 'waveform',
   Image = 'image',
+  Subtitle = 'subtitle',
 }
 
 export type ImageFit = 'fill' | 'scale';

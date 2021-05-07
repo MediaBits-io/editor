@@ -6,7 +6,7 @@ import {
   lastSavedTemplateState,
   selectedElementIdState,
 } from '../atoms/editor';
-import { elementState } from '../atoms/template';
+import { elementState, subtitleState } from '../atoms/template';
 import { templateSelector } from './template';
 
 export const hasUnsavedChangesSelector = selector({
@@ -14,11 +14,14 @@ export const hasUnsavedChangesSelector = selector({
   get: ({ get }) => !equals(get(lastSavedTemplateState), get(templateSelector)),
 });
 
-export const selectedElementSelector = selector({
-  key: 'selectedElementSelector',
+export const selectedElementOrSubtitleSelector = selector({
+  key: 'selectedElementOrSubtitleSelector',
   get: ({ get }) => {
     const selectedElementId = get(selectedElementIdState);
-    return selectedElementId ? get(elementState(selectedElementId)) : undefined;
+    return selectedElementId
+      ? get(elementState(selectedElementId)) ??
+          get(subtitleState(selectedElementId))
+      : undefined;
   },
 });
 

@@ -6,25 +6,43 @@ import { uuid } from '../../../../utils/uuid';
 import { SHAPE_PROPERTIES_PANEL, SHAPE_TOOL_PANEL } from '../../constants';
 import { ShapeType } from '../../interfaces/Shape';
 import { CanvasElement } from '../../interfaces/StageConfig';
+import { Subtitle } from '../../interfaces/Subtitles';
 import { activePanelState, selectedElementIdState } from '../atoms/editor';
-import { dimensionsState, elementIdsState } from '../atoms/template';
-import { selectedElementSelector } from '../selectors/editor';
 import {
-  elementPropsSelector,
+  dimensionsState,
+  elementIdsState,
+  subtitlesStyleState,
+} from '../atoms/template';
+import { selectedElementOrSubtitleSelector } from '../selectors/editor';
+import {
   elementSelector,
   isSelectedElementSelector,
 } from '../selectors/elements';
+import { subtitleSelector } from '../selectors/subtitles';
 
 function useElementsDispatcher() {
   const updateElementProps = useRecoilCallback(
-    ({ set }) => <T extends ShapeConfig>(
+    ({ snapshot, set }) => <T extends ShapeConfig>(
       id: string,
       properties: Partial<T>
     ) => {
-      set(elementPropsSelector(id), (props) => ({
-        ...props,
-        ...properties,
-      }));
+      const subtitle = snapshot.getLoadable(subtitleSelector(id)).getValue();
+
+      if (subtitle) {
+        set(subtitlesStyleState, (element) => ({ ...element, ...properties }));
+      } else {
+        set(
+          elementSelector(id),
+          (element) =>
+            element && {
+              ...element,
+              props: {
+                ...element.props,
+                ...properties,
+              },
+            }
+        );
+      }
     }
   );
 
@@ -38,13 +56,15 @@ function useElementsDispatcher() {
   );
 
   const selectElement = useRecoilCallback(
-    ({ snapshot, set }) => (element: string | CanvasElement) => {
+    ({ snapshot, set }) => (element: string | CanvasElement | Subtitle) => {
       const selectedElementId = snapshot
         .getLoadable(selectedElementIdState)
         .getValue();
+
       const canvasElement =
         typeof element === 'string'
-          ? snapshot.getLoadable(elementSelector(element)).getValue()
+          ? snapshot.getLoadable(elementSelector(element)).getValue() ??
+            snapshot.getLoadable(subtitleSelector(element)).getValue()
           : element;
 
       if (!canvasElement || selectedElementId === canvasElement.id) {
@@ -62,7 +82,10 @@ function useElementsDispatcher() {
 
   const clearSelection = useRecoilCallback(
     ({ snapshot, reset, set }) => () => {
-      const element = snapshot.getLoadable(selectedElementSelector).getValue();
+      const element = snapshot
+        .getLoadable(selectedElementOrSubtitleSelector)
+        .getValue();
+
       if (!element) {
         return;
       }
@@ -79,6 +102,7 @@ function useElementsDispatcher() {
     []
   );
 
+  // TODO: delete subtitles
   const deleteElement = useRecoilCallback(
     ({ reset, snapshot }) => (id: string) => {
       if (snapshot.getLoadable(isSelectedElementSelector(id)).getValue()) {
@@ -89,6 +113,7 @@ function useElementsDispatcher() {
     [clearSelection]
   );
 
+  // TODO: delete subtitles
   const deleteSelectedElement = useRecoilCallback(
     ({ snapshot }) => () => {
       const selectedElementId = snapshot
