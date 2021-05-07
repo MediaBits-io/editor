@@ -47,7 +47,7 @@ function SubtitleTimeInput({ id, label, value, onChange, icon }: Props) {
         radix="."
         lazy={false}
         pattern="mm:ss.m1"
-        className="bg-transparent w-12 h-6 text-xs font-mono focus:outline-none"
+        className="bg-transparent w-12 h-6 text-xs focus:outline-none"
         blocks={{
           mm: {
             mask: IMask.MaskedRange,
