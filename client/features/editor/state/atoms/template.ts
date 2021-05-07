@@ -34,7 +34,6 @@ export const elementState = atomFamily<CanvasElement | undefined, string>({
   effects_UNSTABLE: () => [historyEffect],
 });
 
-// TODO white with black background effect
 export const subtitlesStyleState = atom<SubtitleStyle>({
   key: 'subtitlesStyleState',
   default: {

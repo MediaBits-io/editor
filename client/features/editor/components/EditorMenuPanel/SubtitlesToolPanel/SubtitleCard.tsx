@@ -64,7 +64,7 @@ function SubtitleCard({ subtitle }: Props) {
       <div className="text-gray-400 flex items-center justify-between">
         <div className="flex items-center">
           <SubtitleTimeInput
-            id={`${subtitle.id}_end`}
+            id={`${subtitle.id}_start`}
             value={subtitle.start}
             label="Start time"
             onChange={handleChangeStart}

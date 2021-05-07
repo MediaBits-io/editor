@@ -35,20 +35,19 @@ function SubtitleTimeInput({ id, label, value, onChange, icon }: Props) {
 
   // TODO: mask for longer videos than 1 hour
   return (
-    <span className="px-1 flex items-center rounded focus-within:ring-2 focus-within:ring-gray-200">
+    <span className="px-1 flex items-center rounded-md border border-transparent hover:border-gray-200 focus-within:border-gray-200 focus-within:bg-gray-50 focus-within:text-gray-900 transition duration-150">
       <Tooltip content={label} placement="top">
-        <label htmlFor={`${id}_end`} className="cursor-pointer">
+        <label htmlFor={id} className="cursor-pointer">
           {icon}
         </label>
       </Tooltip>
       <IMaskInput
-        id={`${id}_end`}
+        id={id}
         mask={Date}
         radix="."
         lazy={false}
         pattern="mm:ss.m1"
-        autoFocus
-        className="bg-transparent w-12 h-6 text-xs font-mono focus:outline-none text-gray-900"
+        className="bg-transparent w-12 h-6 text-xs font-mono focus:outline-none"
         blocks={{
           mm: {
             mask: IMask.MaskedRange,

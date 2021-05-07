@@ -19,7 +19,7 @@ function SubtitlesList() {
       <Button
         type="gray"
         onClick={() => {
-          createSubtitle('Test subtitles');
+          createSubtitle('New subtitle line');
         }}
       >
         New line

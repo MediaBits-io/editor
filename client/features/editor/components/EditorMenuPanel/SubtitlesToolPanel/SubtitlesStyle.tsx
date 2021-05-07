@@ -1,26 +1,21 @@
 import React from 'react';
-import { EditorPanel } from '../../../interfaces/Editor';
-import SideMenuPanel from '../../ui/SideMenuPanel';
-import ShapeActions from '../ShapeActions/ShapeActions';
+import { useRecoilValue } from 'recoil';
+import { subtitleIdsState } from '../../../state/atoms/template';
 import FontFamilySetting from '../TextProperties/FontFamilySetting/FontFamilySetting';
 import FontStyleSetting from '../TextProperties/FontStyleSetting';
 import TextAlignmentSetting from '../TextProperties/TextAlignementSetting';
-import TextContentsSetting from './TextContentsSetting';
 import TextFillSetting from '../TextProperties/TextFillSetting';
 import TextSizeSetting from '../TextProperties/TextSizeSetting';
 
-interface Props {
-  elementId: string;
-}
+function SubtitlesStyle() {
+  const subtitleIds = useRecoilValue(subtitleIdsState);
 
-function TextPropertiesPanel({ elementId }: Props) {
+  const elementId = subtitleIds[0];
+
+  console.log(elementId);
+
   return (
-    <SideMenuPanel
-      title="Text"
-      previous={EditorPanel.Text}
-      actions={<ShapeActions elementId={elementId} />}
-    >
-      <TextContentsSetting elementId={elementId} />
+    <>
       <TextFillSetting elementId={elementId} />
       <FontFamilySetting elementId={elementId} />
       <div className="flex space-x-2">
@@ -28,8 +23,8 @@ function TextPropertiesPanel({ elementId }: Props) {
         <TextSizeSetting elementId={elementId} />
       </div>
       <TextAlignmentSetting elementId={elementId} />
-    </SideMenuPanel>
+    </>
   );
 }
 
-export default TextPropertiesPanel;
+export default SubtitlesStyle;

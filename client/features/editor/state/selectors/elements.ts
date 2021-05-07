@@ -3,7 +3,12 @@ import { without } from 'ramda';
 import { DefaultValue, selector, selectorFamily } from 'recoil';
 import { CanvasElement } from '../../interfaces/StageConfig';
 import { selectedElementIdState } from '../atoms/editor';
-import { elementIdsState, elementState } from '../atoms/template';
+import {
+  elementIdsState,
+  elementState,
+  subtitlesStyleState,
+} from '../atoms/template';
+import { subtitleSelector } from './subtitles';
 
 export const elementsSelector = selector<CanvasElement[]>({
   key: 'elementsSelector',
@@ -47,7 +52,9 @@ export const elementSelector = selectorFamily<
 export const elementPropsSelector = selectorFamily({
   key: 'elementPropsSelector',
   get: <P extends ShapeConfig>(id: string) => ({ get }) =>
-    get(elementSelector(id))?.props as P,
+    (get(subtitleSelector(id))
+      ? get(subtitlesStyleState)
+      : get(elementSelector(id))?.props) as P,
 });
 
 export const isSelectedElementSelector = selectorFamily({
