@@ -30,12 +30,12 @@ const SideMenuSetting = ({
         <span className="block text-sm font-medium text-gray-700">{label}</span>
         {deleted
           ? onCreate && (
-              <Tooltip content="Enable" className="flex">
+              <Tooltip key="enable" content="Enable" className="flex">
                 <PanelActionButton icon={PlusIcon} onClick={onCreate} />
               </Tooltip>
             )
           : onDelete && (
-              <Tooltip content="Disable" className="flex">
+              <Tooltip key="disable" content="Disable" className="flex">
                 <PanelActionButton icon={MinusIcon} onClick={onDelete} />
               </Tooltip>
             )}

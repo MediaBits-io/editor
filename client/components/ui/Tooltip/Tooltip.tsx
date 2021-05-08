@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Options as PopperOptions } from '@popperjs/core';
 import Popper from '../Popper';
 
@@ -22,6 +22,13 @@ function Tooltip({
   const [isOpen, setOpen] = useState(false);
   const targetElRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<any>();
+
+  useEffect(
+    () => () => {
+      clearTimeout(timeoutRef.current);
+    },
+    []
+  );
 
   return (
     <div

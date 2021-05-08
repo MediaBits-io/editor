@@ -2,6 +2,7 @@ import Konva from 'konva';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { createContainer } from 'unstated-next';
+import { isTruthy } from '../../../utils/boolean';
 import { elementIdsState, subtitleIdsState } from '../state/atoms/template';
 
 export type ElementRefs = Record<
@@ -35,9 +36,9 @@ function useElementRefsState() {
 
   const elementNodes = useMemo(
     () =>
-      [...subtitleIds, ...elementIds].map(
-        (elementId) => elementRefs[elementId]?.ref!
-      ),
+      [...subtitleIds, ...elementIds]
+        .map((elementId) => elementRefs[elementId]?.ref!)
+        .filter(isTruthy),
     [elementIds, elementRefs, subtitleIds]
   );
 
