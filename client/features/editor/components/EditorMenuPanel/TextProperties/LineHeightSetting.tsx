@@ -16,7 +16,7 @@ interface Props {
   elementId: string;
 }
 
-function TextSizeSetting({ elementId }: Props) {
+function LineHeightSetting({ elementId }: Props) {
   const { updateElementProps } = useElementsDispatcher();
   const elementProps = useRecoilValue(
     elementPropsSelector<TextConfig>(elementId)
@@ -29,57 +29,64 @@ function TextSizeSetting({ elementId }: Props) {
     toggle,
     close,
   } = useDropdown();
-  const [inputValue, setInputValue] = useState(elementProps.fontSize);
+  const [inputValue, setInputValue] = useState(elementProps.lineHeight);
 
   useEffect(() => {
-    setInputValue(elementProps.fontSize && Math.floor(elementProps.fontSize));
-  }, [elementProps.fontSize]);
+    setInputValue(elementProps.lineHeight);
+  }, [elementProps.lineHeight]);
 
-  const handleChange = (fontSize: number) => {
-    updateElementProps<TextConfig>(elementId, { fontSize });
+  const handleChange = (lineHeight: number) => {
+    updateElementProps<TextConfig>(elementId, { lineHeight });
   };
 
   const handleChangeInput = (value: string) => {
-    const newValue = parseInt(value);
+    const newValue = Number(value);
+
     setInputValue(newValue);
 
     if (
-      newValue >= 12 &&
-      (!elementProps.fontSize || newValue !== Math.floor(elementProps.fontSize))
+      newValue >= 0.1 &&
+      (!elementProps.lineHeight || newValue !== elementProps.lineHeight)
     ) {
       handleChange(newValue);
     }
   };
 
   const handleBlurInput = () => {
-    if (!inputValue || inputValue < 12) {
-      setInputValue(elementProps.fontSize);
+    if (!inputValue || inputValue < 0.1) {
+      setInputValue(elementProps.lineHeight);
     }
   };
 
   return (
-    <SideMenuSetting label="Size" className="w-full">
+    <SideMenuSetting label="Line height" className="w-full">
       <div className="panel-item flex p-0 overflow-hidden">
         <IMaskInput
-          mask={[
-            { mask: '' },
-            {
-              mask: 'numpx',
-              lazy: false,
-              blocks: {
-                num: {
-                  mask: Number,
-                  min: 0,
-                  max: 999,
-                },
-              },
-            },
-          ]}
+          // mask={[
+          //   { mask: '' },
+          //   {
+          //     mask: 'numpx',
+          //     lazy: false,
+          //     blocks: {
+          //       num: {
+          //         mask: Number,
+          //         min: 0,
+          //         max: 999,
+          //       },
+          //     },
+          //   },
+          // ]}
+          mask={Number}
+          radix="."
+          mapToRadix={[',']}
+          scale={2}
           unmask
+          signed={false}
           onAccept={handleChangeInput}
           onBlur={handleBlurInput}
-          value={`${inputValue}px`}
-          placeholder="12px"
+          value={`${inputValue}`}
+          placeholder="1"
+          min={0.1}
           className={classNames(
             'text-right focus:outline-none w-full min-w-0 py-2 px-2',
             isOpen && 'border-blue-300'
@@ -103,15 +110,15 @@ function TextSizeSetting({ elementId }: Props) {
           close={close}
         >
           <div className="flex flex-col max-h-64 overflow-y-auto">
-            {[18, 24, 36, 48, 64, 72, 96, 144, 288].map((value) => (
+            {[0.5, 0.75, 1, 1.25, 1.5].map((value) => (
               <DropdownButton
                 key={value}
                 onClick={() => handleChange(value)}
                 state={
-                  value === elementProps.fontSize ? 'selected' : 'stateless'
+                  value === elementProps.lineHeight ? 'selected' : 'stateless'
                 }
               >
-                <span className="text-right">{value}px</span>
+                <span className="text-right">{value}</span>
               </DropdownButton>
             ))}
           </div>
@@ -121,4 +128,4 @@ function TextSizeSetting({ elementId }: Props) {
   );
 }
 
-export default TextSizeSetting;
+export default LineHeightSetting;

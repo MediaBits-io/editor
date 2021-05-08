@@ -12,9 +12,16 @@ interface Props {
   rgba?: RGBColor;
   onChange: (rgba: RGBColor) => void;
   disableAlpha?: boolean;
+  children?: React.ReactNode;
 }
 
-function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
+function PanelColorPicker({
+  id,
+  rgba,
+  disableAlpha,
+  onChange,
+  children,
+}: Props) {
   const color = rgba && toHex(rgba);
   const opacity = rgba?.a;
   const percentageOpacity = Math.round((opacity ?? 1) * 100);
@@ -150,6 +157,7 @@ function PanelColorPicker({ id, rgba, disableAlpha, onChange }: Props) {
           </span>
         </div>
       )}
+      {children}
     </div>
   );
 }

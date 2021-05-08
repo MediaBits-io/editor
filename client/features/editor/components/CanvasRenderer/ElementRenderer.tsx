@@ -1,9 +1,8 @@
-import Konva from 'konva';
 import { ProgressBar, Waveform } from 'konva-elements';
 import React from 'react';
 import { Rect } from 'react-konva';
 import { useRecoilValue } from 'recoil';
-import { ImageConfig, ShapeType } from '../../interfaces/Shape';
+import { ImageConfig, ShapeType, TextConfig } from '../../interfaces/Shape';
 import { elementSelector } from '../../state/selectors/elements';
 import GenericRenderer from './GenericRenderer';
 import ImageRenderer from './ImageRenderer';
@@ -23,9 +22,7 @@ function ElementRenderer({ id }: Props) {
 
   switch (type) {
     case ShapeType.Text:
-      return (
-        <TextRenderer id={id} key={id} props={props as Konva.TextConfig} />
-      );
+      return <TextRenderer id={id} key={id} props={props as TextConfig} />;
     case ShapeType.Rectangle:
       return (
         <GenericRenderer id={id} key={id} props={props} component={Rect} />

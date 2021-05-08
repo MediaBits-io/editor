@@ -27,10 +27,11 @@ function useElementsDispatcher() {
       properties: Partial<T>
     ) => {
       const subtitle = snapshot.getLoadable(subtitleSelector(id)).getValue();
+      const element = snapshot.getLoadable(elementSelector(id)).getValue();
 
       if (subtitle) {
         set(subtitlesStyleState, (element) => ({ ...element, ...properties }));
-      } else {
+      } else if (element) {
         set(
           elementSelector(id),
           (element) =>
@@ -102,18 +103,17 @@ function useElementsDispatcher() {
     []
   );
 
-  // TODO: delete subtitles
   const deleteElement = useRecoilCallback(
     ({ reset, snapshot }) => (id: string) => {
       if (snapshot.getLoadable(isSelectedElementSelector(id)).getValue()) {
         clearSelection();
       }
+      reset(subtitleSelector(id));
       reset(elementSelector(id));
     },
     [clearSelection]
   );
 
-  // TODO: delete subtitles
   const deleteSelectedElement = useRecoilCallback(
     ({ snapshot }) => () => {
       const selectedElementId = snapshot

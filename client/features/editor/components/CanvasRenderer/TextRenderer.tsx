@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import InteractiveKonvaElement, { MIN_WIDTH } from './InteractiveKonvaElement';
-import { KonvaEventObject } from 'konva/types/Node';
 import Konva from 'konva';
-import { Text } from 'react-konva';
+import { KonvaEventObject } from 'konva/types/Node';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { Rect, Text } from 'react-konva';
 import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
+import { TextConfig } from '../../interfaces/Shape';
+import InteractiveKonvaElement, { MIN_WIDTH } from './InteractiveKonvaElement';
 
 const MIN_FONT_SIZE = 8;
 
@@ -17,10 +18,11 @@ const enabledAnchors = [
 ];
 interface Props {
   id: string;
-  props: Konva.TextConfig;
+  props: TextConfig;
 }
 
 function TextRenderer({ id, props }: Props) {
+  const backgroundRef = useRef<Konva.Rect | null>(null);
   const textRef = useRef<Konva.Text | null>(null);
   const { transformerRef } = ElementRefsContainer.useContainer();
 
@@ -28,7 +30,7 @@ function TextRenderer({ id, props }: Props) {
     (
       evt: KonvaEventObject<Event>,
       transformer: Konva.Transformer
-    ): Partial<Konva.TextConfig> => {
+    ): Partial<TextConfig> => {
       const node = evt.target as Konva.Text;
       const anchor = transformer.getActiveAnchor();
 
@@ -49,7 +51,7 @@ function TextRenderer({ id, props }: Props) {
   );
 
   const transformEnd = useCallback(
-    (evt: KonvaEventObject<Event>): Partial<Konva.TextConfig> => {
+    (evt: KonvaEventObject<Event>): Partial<TextConfig> => {
       const textNode = evt.target as Konva.Text;
       return {
         width: Math.max(
@@ -68,9 +70,26 @@ function TextRenderer({ id, props }: Props) {
     []
   );
 
+  const syncBackground = () => {
+    const bg = backgroundRef.current;
+    const text = textRef.current;
+
+    if (bg && text) {
+      bg.x(text.x());
+      bg.y(text.y());
+      bg.width(text.width());
+      bg.height(text.height());
+      bg.scaleX(text.scaleX());
+      bg.scaleY(text.scaleY());
+      bg.rotation(text.rotation());
+    }
+  };
+
   useEffect(() => {
+    syncBackground();
     transformerRef.current?.forceUpdate();
-  }, [props.fontFamily, transformerRef]);
+    backgroundRef.current?.getLayer()?.batchDraw();
+  }, [props, transformerRef]);
 
   return (
     <InteractiveKonvaElement
@@ -81,14 +100,37 @@ function TextRenderer({ id, props }: Props) {
       transformEnd={transformEnd}
     >
       {(additionalProps) => (
-        <Text
-          {...props}
-          {...additionalProps}
-          ref={(el) => {
-            additionalProps.ref.current = el;
-            textRef.current = el;
-          }}
-        />
+        <>
+          {props.backgroundEnabled && (
+            <Rect {...props.background} ref={backgroundRef} />
+          )}
+          <Text
+            {...props}
+            {...additionalProps}
+            fillEnabled={true}
+            fill={props.fillEnabled ? props.fill : 'transparent'}
+            onDragMove={(...rest) => {
+              additionalProps.onDragMove?.(...rest);
+              syncBackground();
+            }}
+            onDragEnd={(...rest) => {
+              additionalProps.onDragEnd?.(...rest);
+              syncBackground();
+            }}
+            onTransform={(...rest) => {
+              additionalProps.onTransform?.(...rest);
+              syncBackground();
+            }}
+            onTransformEnd={(...rest) => {
+              additionalProps.onTransformEnd?.(...rest);
+              syncBackground();
+            }}
+            ref={(el) => {
+              additionalProps.ref.current = el;
+              textRef.current = el;
+            }}
+          />
+        </>
       )}
     </InteractiveKonvaElement>
   );

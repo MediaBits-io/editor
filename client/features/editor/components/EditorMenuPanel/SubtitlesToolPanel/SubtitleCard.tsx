@@ -1,13 +1,13 @@
 import { ClockIcon, TrashIcon } from '@heroicons/react/outline';
 import React, { ChangeEvent } from 'react';
-import { useRecoilCallback, useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
 import classNames from '../../../../../utils/classNames';
 import { AudioControlsContainer } from '../../../containers/AudioControlsContainer';
 import { Subtitle } from '../../../interfaces/Subtitles';
 import { audioProgressState } from '../../../state/atoms/audio';
+import useElementsDispatcher from '../../../state/dispatchers/elements';
 import useSubtitlesDispatcher from '../../../state/dispatchers/subtitles';
-import { subtitleSelector } from '../../../state/selectors/subtitles';
 import PanelActionButton from '../../ui/PanelActionButton';
 import SubtitleTimeInput from './SubtitleTimeInput';
 
@@ -17,7 +17,7 @@ interface Props {
 
 function SubtitleCard({ subtitle }: Props) {
   const { updateSubtitle } = useSubtitlesDispatcher();
-  const resetSubtitle = useResetRecoilState(subtitleSelector(subtitle.id));
+  const { deleteElement, selectElement } = useElementsDispatcher();
   const audioProgress = useRecoilValue(audioProgressState);
   const { wavesurferRef } = AudioControlsContainer.useContainer();
 
@@ -30,13 +30,15 @@ function SubtitleCard({ subtitle }: Props) {
 
   const handleFocusSubtitle = useRecoilCallback(
     ({ set }) => () => {
+      selectElement(subtitle.id);
+
       if (wavesurferRef.current) {
         wavesurferRef.current.setCurrentTime(subtitle.start);
       } else {
         set(audioProgressState, subtitle.start);
       }
     },
-    [subtitle.start, wavesurferRef]
+    [selectElement, subtitle.id, subtitle.start, wavesurferRef]
   );
 
   const handleChangeStart = (value: number) => {
@@ -85,7 +87,7 @@ function SubtitleCard({ subtitle }: Props) {
           <PanelActionButton
             type="white"
             icon={TrashIcon}
-            onClick={() => resetSubtitle()}
+            onClick={() => deleteElement(subtitle.id)}
           />
         </Tooltip>
       </div>

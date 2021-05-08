@@ -16,9 +16,8 @@ import { backgroundState, dimensionsState } from '../../state/atoms/template';
 import useElementsDispatcher from '../../state/dispatchers/elements';
 import Elements from './Elements';
 import GuideLines from './GuideLines';
-import HighlightRenderer from './HighlightRenderer';
 import Subtitles from './Subtitles';
-import TransformerRenderer from './TransformerRenderer';
+import Transformers from './Transformers';
 
 function CanvasRenderer() {
   const zoom = useRecoilValue(zoomState);
@@ -163,10 +162,9 @@ function CanvasRenderer() {
                 <Elements />
               </Layer>
               <Layer>
-                <HighlightRenderer />
                 <Subtitles />
                 <GuideLines />
-                <TransformerRenderer />
+                <Transformers />
               </Layer>
             </ElementRefsContainer.Provider>
           </RecoilBridge>

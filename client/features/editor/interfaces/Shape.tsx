@@ -10,6 +10,12 @@ export enum ShapeType {
 }
 
 export type ImageFit = 'fill' | 'scale';
+
 export interface ImageConfig extends Konva.ImageConfig {
   imageFit: ImageFit;
 }
+
+export type TextConfig = Konva.TextConfig & {
+  background?: Konva.RectConfig;
+  backgroundEnabled?: boolean;
+};

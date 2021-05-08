@@ -12,38 +12,47 @@ interface Props {
   elementId: string;
 }
 
-function TextFillSetting({ elementId }: Props) {
+function TextBackgroundSetting({ elementId }: Props) {
   const elementProps = useRecoilValue(
     elementPropsSelector<TextConfig>(elementId)
   );
 
   const { updateElementProps } = useElementsDispatcher();
 
-  const handleChangeEnabled = (fillEnabled: boolean) => () => {
+  const handleChangeEnabled = (backgroundEnabled: boolean) => () => {
     updateElementProps<TextConfig>(elementId, {
-      fillEnabled,
+      backgroundEnabled,
     });
   };
 
   const changeColor = (color: RGBColor) => {
-    updateElementProps<TextConfig>(elementId, { fill: toRgba(color) });
+    updateElementProps<TextConfig>(elementId, {
+      background: {
+        ...elementProps.background,
+        fill: toRgba(color),
+      },
+    });
   };
 
   return (
     <SideMenuSetting
-      label="Fill"
-      htmlFor="input-fill-color"
+      label="Background"
+      htmlFor="input-background-color"
       onDelete={handleChangeEnabled(false)}
       onCreate={handleChangeEnabled(true)}
-      deleted={!elementProps.fillEnabled}
+      deleted={!elementProps.backgroundEnabled}
     >
       <PanelColorPicker
-        rgba={elementProps.fill ? fromRgba(elementProps.fill) : undefined}
-        id="input-fill-color"
+        rgba={
+          elementProps.background?.fill
+            ? fromRgba(elementProps.background.fill)
+            : undefined
+        }
+        id="input-background-color"
         onChange={changeColor}
       />
     </SideMenuSetting>
   );
 }
 
-export default TextFillSetting;
+export default TextBackgroundSetting;

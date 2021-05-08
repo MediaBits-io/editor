@@ -1,44 +1,61 @@
-import React, { useEffect } from 'react';
+import Konva from 'konva';
+import React, { useEffect, useRef } from 'react';
 import { Transformer } from 'react-konva';
-import { useRecoilValue } from 'recoil';
 import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
-import { selectedElementIdState } from '../../state/atoms/editor';
 import { MIN_HEIGHT, MIN_WIDTH } from './InteractiveKonvaElement';
 
-function TransformerRenderer() {
-  const { transformerRef, elementRefs } = ElementRefsContainer.useContainer();
-  const selectedElementId = useRecoilValue(selectedElementIdState);
+interface Props {
+  elementId: string;
+  isSelected?: boolean;
+  isHighlighted?: boolean;
+}
 
-  const element = selectedElementId
-    ? elementRefs[selectedElementId]
-    : undefined;
+const highlightProps = {
+  rotateEnabled: false,
+  enabledAnchors: [],
+  borderStroke: 'rgba(0, 161, 255, 0.4)',
+};
+
+function TransformerRenderer({ elementId, isSelected, isHighlighted }: Props) {
+  const { transformerRef, elementRefs } = ElementRefsContainer.useContainer();
+  const localTransformerRef = useRef<Konva.Transformer | null>(null);
+
+  const element = elementId ? elementRefs[elementId] : undefined;
+  const isVisible = isSelected || isHighlighted;
 
   useEffect(() => {
-    const transformer = transformerRef.current;
+    const transformer = localTransformerRef.current;
 
-    if (element && transformer) {
+    if (isVisible && element && transformer) {
       transformer.nodes([element.ref]);
       transformer.getLayer()?.batchDraw();
 
+      if (isSelected) {
+        transformerRef.current = transformer;
+      }
+
       return () => {
         transformer.nodes([]);
+        transformerRef.current = null;
       };
     }
-  }, [element, transformerRef]);
+  }, [element, isSelected, isVisible, localTransformerRef, transformerRef]);
 
-  if (!selectedElementId) {
+  if (!isVisible) {
     return null;
   }
 
   return (
     <Transformer
       {...element?.transformerProps}
-      ref={transformerRef}
+      ref={localTransformerRef}
+      ignoreStroke
       rotationSnaps={[0, 90, 180, 270]}
       keepRatio={element?.transformerProps?.keepRatio ?? false}
       boundBoxFunc={(oldBox, newBox) =>
         newBox.width < MIN_WIDTH || newBox.height < MIN_HEIGHT ? oldBox : newBox
       }
+      {...(!isSelected ? highlightProps : {})}
     />
   );
 }

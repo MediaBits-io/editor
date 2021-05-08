@@ -226,34 +226,32 @@ const InteractiveKonvaElement = ({
     [elementNodes, updateGuideLines]
   );
 
-  return useMemo(
-    () =>
-      children({
-        id,
-        onClick: handleSelect,
-        onTap: handleSelect,
-        ref: shapeRef,
-        draggable: true,
-        onDragEnd: handleDragEnd,
-        onDragMove: handleDragMove,
-        onDragStart: handleSelect,
-        onTransformEnd: handleTransformEnd,
-        onTransform: handleTransform,
-        onMouseEnter: handleMouseEnter,
-        onMouseLeave: handleMouseLeave,
-      }),
-    [
-      children,
-      handleDragEnd,
-      handleDragMove,
-      handleMouseEnter,
-      handleMouseLeave,
-      handleSelect,
-      handleTransform,
-      handleTransformEnd,
+  return useMemo(() => {
+    return children({
       id,
-    ]
-  );
+      onClick: handleSelect,
+      onTap: handleSelect,
+      ref: shapeRef,
+      draggable: true,
+      onDragEnd: handleDragEnd,
+      onDragMove: handleDragMove,
+      onDragStart: handleSelect,
+      onTransformEnd: handleTransformEnd,
+      onTransform: handleTransform,
+      onMouseEnter: handleMouseEnter,
+      onMouseLeave: handleMouseLeave,
+    });
+  }, [
+    children,
+    handleDragEnd,
+    handleDragMove,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleSelect,
+    handleTransform,
+    handleTransformEnd,
+    id,
+  ]);
 };
 
 export default InteractiveKonvaElement;

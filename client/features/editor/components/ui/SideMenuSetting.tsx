@@ -1,10 +1,15 @@
+import { MinusIcon, PlusIcon } from '@heroicons/react/outline';
 import React from 'react';
 import classNames from '../../../../utils/classNames';
+import PanelActionButton from './PanelActionButton';
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
   label: React.ReactNode;
   htmlFor?: string;
   noLabel?: boolean;
+  deleted?: boolean;
+  onDelete?: () => void;
+  onCreate?: () => void;
 }
 
 const SideMenuSetting = ({
@@ -13,17 +18,31 @@ const SideMenuSetting = ({
   htmlFor,
   className,
   children,
+  onDelete,
+  onCreate,
+  deleted,
   ...rest
 }: Props) => {
   const contents = (
     <>
-      <span className="block text-sm font-medium mb-1 text-gray-700">
-        {label}
-      </span>
-      {children}
+      <div className={classNames('flex items-center justify-between pb-1')}>
+        <span className="block text-sm font-medium text-gray-700">{label}</span>
+        {deleted
+          ? onCreate && <PanelActionButton icon={PlusIcon} onClick={onCreate} />
+          : onDelete && (
+              <PanelActionButton icon={MinusIcon} onClick={onDelete} />
+            )}
+      </div>
+      {!deleted && children}
     </>
   );
-  const classes = classNames('mb-4 flex flex-col', className);
+
+  const classes = classNames(
+    'flex flex-col',
+    deleted ? 'mb-2' : 'mb-4',
+    className
+  );
+
   return noLabel ? (
     <div className={classes} {...rest}>
       {contents}

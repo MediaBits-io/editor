@@ -1,10 +1,10 @@
-import Konva from 'konva';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import Button from '../../../../../components/ui/Button';
 import AlignCenterIcon from '../../../../../components/ui/Icons/AlignCenterIcon';
 import AlignLeftIcon from '../../../../../components/ui/Icons/AlignLeftIcon';
 import AlignRightIcon from '../../../../../components/ui/Icons/AlignRightIcon';
+import { TextConfig } from '../../../interfaces/Shape';
 import useElementsDispatcher from '../../../state/dispatchers/elements';
 import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
@@ -16,11 +16,11 @@ interface Props {
 function TextAlignmentSetting({ elementId }: Props) {
   const { updateElementProps } = useElementsDispatcher();
   const elementProps = useRecoilValue(
-    elementPropsSelector<Konva.TextConfig>(elementId)
+    elementPropsSelector<TextConfig>(elementId)
   );
 
   const onChangeAlign = (align: string) => () => {
-    updateElementProps<Konva.TextConfig>(elementId, {
+    updateElementProps<TextConfig>(elementId, {
       align,
     });
   };

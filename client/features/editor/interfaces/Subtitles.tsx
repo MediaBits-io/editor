@@ -1,5 +1,4 @@
-import Konva from 'konva';
-import { ShapeType } from './Shape';
+import { ShapeType, TextConfig } from './Shape';
 
 export interface Subtitle {
   id: string;
@@ -9,7 +8,4 @@ export interface Subtitle {
   type: ShapeType.Subtitle;
 }
 
-export interface SubtitleStyle extends Omit<Konva.TextConfig, 'text'> {
-  effect?: 'none' | 'hard';
-  effectColor?: string;
-}
+export type SubtitleStyle = Omit<TextConfig, 'text'>;

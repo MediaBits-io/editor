@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import { ShapeType } from './Shape';
-import { Subtitle } from './Subtitles';
+import { Subtitle, SubtitleStyle } from './Subtitles';
 
 export type Dimensions = { width: number; height: number };
 
@@ -16,6 +16,6 @@ export interface Template {
   elements: CanvasElement[];
   subtitles?: {
     entries: Subtitle[];
-    style: Konva.TextConfig;
+    style: SubtitleStyle;
   };
 }

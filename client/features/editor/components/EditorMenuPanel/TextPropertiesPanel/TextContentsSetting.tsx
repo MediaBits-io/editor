@@ -1,6 +1,6 @@
-import Konva from 'konva';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import { TextConfig } from '../../../interfaces/Shape';
 import useElementsDispatcher from '../../../state/dispatchers/elements';
 import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
@@ -11,12 +11,12 @@ interface Props {
 
 function TextContentsSetting({ elementId }: Props) {
   const elementProps = useRecoilValue(
-    elementPropsSelector<Konva.TextConfig>(elementId)
+    elementPropsSelector<TextConfig>(elementId)
   );
   const { updateElementProps } = useElementsDispatcher();
 
   const handleChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    updateElementProps<Konva.TextConfig>(elementId, { text: e.target.value });
+    updateElementProps<TextConfig>(elementId, { text: e.target.value });
   };
 
   return (

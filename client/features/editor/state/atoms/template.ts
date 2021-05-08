@@ -39,8 +39,20 @@ export const subtitlesStyleState = atom<SubtitleStyle>({
   default: {
     fontSize: 48,
     fontFamily: DefaultFonts.Regular,
-    fill: 'rgba(0, 0, 0, 1)',
     align: 'center',
+    fillEnabled: true,
+    fill: 'rgba(0, 0, 0, 1)',
+    lineHeight: 1,
+    shadowEnabled: false,
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    shadowBlur: 5,
+    strokeEnabled: false,
+    stroke: 'rgba(0, 0, 0, 1)',
+    strokeWidth: 1,
+    backgroundEnabled: false,
+    background: {
+      fill: 'rgba(0, 0, 0, 0.2)',
+    },
   },
   effects_UNSTABLE: [historyEffect],
 });

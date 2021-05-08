@@ -1,4 +1,3 @@
-import Konva from 'konva';
 import React, { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import Button from '../../../../../components/ui/Button';
@@ -6,6 +5,7 @@ import BoldTextIcon from '../../../../../components/ui/Icons/BoldTextIcon';
 import ItalicTextIcon from '../../../../../components/ui/Icons/ItalicTextIcon';
 import UnderlineTextIcon from '../../../../../components/ui/Icons/UnderlineTextIcon';
 import classNames from '../../../../../utils/classNames';
+import { TextConfig } from '../../../interfaces/Shape';
 import useElementsDispatcher from '../../../state/dispatchers/elements';
 import { elementPropsSelector } from '../../../state/selectors/elements';
 import SideMenuSetting from '../../ui/SideMenuSetting';
@@ -17,7 +17,7 @@ interface Props {
 function FontStyleSetting({ elementId }: Props) {
   const { updateElementProps } = useElementsDispatcher();
   const elementProps = useRecoilValue(
-    elementPropsSelector<Konva.TextConfig>(elementId)
+    elementPropsSelector<TextConfig>(elementId)
   );
 
   const styles = useMemo(() => elementProps.fontStyle?.split(' '), [
@@ -28,7 +28,7 @@ function FontStyleSetting({ elementId }: Props) {
   const isUnderline = elementProps?.textDecoration === 'underline';
 
   const onToggleBold = () => {
-    updateElementProps<Konva.TextConfig>(elementId, {
+    updateElementProps<TextConfig>(elementId, {
       fontStyle: isBold
         ? styles?.filter((style) => style !== 'bold').join(' ')
         : classNames(...(styles ?? []), 'bold'),
@@ -36,7 +36,7 @@ function FontStyleSetting({ elementId }: Props) {
   };
 
   const onToggleItalic = () => {
-    updateElementProps<Konva.TextConfig>(elementId, {
+    updateElementProps<TextConfig>(elementId, {
       fontStyle: isItalic
         ? styles?.filter((style) => style !== 'italic').join(' ')
         : classNames(...(styles ?? []), 'italic'),
@@ -44,7 +44,7 @@ function FontStyleSetting({ elementId }: Props) {
   };
 
   const onToggleUnderline = () => {
-    updateElementProps<Konva.TextConfig>(elementId, {
+    updateElementProps<TextConfig>(elementId, {
       textDecoration: isUnderline ? undefined : 'underline',
     });
   };
