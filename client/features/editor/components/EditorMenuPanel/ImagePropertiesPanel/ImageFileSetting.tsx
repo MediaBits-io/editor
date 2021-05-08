@@ -43,7 +43,7 @@ function ImageFileSetting({ elementId }: Props) {
   };
 
   return (
-    <Tooltip content="Change image" className="mb-4">
+    <Tooltip content="Change image" placement="bottom" className="mb-4">
       <input
         className="hidden"
         ref={inputRef}

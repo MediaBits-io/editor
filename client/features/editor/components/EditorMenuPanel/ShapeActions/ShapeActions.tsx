@@ -25,13 +25,13 @@ function ShapeActions({ elementId }: Props) {
     <>
       <MoveLayerUpAction elementId={elementId} />
       <MoveLayerDownAction elementId={elementId} />
-      <Tooltip content="Duplicate" placement="top" className="flex">
+      <Tooltip content="Duplicate" className="flex">
         <PanelActionButton
           icon={DuplicateIcon}
           onClick={handleDuplicateClick}
         />
       </Tooltip>
-      <Tooltip content="Remove (delete)" placement="top" className="flex">
+      <Tooltip content="Remove (delete)" className="flex">
         <PanelActionButton icon={TrashIcon} onClick={handleDeleteClick} />
       </Tooltip>
     </>

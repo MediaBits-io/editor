@@ -36,7 +36,7 @@ function SubtitleTimeInput({ id, label, value, onChange, icon }: Props) {
   // TODO: mask for longer videos than 1 hour
   return (
     <span className="px-1 flex items-center rounded-md border border-transparent hover:border-gray-200 focus-within:border-gray-200 focus-within:bg-gray-50 focus-within:text-gray-900 transition duration-150">
-      <Tooltip content={label} placement="top">
+      <Tooltip content={label}>
         <label htmlFor={id} className="cursor-pointer">
           {icon}
         </label>

@@ -21,12 +21,7 @@ function ZoomControls() {
       targetElement={targetElement}
       target={({ open }) => (
         <div ref={setTargetElement}>
-          <Tooltip
-            content="Zoom"
-            className="mt-auto"
-            placement="bottom"
-            closed={open}
-          >
+          <Tooltip content="Zoom" className="mt-auto" closed={open}>
             <DropdownMenuAnchor
               as={ClearButton}
               className={classNames(

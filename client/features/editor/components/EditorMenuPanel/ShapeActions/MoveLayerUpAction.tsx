@@ -22,12 +22,7 @@ function MoveLayerUpAction({ elementId }: Props) {
   const moveUpDisabled = last(elementIds) === elementId;
 
   return (
-    <Tooltip
-      content="Move layer up"
-      placement="top"
-      className="flex"
-      closed={moveUpDisabled}
-    >
+    <Tooltip content="Move layer up" className="flex" closed={moveUpDisabled}>
       <PanelActionButton
         icon={ArrowUpIcon}
         onClick={handleMoveUpClick}

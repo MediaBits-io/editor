@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/types/Node';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Rect, Text } from 'react-konva';
+import { Rect, Shape, Text } from 'react-konva';
 import { ElementRefsContainer } from '../../containers/ElementRefsContainer';
 import { TextConfig } from '../../interfaces/Shape';
 import InteractiveKonvaElement, { MIN_WIDTH } from './InteractiveKonvaElement';
@@ -82,13 +82,12 @@ function TextRenderer({ id, props }: Props) {
       bg.scaleX(text.scaleX());
       bg.scaleY(text.scaleY());
       bg.rotation(text.rotation());
+      bg.visible(text.visible());
     }
   };
 
   useEffect(() => {
-    syncBackground();
     transformerRef.current?.forceUpdate();
-    backgroundRef.current?.getLayer()?.batchDraw();
   }, [props, transformerRef]);
 
   return (
@@ -101,6 +100,7 @@ function TextRenderer({ id, props }: Props) {
     >
       {(additionalProps) => (
         <>
+          <Shape sceneFunc={syncBackground} />
           {props.backgroundEnabled && (
             <Rect {...props.background} ref={backgroundRef} />
           )}
@@ -109,22 +109,6 @@ function TextRenderer({ id, props }: Props) {
             {...additionalProps}
             fillEnabled={true}
             fill={props.fillEnabled ? props.fill : 'transparent'}
-            onDragMove={(...rest) => {
-              additionalProps.onDragMove?.(...rest);
-              syncBackground();
-            }}
-            onDragEnd={(...rest) => {
-              additionalProps.onDragEnd?.(...rest);
-              syncBackground();
-            }}
-            onTransform={(...rest) => {
-              additionalProps.onTransform?.(...rest);
-              syncBackground();
-            }}
-            onTransformEnd={(...rest) => {
-              additionalProps.onTransformEnd?.(...rest);
-              syncBackground();
-            }}
             ref={(el) => {
               additionalProps.ref.current = el;
               textRef.current = el;

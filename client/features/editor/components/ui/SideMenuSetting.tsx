@@ -1,5 +1,6 @@
 import { MinusIcon, PlusIcon } from '@heroicons/react/outline';
 import React from 'react';
+import Tooltip from '../../../../components/ui/Tooltip/Tooltip';
 import classNames from '../../../../utils/classNames';
 import PanelActionButton from './PanelActionButton';
 
@@ -28,9 +29,15 @@ const SideMenuSetting = ({
       <div className={classNames('flex items-center justify-between pb-1')}>
         <span className="block text-sm font-medium text-gray-700">{label}</span>
         {deleted
-          ? onCreate && <PanelActionButton icon={PlusIcon} onClick={onCreate} />
+          ? onCreate && (
+              <Tooltip content="Enable" className="flex">
+                <PanelActionButton icon={PlusIcon} onClick={onCreate} />
+              </Tooltip>
+            )
           : onDelete && (
-              <PanelActionButton icon={MinusIcon} onClick={onDelete} />
+              <Tooltip content="Disable" className="flex">
+                <PanelActionButton icon={MinusIcon} onClick={onDelete} />
+              </Tooltip>
             )}
       </div>
       {!deleted && children}

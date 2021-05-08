@@ -52,7 +52,7 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
           {pendingCount > 0 && (
             <Tooltip
               content="Pending videos"
-              placement="top"
+              placement="bottom"
               className="flex items-center"
             >
               {pendingCount}
@@ -60,11 +60,7 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
             </Tooltip>
           )}
           {generatedCount > 0 && (
-            <Tooltip
-              content="Recent videos"
-              placement="top"
-              className="flex items-center"
-            >
+            <Tooltip content="Recent videos" className="flex items-center">
               {generatedCount}
               <VideoCameraIcon className="h-4 w-4 ml-0.5" />
             </Tooltip>

@@ -83,7 +83,7 @@ function SubtitleCard({ subtitle }: Props) {
             icon={<ClockIcon className="w-4 h-4 mr-1 transform -scale-x-1" />}
           />
         </div>
-        <Tooltip content="Delete" placement="top">
+        <Tooltip content="Delete">
           <PanelActionButton
             type="white"
             icon={TrashIcon}

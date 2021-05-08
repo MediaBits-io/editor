@@ -7,6 +7,7 @@ interface Props extends Partial<PopperOptions> {
   content: React.ReactNode;
   closed?: boolean;
   className?: string;
+  delay?: number;
 }
 
 function Tooltip({
@@ -14,21 +15,28 @@ function Tooltip({
   content,
   className,
   closed,
+  placement = 'top',
+  delay = 300,
   ...popperOptions
 }: Props) {
   const [isOpen, setOpen] = useState(false);
   const targetElRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<any>();
 
   return (
     <div
       ref={targetElRef}
       className={className}
       onMouseOver={() => {
-        if (!isOpen && !closed) {
-          setOpen(true);
+        if (!isOpen && !closed && !timeoutRef.current) {
+          timeoutRef.current = setTimeout(() => {
+            setOpen(true);
+          }, delay);
         }
       }}
       onMouseLeave={() => {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = undefined;
         if (isOpen) {
           setOpen(false);
         }
@@ -42,6 +50,7 @@ function Tooltip({
         className="tooltip z-20"
         popperOptions={{
           ...popperOptions,
+          placement,
           modifiers: popperOptions.modifiers ?? [
             {
               name: 'offset',

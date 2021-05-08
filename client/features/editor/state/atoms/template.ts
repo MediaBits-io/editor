@@ -49,7 +49,7 @@ export const subtitlesStyleState = atom<SubtitleStyle>({
     strokeEnabled: false,
     stroke: 'rgba(0, 0, 0, 1)',
     strokeWidth: 1,
-    backgroundEnabled: false,
+    backgroundEnabled: true,
     background: {
       fill: 'rgba(0, 0, 0, 0.2)',
     },
