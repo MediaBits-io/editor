@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { TrashIcon } from '@heroicons/react/outline';
+import React, { ChangeEvent, useRef, useState } from 'react';
+import { useRecoilCallback, useRecoilValue, useResetRecoilState } from 'recoil';
+import { parseSync } from 'subtitle';
 import Button from '../../../../../components/ui/Button';
+import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
+import { readBlobAsText } from '../../../../../utils/blob';
 import classNames from '../../../../../utils/classNames';
 import { subtitleIdsState } from '../../../state/atoms/template';
 import useSubtitlesDispatcher from '../../../state/dispatchers/subtitles';
+import { subtitlesSelector } from '../../../state/selectors/subtitles';
+import PanelActionButton from '../../ui/PanelActionButton';
 import SideMenuPanel from '../../ui/SideMenuPanel';
 import SubtitlesList from './SubtitlesList';
 import SubtitlesStyle from './SubtitlesStyle';
@@ -17,11 +23,55 @@ const tabs: { name: string; key: Tabs }[] = [
 
 function SubtitlesToolPanel() {
   const subtitleIds = useRecoilValue(subtitleIdsState);
+  const resetSubtitles = useResetRecoilState(subtitlesSelector);
   const { createSubtitle } = useSubtitlesDispatcher();
   const [activeTab, setActiveTab] = useState<Tabs>('subtitles');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleChangeFile = useRecoilCallback(
+    () => async (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+
+      if (file) {
+        const contents = await readBlobAsText(file);
+        const nodes = parseSync(contents);
+        nodes.forEach((node) => {
+          if (typeof node.data === 'object') {
+            createSubtitle(node.data.text, {
+              start: node.data.start,
+              end: node.data.end,
+            });
+          }
+        });
+      }
+
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
+    },
+    [createSubtitle]
+  );
+
+  const handleClickUpload = () => {
+    inputRef.current?.click();
+  };
 
   return (
-    <SideMenuPanel title="Subtitles">
+    <SideMenuPanel
+      title="Subtitles"
+      actions={
+        <Tooltip content="Remove all">
+          <PanelActionButton icon={TrashIcon} onClick={resetSubtitles} />
+        </Tooltip>
+      }
+    >
+      <input
+        className="hidden"
+        ref={inputRef}
+        type="file"
+        onChange={handleChangeFile}
+        accept=".vtt,.srt"
+      />
       {subtitleIds.length > 0 ? (
         <>
           <nav
@@ -53,9 +103,17 @@ function SubtitlesToolPanel() {
           {activeTab === 'style' && <SubtitlesStyle />}
         </>
       ) : (
-        <Button type="gray" onClick={() => createSubtitle('New subtitle line')}>
-          Manual subtitles
-        </Button>
+        <div className="flex flex-col space-y-2">
+          <Button
+            type="gray"
+            onClick={() => createSubtitle('New subtitle line')}
+          >
+            Manual subtitles
+          </Button>
+          <Button type="gray" onClick={handleClickUpload}>
+            Upload subtitle file
+          </Button>
+        </div>
       )}
     </SideMenuPanel>
   );

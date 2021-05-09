@@ -12,7 +12,10 @@ import {
 
 function useSubtitlesDispatcher() {
   const createSubtitle = useRecoilCallback(
-    ({ set, snapshot }) => (text: string) => {
+    ({ set, snapshot }) => (
+      text: string,
+      time?: { start: number; end: number }
+    ) => {
       const id = uuid();
 
       const dimensions = snapshot.getLoadable(dimensionsState).getValue();
@@ -33,17 +36,25 @@ function useSubtitlesDispatcher() {
         });
       }
 
-      const subtitles = last(
-        snapshot.getLoadable(subtitlesByEndSelector).getValue()
-      );
-      const start = subtitles?.end ?? 0;
+      const getTime = () => {
+        const subtitles = last(
+          snapshot.getLoadable(subtitlesByEndSelector).getValue()
+        );
+        const start = subtitles?.end ?? 0;
+        return {
+          start,
+          end: start + 3,
+        };
+      };
+
+      const { start, end } = time ?? getTime();
 
       // TODO: limit to video length
       set(subtitleSelector(id), {
         id,
         text,
         start,
-        end: start + 3,
+        end,
         type: ShapeType.Subtitle,
       });
     },
@@ -62,7 +73,6 @@ function useSubtitlesDispatcher() {
       );
     }
   );
-
   return { createSubtitle, updateSubtitle };
 }
 
