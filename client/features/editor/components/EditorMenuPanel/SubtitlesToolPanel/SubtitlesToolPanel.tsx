@@ -60,9 +60,11 @@ function SubtitlesToolPanel() {
     <SideMenuPanel
       title="Subtitles"
       actions={
-        <Tooltip content="Remove all">
-          <PanelActionButton icon={TrashIcon} onClick={resetSubtitles} />
-        </Tooltip>
+        subtitleIds.length > 0 ? (
+          <Tooltip content="Remove all">
+            <PanelActionButton icon={TrashIcon} onClick={resetSubtitles} />
+          </Tooltip>
+        ) : null
       }
     >
       <input
