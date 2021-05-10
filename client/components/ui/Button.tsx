@@ -8,7 +8,7 @@ export interface Props
       React.ButtonHTMLAttributes<HTMLButtonElement>,
       HTMLButtonElement
     >,
-    'type'
+    'type' | 'disabled'
   > {
   icon?: React.ComponentType<{ className?: string }>;
   children?: React.ReactNode;
@@ -25,6 +25,7 @@ export interface Props
     | 'link-light';
   buttonType?: 'button' | 'submit' | 'reset';
   round?: boolean;
+  disabled?: boolean | 'soft';
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>(
@@ -44,13 +45,15 @@ const Button = forwardRef<HTMLButtonElement, Props>(
     },
     ref
   ) => {
+    const isDisabled = !!disabled;
+
     return (
       <button
         ref={ref}
         type={buttonType}
-        disabled={loading || disabled}
-        tabIndex={disabled ? -1 : tabIndex}
-        onClick={loading || disabled ? undefined : onClick}
+        disabled={disabled !== 'soft' && (loading || isDisabled)}
+        tabIndex={isDisabled ? -1 : tabIndex}
+        onClick={loading || isDisabled ? undefined : onClick}
         className={classNames(
           'button-default',
           !type.startsWith('link') &&
@@ -62,7 +65,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             'rounded-md px-4',
           round && 'rounded-full px-2',
           type === 'link' &&
-            (disabled
+            (isDisabled
               ? 'text-gray-400'
               : 'text-blue-600 hover:text-blue-400 focus:outline-none focus:underline'),
           type === 'link-light' &&
@@ -70,7 +73,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
           type === 'danger' &&
             'border-transparent bg-red-600 text-white hover:bg-red-500 focus:border-red-700 active:bg-red-700',
           type === 'primary' &&
-            (disabled
+            (isDisabled
               ? 'border-transparent bg-gray-200 text-gray-400'
               : 'border-transparent bg-blue-600 text-white hover:bg-blue-500 active:bg-blue-700 focus:ring-blue-300 focus:ring-2'),
           type === 'secondary' &&
@@ -81,7 +84,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             'border border-transparent bg-gray-100 text-gray-800 focus:ring-gray-300 hover:text-gray-900 hover:bg-gray-200 focus:ring-2',
           type === 'dark' &&
             'border border-transparent bg-gray-900 text-gray-100 hover:bg-gray-700 focus:bg-gray-700 focus:ring-gray-500 focus-visible:ring-2',
-          disabled && 'cursor-default',
+          isDisabled && 'cursor-default',
           className
         )}
         {...rest}

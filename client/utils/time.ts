@@ -19,6 +19,12 @@ export const secondsToDate = (totalSeconds: number) => {
   return date;
 };
 
+export const millisToDecimalSeconds = (millis: number) => {
+  const seconds = Math.floor(millis / 1000);
+  const decimal = Math.floor((millis % 1000) / 100);
+  return seconds + decimal;
+};
+
 export const dateToTimeString = (
   date: Date,
   config: {

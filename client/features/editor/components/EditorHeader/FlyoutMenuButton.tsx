@@ -30,6 +30,7 @@ function FlyoutMenuButton({
     <button
       type="button"
       onClick={isDisabledPro ? undefined : onClick}
+      tabIndex={isDisabledPro ? -1 : 0}
       disabled={isDisabledPro}
       className={classNames(
         'text-left flex rounded-md focus:outline-none transition ease-in-out duration-150',

@@ -4,8 +4,10 @@ import { useRecoilCallback, useRecoilValue, useResetRecoilState } from 'recoil';
 import { parseSync } from 'subtitle';
 import Button from '../../../../../components/ui/Button';
 import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
+import { ENABLE_UPGRADES } from '../../../../../constants';
 import { readBlobAsText } from '../../../../../utils/blob';
 import classNames from '../../../../../utils/classNames';
+import { millisToDecimalSeconds } from '../../../../../utils/time';
 import { subtitleIdsState } from '../../../state/atoms/template';
 import useSubtitlesDispatcher from '../../../state/dispatchers/subtitles';
 import { subtitlesSelector } from '../../../state/selectors/subtitles';
@@ -38,8 +40,8 @@ function SubtitlesToolPanel() {
         nodes.forEach((node) => {
           if (typeof node.data === 'object') {
             createSubtitle(node.data.text, {
-              start: node.data.start,
-              end: node.data.end,
+              start: millisToDecimalSeconds(node.data.start),
+              end: millisToDecimalSeconds(node.data.end),
             });
           }
         });
@@ -115,6 +117,22 @@ function SubtitlesToolPanel() {
           <Button type="gray" onClick={handleClickUpload}>
             Upload subtitle file
           </Button>
+          <Tooltip
+            placement="bottom"
+            content={
+              ENABLE_UPGRADES
+                ? 'Upgrade is required'
+                : 'Coming soon for professional users'
+            }
+          >
+            <Button
+              disabled="soft"
+              className="button-default w-full py-2 px-4 border border-transparent rounded-md text-yellow-600 bg-yellow-50 focus:outline-none"
+              type="custom"
+            >
+              Automatic subtitles (PRO)
+            </Button>
+          </Tooltip>
         </div>
       )}
     </SideMenuPanel>
