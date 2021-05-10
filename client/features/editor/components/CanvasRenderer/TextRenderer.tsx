@@ -19,9 +19,10 @@ const enabledAnchors = [
 interface Props {
   id: string;
   props: TextConfig;
+  centered?: boolean;
 }
 
-function TextRenderer({ id, props }: Props) {
+function TextRenderer({ id, props, centered }: Props) {
   const backgroundRef = useRef<Konva.Rect | null>(null);
   const textRef = useRef<Konva.Text | null>(null);
   const { transformerRef } = ElementRefsContainer.useContainer();
@@ -31,7 +32,7 @@ function TextRenderer({ id, props }: Props) {
       evt: KonvaEventObject<Event>,
       transformer: Konva.Transformer
     ): Partial<TextConfig> => {
-      const node = evt.target as Konva.Text;
+      const textNode = evt.target as Konva.Text;
       const anchor = transformer.getActiveAnchor();
 
       if (!['middle-right', 'middle-left'].includes(anchor)) {
@@ -40,8 +41,8 @@ function TextRenderer({ id, props }: Props) {
 
       return {
         width: Math.max(
-          node.width() * node.scaleX(),
-          node.fontSize(),
+          textNode.width() * textNode.scaleX(),
+          textNode.fontSize(),
           MIN_WIDTH
         ),
         scaleX: 1,
@@ -53,10 +54,11 @@ function TextRenderer({ id, props }: Props) {
   const transformEnd = useCallback(
     (evt: KonvaEventObject<Event>): Partial<TextConfig> => {
       const textNode = evt.target as Konva.Text;
+
       return {
         width: Math.max(
           textNode.width() * textNode.scaleX(),
-          textNode.measureSize(textNode.text()[0]).width,
+          textNode.fontSize(),
           MIN_WIDTH
         ),
         fontSize: Math.max(
@@ -83,6 +85,11 @@ function TextRenderer({ id, props }: Props) {
       bg.scaleY(text.scaleY());
       bg.rotation(text.rotation());
       bg.visible(text.visible());
+
+      if (centered) {
+        bg.offsetX(text.offsetX());
+        bg.offsetY(text.offsetY());
+      }
     }
   };
 
@@ -95,6 +102,7 @@ function TextRenderer({ id, props }: Props) {
       id={id}
       enabledAnchors={enabledAnchors}
       keepRatio
+      centeredScaling={centered}
       transform={transform}
       transformEnd={transformEnd}
     >
@@ -105,6 +113,7 @@ function TextRenderer({ id, props }: Props) {
             <Rect {...props.background} ref={backgroundRef} />
           )}
           <Text
+            verticalAlign="middle"
             {...props}
             {...additionalProps}
             fillEnabled={true}

@@ -21,7 +21,7 @@ export const secondsToDate = (totalSeconds: number) => {
 
 export const millisToDecimalSeconds = (millis: number) => {
   const seconds = Math.floor(millis / 1000);
-  const decimal = Math.floor((millis % 1000) / 100);
+  const decimal = Math.floor((millis % 1000) / 100) / 10;
   return seconds + decimal;
 };
 

@@ -1,5 +1,6 @@
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/types/Node';
+import { omit } from 'ramda';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { KonvaNodeEvents } from 'react-konva';
 import { useRecoilCallback } from 'recoil';
@@ -28,6 +29,7 @@ interface Props {
   ) => Konva.ShapeConfig;
   enabledAnchors?: string[];
   keepRatio?: boolean;
+  centeredScaling?: boolean;
 }
 
 const InteractiveKonvaElement = ({
@@ -37,6 +39,7 @@ const InteractiveKonvaElement = ({
   transformEnd,
   enabledAnchors,
   keepRatio,
+  centeredScaling,
 }: Props) => {
   const {
     updateElementProps,
@@ -53,13 +56,22 @@ const InteractiveKonvaElement = ({
 
   useEffect(() => {
     if (shapeRef.current) {
-      setElementRef(id, shapeRef.current, { keepRatio, enabledAnchors });
+      setElementRef(id, shapeRef.current, {
+        keepRatio,
+        enabledAnchors,
+        centeredScaling,
+      });
+
+      if (centeredScaling) {
+        shapeRef.current.offsetX(shapeRef.current.width() / 2);
+        shapeRef.current.offsetY(shapeRef.current.height() / 2);
+      }
 
       return () => {
         setElementRef(id, undefined);
       };
     }
-  }, [enabledAnchors, id, keepRatio, setElementRef]);
+  }, [centeredScaling, enabledAnchors, id, keepRatio, setElementRef]);
 
   const handleSelect = useCallback(
     (evt: KonvaEventObject<MouseEvent>) => {
@@ -158,31 +170,47 @@ const InteractiveKonvaElement = ({
       if (transformerRef.current && transform) {
         shape.setAttrs(transform(evt, transformerRef.current));
       }
+
+      if (centeredScaling) {
+        shape.offsetX(shape.width() / 2);
+        shape.offsetY(shape.height() / 2);
+      }
     },
-    [elementNodes, transform, transformerRef, updateGuideLines]
+    [centeredScaling, elementNodes, transform, transformerRef, updateGuideLines]
   );
 
   const handleTransformEnd = useRecoilCallback(
     ({ reset }) => (evt: KonvaEventObject<Event>) => {
       reset(guideLinesState);
 
-      if (!shapeRef.current) {
+      const shape = shapeRef.current;
+
+      if (!shape) {
         return;
       }
 
       if (transformerRef.current && transformEnd) {
-        shapeRef.current.setAttrs(transformEnd(evt, transformerRef.current));
+        shape.setAttrs(transformEnd(evt, transformerRef.current));
       }
 
-      if (isOutOfBounds(shapeRef.current)) {
+      if (centeredScaling) {
+        shape.offsetX(shape.width() / 2);
+        shape.offsetY(shape.height() / 2);
+      }
+
+      if (isOutOfBounds(shape)) {
         deleteElement(id);
       } else {
         handleChange({
-          ...shapeRef.current.getAttrs(),
+          ...omit(
+            centeredScaling ? ['offsetX', 'offsetY'] : [],
+            shape.getAttrs()
+          ),
         });
       }
     },
     [
+      centeredScaling,
       deleteElement,
       handleChange,
       id,

@@ -22,15 +22,30 @@ function useSubtitlesDispatcher() {
       const defaultStyle = snapshot.getLoadable(subtitlesStyleState).getValue();
 
       if (!('x' in defaultStyle || 'y' in defaultStyle)) {
+        const x = dimensions.width / 2;
+        const y = 0.9 * dimensions.height;
+        const width = 0.8 * dimensions.width;
+
         const bounds = new Konva.Text({
           ...defaultStyle,
+          width,
           text,
         }).getClientRect();
-        const x = dimensions.width / 2 - bounds.width / 2;
-        const y = 0.9 * dimensions.height - bounds.height / 2;
+
+        console.log(
+          'W',
+          {
+            ...defaultStyle,
+            width,
+            text,
+          },
+          bounds.height
+        );
 
         set(subtitlesStyleState, {
           ...defaultStyle,
+          width,
+          // offsetX: width / 2,
           x,
           y,
         });

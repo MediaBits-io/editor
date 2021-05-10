@@ -24,7 +24,7 @@ function SubtitleRenderer({ id }: Props) {
     audioProgress >= subtitle.start && audioProgress < subtitle.end;
 
   return isActive ? (
-    <TextRenderer id={id} key={id} props={{ ...style, text }} />
+    <TextRenderer id={id} key={id} props={{ ...style, text }} centered />
   ) : null;
 }
 
