@@ -1,6 +1,6 @@
 import { TrashIcon } from '@heroicons/react/outline';
 import React, { ChangeEvent, useRef, useState } from 'react';
-import { useRecoilCallback, useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { parseSync } from 'subtitle';
 import Button from '../../../../../components/ui/Button';
 import Tooltip from '../../../../../components/ui/Tooltip/Tooltip';
@@ -8,7 +8,10 @@ import { ENABLE_UPGRADES } from '../../../../../constants';
 import { readBlobAsText } from '../../../../../utils/blob';
 import classNames from '../../../../../utils/classNames';
 import { millisToDecimalSeconds } from '../../../../../utils/time';
-import { subtitleIdsState } from '../../../state/atoms/template';
+import {
+  subtitleIdsState,
+  subtitlesStyleState,
+} from '../../../state/atoms/template';
 import useSubtitlesDispatcher from '../../../state/dispatchers/subtitles';
 import { subtitlesSelector } from '../../../state/selectors/subtitles';
 import PanelActionButton from '../../ui/PanelActionButton';
@@ -25,7 +28,6 @@ const tabs: { name: string; key: Tabs }[] = [
 
 function SubtitlesToolPanel() {
   const subtitleIds = useRecoilValue(subtitleIdsState);
-  const resetSubtitles = useResetRecoilState(subtitlesSelector);
   const { createSubtitle } = useSubtitlesDispatcher();
   const [activeTab, setActiveTab] = useState<Tabs>('subtitles');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -58,13 +60,21 @@ function SubtitlesToolPanel() {
     inputRef.current?.click();
   };
 
+  const handleClickRemoveAll = useRecoilCallback(({ reset }) => () => {
+    reset(subtitlesSelector);
+    reset(subtitlesStyleState);
+  });
+
   return (
     <SideMenuPanel
       title="Subtitles"
       actions={
         subtitleIds.length > 0 ? (
           <Tooltip content="Remove all">
-            <PanelActionButton icon={TrashIcon} onClick={resetSubtitles} />
+            <PanelActionButton
+              icon={TrashIcon}
+              onClick={handleClickRemoveAll}
+            />
           </Tooltip>
         ) : null
       }

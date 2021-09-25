@@ -95,14 +95,21 @@ function TextRenderer({ id, props, centered }: Props) {
 
   useEffect(() => {
     transformerRef.current?.forceUpdate();
-  }, [props, transformerRef]);
+
+    const text = textRef.current;
+
+    if (text && centered) {
+      text.offsetX((text.width() * text.scaleX()) / 2);
+      text.offsetY((text.height() * text.scaleY()) / 2);
+    }
+  }, [centered, props, transformerRef]);
 
   return (
     <InteractiveKonvaElement
       id={id}
       enabledAnchors={enabledAnchors}
       keepRatio
-      centeredScaling={centered}
+      centered={centered}
       transform={transform}
       transformEnd={transformEnd}
     >

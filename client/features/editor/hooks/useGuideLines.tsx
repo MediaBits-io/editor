@@ -25,9 +25,20 @@ const getSnappingEdges = (stage: Konva.Stage, node: Konva.Shape): LineStops => {
     width: rect.width / stage.scaleX(),
     ...node.getPosition(),
   };
+
   return {
-    horizontal: [0, box.height / 2, box.height],
-    vertical: [0, box.width / 2, box.width],
+    // horizontal: [0, box.height / 2, box.height],
+    // vertical: [0, box.width / 2, box.width],
+    horizontal: [
+      -node.offsetY(),
+      -node.offsetY() + box.height / 2,
+      -node.offsetY() + box.height,
+    ],
+    vertical: [
+      -node.offsetX(),
+      -node.offsetX() + box.width / 2,
+      -node.offsetX() + box.width,
+    ],
   };
 };
 
@@ -90,6 +101,7 @@ const getLines = (
     const orientation = 'horizontal';
     edges.horizontal.forEach((edgeOffset, i) => {
       const diff = Math.abs(stop - edgeOffset - position.y);
+
       if (diff < MAX_OFFSET && matchesSnappingAnchor(orientation, i)) {
         resultH.push({
           orientation,
@@ -105,6 +117,8 @@ const getLines = (
     const orientation = 'vertical';
     edges.vertical.forEach((edgeOffset, i) => {
       const diff = Math.abs(stop - edgeOffset - position.x);
+      console.log(diff, orientation, stop);
+
       if (diff < MAX_OFFSET && matchesSnappingAnchor(orientation, i)) {
         resultV.push({
           orientation,
@@ -156,36 +170,33 @@ const getLineShapes = (lines: GuideLine[]) => {
 
 function useGuideLines() {
   const updateGuideLines = useRecoilCallback(
-    ({ snapshot, set }) => (
-      node: Konva.Shape,
-      nodes: Konva.Shape[] = [],
-      snapAnchor?: string
-    ) => {
-      const stage = node.getStage();
+    ({ snapshot, set }) =>
+      (node: Konva.Shape, nodes: Konva.Shape[] = [], snapAnchor?: string) => {
+        const stage = node.getStage();
 
-      if (!stage) {
-        return [];
-      }
+        if (!stage) {
+          return [];
+        }
 
-      const guideLines = snapshot.getLoadable(guideLinesState).getValue();
-      const dimensions = snapshot.getLoadable(dimensionsState).getValue();
+        const guideLines = snapshot.getLoadable(guideLinesState).getValue();
+        const dimensions = snapshot.getLoadable(dimensionsState).getValue();
 
-      const stops = getStops(dimensions, stage, nodes, node);
-      const edges = getSnappingEdges(stage, node);
-      const lines = getLines(node, stops, edges, snapAnchor);
-      const shapes = getLineShapes(lines);
+        const stops = getStops(dimensions, stage, nodes, node);
+        const edges = getSnappingEdges(stage, node);
+        const lines = getLines(node, stops, edges, snapAnchor);
+        const shapes = getLineShapes(lines);
 
-      if (
-        shapes.length !== guideLines.length ||
-        !shapes.every((line) =>
-          guideLines.find((shape) => shape.id === line.id)
-        )
-      ) {
-        set(guideLinesState, shapes);
-      }
+        if (
+          shapes.length !== guideLines.length ||
+          !shapes.every((line) =>
+            guideLines.find((shape) => shape.id === line.id)
+          )
+        ) {
+          set(guideLinesState, shapes);
+        }
 
-      return lines;
-    },
+        return lines;
+      },
     []
   );
 
