@@ -46,7 +46,7 @@ export default function Home({ plans, authInfo }: Props) {
           content="https://app.mediabits.io/images/fb.png"
         />
         <link rel="manifest" href="/manifest.json" />
-        <title>Mediabits.io | Turn your audio into sharable video</title>
+        <title>Mediabits.io - Turn your audio into sharable video</title>
       </Head>
 
       <RecoilRoot

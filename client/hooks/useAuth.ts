@@ -1,6 +1,4 @@
-import firebase from 'firebase/app';
-import 'firebase/analytics';
-import 'firebase/auth';
+import { getAuth, User, signInWithEmailAndPassword } from 'firebase/auth';
 import { useCallback, useEffect } from 'react';
 import cookies from 'js-cookie';
 import { fetchAuthInfo } from '../utils/api/auth';
@@ -14,13 +12,13 @@ function useAuth({ bindAuthListener = false }: Params = {}) {
   const { setUserAuthenticated, setUserUnauthenticated } = useUserDispatcher();
 
   const signIn = useCallback(async (email: string, password: string) => {
-    await firebase.auth().signInWithEmailAndPassword(email, password);
+    await signInWithEmailAndPassword(getAuth(), email, password);
   }, []);
 
-  const signOut = useCallback(() => firebase.auth().signOut(), []);
+  const signOut = useCallback(() => getAuth().signOut(), []);
 
   const authChangeCallback = useCallback(
-    async (user: firebase.User | null) => {
+    async (user: User | null) => {
       if (!user) {
         cookies.remove('userToken');
         setUserUnauthenticated();
@@ -37,7 +35,7 @@ function useAuth({ bindAuthListener = false }: Params = {}) {
 
   useEffect(() => {
     if (bindAuthListener) {
-      return firebase.auth().onAuthStateChanged(authChangeCallback);
+      return getAuth().onAuthStateChanged(authChangeCallback);
     }
   }, [authChangeCallback, bindAuthListener]);
 

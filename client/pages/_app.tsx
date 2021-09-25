@@ -1,16 +1,16 @@
 import * as Sentry from '@sentry/react';
-import 'firebase/analytics';
-import firebase from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
+import { initializeApp, getApps } from 'firebase/app';
 import { AppProps } from 'next/app';
 import GlobalError from '../components/GlobalError';
 import firebaseConfig from '../firebaseConfig';
 import '../styles/global.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  if (process.browser && !firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+  if (process.browser && !getApps().length) {
+    initializeApp(firebaseConfig);
     if (process.env.NODE_ENV === 'production') {
-      firebase.analytics();
+      getAnalytics();
     }
   }
 

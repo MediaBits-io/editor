@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import firebase from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import { API_URL } from '../../constants';
 
 export const api = Axios.create({
@@ -11,14 +11,14 @@ api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err?.response?.status === 401) {
-      firebase.auth().signOut();
+      getAuth().signOut();
     }
     throw err;
   }
 );
 
 export const getAuthHeaders = async (userToken?: string) => {
-  const token = userToken ?? (await firebase.auth().currentUser?.getIdToken());
+  const token = userToken ?? (await getAuth().currentUser?.getIdToken());
   if (!token) {
     throw new Error('No user token to fetch links');
   }
