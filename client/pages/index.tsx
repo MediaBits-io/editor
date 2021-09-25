@@ -1,20 +1,20 @@
-import Head from 'next/head';
 import { NextPageContext } from 'next';
-import { ToastProvider } from 'react-toast-notifications';
+import Head from 'next/head';
 import { parseCookies } from 'nookies';
+import { ToastProvider } from 'react-toast-notifications';
+import { RecoilRoot } from 'recoil';
 import Notification from '../components/ui/Notification/Notification';
 import NotificationContainer from '../components/ui/Notification/NotificationContainer';
+import AppController from '../controllers/AppController';
+import AuthController from '../controllers/AuthController';
+import VideosController from '../controllers/VideosController';
 import Editor from '../features/editor/Editor';
+import { Plans } from '../interfaces/plans';
 import { AuthInfoDTO, deserializeUserPlanDTO } from '../interfaces/user';
+import { plansState } from '../state/atoms/plans';
+import { userInfoState, userPlanState } from '../state/atoms/user';
 import { api } from '../utils/api/api';
 import { fetchAuthInfo } from '../utils/api/auth';
-import { RecoilRoot } from 'recoil';
-import { userInfoState, userPlanState } from '../state/atoms/user';
-import { plansState } from '../state/atoms/plans';
-import AuthController from '../controllers/AuthController';
-import { Plans } from '../interfaces/plans';
-import VideosController from '../controllers/VideosController';
-import AppController from '../controllers/AppController';
 
 interface Props {
   plans: Plans;

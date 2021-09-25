@@ -47,7 +47,7 @@ function InfoPopup() {
           />
 
           <h2 className="text-base font-semibold tracking-wide text-white mb-2">
-            About Mediabits.io
+            🤔 About Mediabits.io
           </h2>
 
           <p className="text-sm text-gray-400 mb-3">

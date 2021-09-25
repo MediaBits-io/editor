@@ -28,3 +28,11 @@ export const infoPopupState = atom<{ visible: boolean }>({
   default: { visible: process.browser },
   effects_UNSTABLE: [persistAtom],
 });
+
+export const feedbackPopupState = atom<{
+  discarded: boolean;
+}>({
+  key: 'feedbackPopupState',
+  default: { discarded: false },
+  effects_UNSTABLE: [persistAtom],
+});

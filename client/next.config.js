@@ -16,9 +16,6 @@ const SentryWebpackPluginOptions = {
 module.exports = withSentryConfig(
   withTM({
     distDir: '../dist/client',
-    future: {
-      webpack5: true,
-    },
   }),
   SentryWebpackPluginOptions
 );

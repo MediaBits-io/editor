@@ -50,7 +50,8 @@ function ExportButton() {
           );
         }
       } catch (e) {
-        const errorText = e?.response?.data?.error || "Something's wrong";
+        const errorText =
+          (e as any)?.response?.data?.error || "Something's wrong";
         addToast(
           <NotificationContent title={errorText}>
             Please contact support through
@@ -72,21 +73,22 @@ function ExportButton() {
   );
 
   const handleClickExport = useRecoilCallback(
-    ({ set, snapshot }) => () => {
-      const audio = snapshot.getLoadable(audioState).getValue();
+    ({ set, snapshot }) =>
+      () => {
+        const audio = snapshot.getLoadable(audioState).getValue();
 
-      if (!audio) {
-        set(audioModalState, {
-          visible: true,
-          onContinue: (clipBuffer) => {
-            setNewAudio(clipBuffer);
-            saveAndExportVideo(clipBuffer);
-          },
-        });
-      } else {
-        saveAndExportVideo(audio.data);
-      }
-    },
+        if (!audio) {
+          set(audioModalState, {
+            visible: true,
+            onContinue: (clipBuffer) => {
+              setNewAudio(clipBuffer);
+              saveAndExportVideo(clipBuffer);
+            },
+          });
+        } else {
+          saveAndExportVideo(audio.data);
+        }
+      },
     [saveAndExportVideo, setNewAudio]
   );
 

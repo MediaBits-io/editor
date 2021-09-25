@@ -8,6 +8,7 @@ import CanvasRenderer from './components/CanvasRenderer/CanvasRenderer';
 import EditorHeader from './components/EditorHeader/EditorHeader';
 import EditorMenu from './components/EditorMenu/EditorMenu';
 import EditorMenuPanel from './components/EditorMenuPanel/EditorMenuPanel';
+import FeedbackPopup from './components/FeedbackPopup';
 import HistoryControls from './components/HistoryControls/HistoryControls';
 import ProgressModal from './components/ProgressModal/ProgressModal';
 import ZoomControls from './components/ZoomControls/ZoomControls';
@@ -87,11 +88,12 @@ function Editor() {
               </div>
               <MainArea
                 onKeyDown={handleKeyDown}
-                className="overflow-hidden"
+                className="relative overflow-hidden"
                 noScroll
               >
                 <CanvasRenderer />
               </MainArea>
+              <FeedbackPopup />
             </div>
           </div>
         </div>
