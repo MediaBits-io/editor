@@ -3,7 +3,7 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const withTM = require('next-transpile-modules')([
   'imask/esm',
   'react-imask',
-  '@etercast/mp3',
+  '@vincaslt/mp3',
 ]);
 
 const SentryWebpackPluginOptions = {

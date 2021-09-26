@@ -1,6 +1,6 @@
 import { slice } from 'audio-buffer-utils';
 import { readBlobAsArrayBuffer } from '../../../../utils/blob';
-import instantiate from '@etercast/mp3';
+import instantiate from '@vincaslt/mp3';
 
 // TODO: Move audio clipping to web worker to prevent blocking
 // TODO: detect audio sample rate instead of hard coding it (browsers missing APIs)
@@ -52,18 +52,20 @@ export async function clipAudio(
     ) * 16;
 
   const quality =
-    ({
-      32: 0,
-      48: 1,
-      64: 2,
-      96: 3,
-      128: 4,
-      160: 5,
-      192: 6,
-      224: 7,
-      256: 8,
-      320: 9,
-    } as { [bitrate: number]: number })[bitrate] || 4;
+    (
+      {
+        32: 0,
+        48: 1,
+        64: 2,
+        96: 3,
+        128: 4,
+        160: 5,
+        192: 6,
+        224: 7,
+        256: 8,
+        320: 9,
+      } as { [bitrate: number]: number }
+    )[bitrate] || 4;
 
   const encoder = new Encoder({
     sampleRate: clipAudioBuffer.sampleRate,

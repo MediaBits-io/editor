@@ -1,4 +1,4 @@
-import { ProgressBar, Waveform } from 'konva-elements';
+import { ProgressBar, Waveform } from '@vincaslt/konva-elements';
 import React from 'react';
 import { Rect } from 'react-konva';
 import { useRecoilValue } from 'recoil';

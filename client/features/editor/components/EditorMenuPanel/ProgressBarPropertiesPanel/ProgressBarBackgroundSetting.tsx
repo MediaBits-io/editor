@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import SideMenuSetting from '../../ui/SideMenuSetting';
 import PanelColorPicker from '../../ui/PanelColorPicker';
-import { ProgressBarConfig } from 'konva-elements';
+import { ProgressBarConfig } from '@vincaslt/konva-elements';
 import { fromRgba, toRgba } from '../../../../../utils/color';
 import { RGBColor } from 'react-color';
 import { useRecoilValue } from 'recoil';

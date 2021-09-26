@@ -1,4 +1,4 @@
-import { ProgressBarConfig } from 'konva-elements';
+import { ProgressBarConfig } from '@vincaslt/konva-elements';
 import React, { useCallback } from 'react';
 import { RGBColor } from 'react-color';
 import { useRecoilValue } from 'recoil';

@@ -3,7 +3,7 @@ import SideMenuSetting from '../../ui/SideMenuSetting';
 import PanelColorPicker from '../../ui/PanelColorPicker';
 import { fromRgba, toRgba } from '../../../../../utils/color';
 import { RGBColor } from 'react-color';
-import { WaveformConfig } from 'konva-elements';
+import { WaveformConfig } from '@vincaslt/konva-elements';
 import { useRecoilValue } from 'recoil';
 import { elementPropsSelector } from '../../../state/selectors/elements';
 import useElementsDispatcher from '../../../state/dispatchers/elements';

@@ -1,4 +1,4 @@
-import { PatternType, WaveformConfig } from 'konva-elements';
+import { PatternType, WaveformConfig } from '@vincaslt/konva-elements';
 import React, { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import useDropdown from '../../../../../components/ui/Dropdown/useDropdown';
