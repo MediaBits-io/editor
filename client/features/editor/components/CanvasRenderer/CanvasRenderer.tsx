@@ -27,10 +27,8 @@ function CanvasRenderer() {
   const RecoilBridge = useRecoilBridgeAcrossReactRoots_UNSTABLE();
   const { fitToScreen } = useZoomControls();
   const { clearSelection } = useElementsDispatcher();
-  const {
-    editorAreaRef,
-    setScreenDimensions,
-  } = EditorAreaContainer.useContainer();
+  const { editorAreaRef, setScreenDimensions } =
+    EditorAreaContainer.useContainer();
 
   const [containerDimensions, setContainerDimensions] = useState<
     Dimensions | undefined
@@ -157,7 +155,7 @@ function CanvasRenderer() {
                 clipX={0}
                 clipY={0}
                 clipWidth={dimensions.width}
-                clipHeight={dimensions.width}
+                clipHeight={dimensions.height}
               >
                 <Elements />
               </Layer>
