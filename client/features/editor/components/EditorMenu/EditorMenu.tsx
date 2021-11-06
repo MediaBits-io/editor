@@ -1,4 +1,6 @@
 import React from 'react';
+import Button from '../../../../components/ui/Button';
+import ExternalLink from '../../../../components/ui/ExternalLink';
 import Logo from '../../../../components/ui/Logo/Logo';
 import SideMenu from '../ui/SideMenu';
 import ElementsToolButton from './buttons/ElementsToolButton';
@@ -22,6 +24,21 @@ function EditorMenu() {
         <div className="flex flex-grow">
           <div className="mt-auto">
             <UpgradedMessage />
+            <ExternalLink
+              target="_blank"
+              type="custom"
+              to="https://vistontea.com/"
+              className="block mb-2 ml-auto focus:outline-none"
+            >
+              <Button
+                round
+                type="link-light"
+                className="text-xs w-16 text-gray-200 focus:!no-underline hover:text-white focus:text-white transition duration-150"
+              >
+                🍵 Tea?
+              </Button>
+            </ExternalLink>
+
             <InfoPopup />
           </div>
         </div>
