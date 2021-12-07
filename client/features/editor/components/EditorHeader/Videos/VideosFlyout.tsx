@@ -47,7 +47,7 @@ function VideosFlyout({ close, isOpen, targetElement }: Props) {
       close={close}
     >
       <div className="flex items-baseline justify-between mb-2 font-medium">
-        <h2 className="leading-6">Videos in the last 24h</h2>
+        <h2 className="leading-6">Videos in the last week</h2>
         <div className="text-gray-500 text-sm ml-2 space-x-2 flex">
           {pendingCount > 0 && (
             <Tooltip

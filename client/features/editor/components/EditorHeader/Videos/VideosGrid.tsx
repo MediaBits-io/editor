@@ -38,7 +38,7 @@ function VideosGrid({ visible }: Props) {
       ))}
     </div>
   ) : (
-    <Alert title="No videos were generated in the last 24 hours" type="info" />
+    <Alert title="No videos were generated in the last week" type="info" />
   );
 }
 
