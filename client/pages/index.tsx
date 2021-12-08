@@ -45,7 +45,9 @@ export default function Home({ plans, authInfo }: Props) {
           name="og:image"
           content="https://app.mediabits.io/images/fb.png"
         />
+
         <link rel="manifest" href="/manifest.json" />
+        <link rel="canonical" href="https://app.mediabits.io" />
         <title>Mediabits.io - Turn your audio into sharable video</title>
       </Head>
 

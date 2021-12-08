@@ -1,6 +1,6 @@
 {
   "name": "mediabits-editor",
-  "description": "MediaBits.io editor to create videos for audio clips",
+  "description": "Mediabits.io editor to create videos for audio clips",
   "version": "0.1.0",
   "private": false,
   "main": "dist/server/index.js",

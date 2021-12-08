@@ -13,7 +13,7 @@ function Logo({ className }: Props) {
         'relative flex py-3.5 border-transparent border-t-2 border-b px-2 justify-center bg-gray-900',
         className
       )}
-      to="https://mediabits.io"
+      to="https://app.mediabits.io"
       newTab
     >
       <svg className="h-6" viewBox="0 0 150 88" fill="none">

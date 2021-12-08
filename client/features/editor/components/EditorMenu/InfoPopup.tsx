@@ -52,7 +52,10 @@ function InfoPopup() {
 
           <p className="text-sm text-gray-400 mb-3">
             Mediabits.io is an editor to create small videos for your podcast or
-            other audio content, that you can then share on social media.
+            other audio content, that you can then share on social media.{' '}
+            <ExternalLink to="https://mediabits.io" newTab>
+              Learn more.
+            </ExternalLink>
           </p>
 
           <ol className="text-sm text-gray-200 list-decimal list-inside mb-3">
